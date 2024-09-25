@@ -7,7 +7,6 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.FeatureManager;
 import net.ijt.regfeat.RegionAnalyisData;
 
 /**
@@ -16,23 +15,6 @@ import net.ijt.regfeat.RegionAnalyisData;
  */
 public class Perimeter_Crofton_D4 extends Feature
 {
-    public static final Perimeter_Crofton_D4 instance()
-    {
-        if (instance == null)
-        {
-            instance = new Perimeter_Crofton_D4();
-            FeatureManager.getInstance().addFeature(instance);
-        }
-        return instance;
-    }
-    
-    private static Perimeter_Crofton_D4 instance = null;
-    
-    
-    public Perimeter_Crofton_D4()
-    {
-    }
-    
     @Override
     public Object[] compute(int[] labels, RegionAnalyisData results)
     {

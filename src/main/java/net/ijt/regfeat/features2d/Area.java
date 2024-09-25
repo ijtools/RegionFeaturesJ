@@ -7,7 +7,6 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.FeatureManager;
 import net.ijt.regfeat.RegionAnalyisData;
 
 /**
@@ -15,27 +14,6 @@ import net.ijt.regfeat.RegionAnalyisData;
  */
 public class Area extends Feature
 {
-    public static final Area instance()
-    {
-        if (instance == null)
-        {
-            instance = new Area();
-            FeatureManager.getInstance().addFeature(instance);
-        }
-        return instance;
-    }
-    private static Area instance = null;
-    
-    public Area()
-    {
-    }
-
-    @Override
-    public void populateTable(ResultsTable table, int row, Object value)
-    {
-        table.setValue("Area", row, (double) value);
-    }
-
     @Override
     public Object[] compute(int[] labels, RegionAnalyisData results)
     {
@@ -50,5 +28,11 @@ public class Area extends Feature
             areas[i] = res[i].area;
         }
         return areas;
+    }
+    
+    @Override
+    public void populateTable(ResultsTable table, int row, Object value)
+    {
+        table.setValue("Area", row, (double) value);
     }
 }

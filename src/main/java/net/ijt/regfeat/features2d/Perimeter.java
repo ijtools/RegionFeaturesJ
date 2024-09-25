@@ -5,27 +5,14 @@ package net.ijt.regfeat.features2d;
 
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.FeatureManager;
 import net.ijt.regfeat.RegionAnalyisData;
 
 /**
- * Computes the perimeter of a 2D region. In practice, this feature is an alias for the Perimeter_Crofton_D4 feature.
+ * Computes the perimeter of a 2D region. In practice, this feature is an alias
+ * for the Perimeter_Crofton_D4 feature.
  */
 public class Perimeter extends Feature
 {
-    public static final Perimeter instance()
-    {
-        if (instance == null)
-        {
-            instance = new Perimeter();
-            FeatureManager.getInstance().addFeature(instance);
-        }
-        return instance;
-    }
-    
-    private static Perimeter instance = null;
-    
-    
     public Perimeter()
     {
         this.requiredFeatures.add(Perimeter_Crofton_D4.class);

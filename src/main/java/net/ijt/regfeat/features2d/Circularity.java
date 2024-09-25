@@ -5,7 +5,6 @@ package net.ijt.regfeat.features2d;
 
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.FeatureManager;
 import net.ijt.regfeat.RegionAnalyisData;
 import net.ijt.regfeat.RegionData;
 
@@ -15,17 +14,6 @@ import net.ijt.regfeat.RegionData;
  */
 public class Circularity extends Feature
 {
-    public static final Circularity instance()
-    {
-        if (instance == null)
-        {
-            instance = new Circularity();
-            FeatureManager.getInstance().addFeature(instance);
-        }
-        return instance;
-    }
-    private static Circularity instance = null;
-
     public Circularity()
     {
         this.requiredFeatures.add(Area.class);
