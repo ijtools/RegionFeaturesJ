@@ -25,39 +25,14 @@ public class Perimeter extends Feature
     
     public Perimeter()
     {
-        super("perimeter");
-        this.requiredFeatures.add(Perimeter_Crofton_D4.instance());
+        this.requiredFeatures.add(Perimeter_Crofton_D4.class);
     }
-    
-//    @Override
-//    public void updateData(RegionAnalyisData results)
-//    {
-//        System.out.println("start computing perimeter");
-//        if (results.isComputed(getId())) return;
-//        System.out.println("  compute it");
-//        
-//        Perimeter_Crofton_D4.instance().updateData(results);
-//        
-//        ImagePlus labelMap = results.labelMap;
-//        int[] labels = results.labels;
-//            
-//        IntrinsicVolumesAnalyzer2D algo = new IntrinsicVolumesAnalyzer2D();
-//        IntrinsicVolumesAnalyzer2D.Result[] res = algo.analyzeRegions(labelMap.getProcessor(), labels, labelMap.getCalibration());
-//        
-//        for (int i = 0; i < labels.length; i++)
-//        {
-//            results.regionData.get(labels[i]).data.put(getId(), res[i].perimeter);
-//        }
-//        
-//        results.setAsComputed(getId());
-//    }
     
     @Override
     public Object[] compute(int[] labels, RegionAnalyisData results)
     {
         // check required features have been computed
-        String id = Perimeter_Crofton_D4.instance().getId();
-        if (!results.isComputed(id))
+        if (!results.isComputed(Perimeter_Crofton_D4.class))
         {
             throw new RuntimeException("Requires Perimeter_Crofton_D4 to have been computed");
         }
@@ -66,7 +41,7 @@ public class Perimeter extends Feature
         Double[] res = new Double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
-            res[i] = (double) results.regionData.get(labels[i]).getFeature(id);
+            res[i] = (double) results.regionData.get(labels[i]).getFeature(Perimeter_Crofton_D4.class);
         }
         return res;
     }

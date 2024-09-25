@@ -3,6 +3,8 @@
  */
 package net.ijt.regfeat.features2d;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,43 +16,74 @@ import ij.measure.ResultsTable;
 public abstract class Feature
 {
     /**
-     * The identifier for this feature. Must be unique within the available features.
-     */
-    private String id;
-    
-    /**
      * The list of features that are required to compute this feature.
      */
-    protected Collection<Feature> requiredFeatures = new ArrayList<Feature>(2);
+    protected Collection<Class<? extends Feature>> requiredFeatures = new ArrayList<>(2);
     
     
-    protected Feature(String id)
+    protected Feature()
     {
-        this.id = id;
     }
     
     
     public void updateData(RegionAnalyisData results)
     {
-        String id = getId();
-        System.out.println("start computing feature: " + id);
-        if (results.isComputed(getId())) return;
+        System.out.println("start computing feature: " + this.getClass().getSimpleName());
+        if (results.isComputed(this.getClass())) return;
         System.out.println("  compute it");
         
         // check required features
-        for (Feature f : requiredFeatures)
+        for (Class<? extends Feature> fClass : requiredFeatures)
         {
-            f.updateData(results);
+            Feature feature = getFeature(fClass);
+            if (feature != null)
+            {
+                feature.updateData(results);
+            }
         }
         
         // process computation
         Object[] res = compute(results.labels, results);
         for (int i = 0; i < results.labels.length; i++)
         {
-            results.regionData.get(results.labels[i]).features.put(id, res[i]);
+            results.regionData.get(results.labels[i]).features.put(this.getClass(), res[i]);
         }
         
-        results.setAsComputed(id);
+        results.setAsComputed(this.getClass());
+    }
+    
+    private Feature getFeature(Class<? extends Feature> featureClass)
+    {
+        try
+        {
+            Constructor<? extends Feature> cons = featureClass.getConstructor();
+            return cons.newInstance();
+        }
+        catch (NoSuchMethodException e)
+        {
+            e.printStackTrace();
+        }
+        catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InstantiationException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+        catch (InvocationTargetException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
     
     /**
@@ -70,10 +103,4 @@ public abstract class Feature
     
     public abstract void populateTable(ResultsTable table, int row, Object value);
     
-    
-    public String getId()
-    {
-        return this.id;
-    }
-
 }

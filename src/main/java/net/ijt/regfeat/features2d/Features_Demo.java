@@ -40,7 +40,7 @@ public class Features_Demo
         RegionAnalyisData results = new RegionAnalyisData(image, labels);
         results.updateWith(Perimeter.instance());
         Circularity circularity = Circularity.instance();
-        System.out.println(circularity.getClass().getName());
+        System.out.println(Circularity.class.getName());
         results.updateWith(circularity);
         
         System.out.println("Computed features:");
@@ -48,7 +48,7 @@ public class Features_Demo
         
         for (int label : labels)
         {
-            System.out.println("circ of " + label + " is " + results.regionData.get(label).features.get(circularity.getId()));
+            System.out.println("circ of " + label + " is " + results.regionData.get(label).features.get(Circularity.class));
         }
         
         

@@ -26,21 +26,21 @@ public class FeatureManager
     }
     
     
-    Map<String, Feature> features = new HashMap<String, Feature>();
+    Map<Class<? extends Feature>, Feature> features = new HashMap<Class<? extends Feature>, Feature>();
     
     
-    public Feature getFeature(String featureId)
+    public Feature getFeature(Class<? extends Feature> featureClass)
     {
-        return features.get(featureId);
+        return features.get(featureClass);
     }
     
     public void addFeature(Feature feature)
     {
-        if (features.containsKey(feature.getId()))
+        if (features.containsKey(feature.getClass()))
         {
-            throw new RuntimeException("FeatureManager already contains a feature with id: " + feature.getId());
+            throw new RuntimeException("FeatureManager already contains a feature with class: " + feature.getClass());
         }
-        features.put(feature.getId(), feature);
+        features.put(feature.getClass(), feature);
     }
     
     public void printFeatureList()

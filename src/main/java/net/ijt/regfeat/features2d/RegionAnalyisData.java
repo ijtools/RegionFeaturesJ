@@ -35,8 +35,7 @@ public class RegionAnalyisData
      * A map of boolean flags identifying which features have been already
      * computed.
      */
-    Map<String, Boolean> computed;
-    Collection<String> computedFeatureNames;
+    Collection<Class<? extends Feature>> computedFeatures;
     
     public RegionAnalyisData(ImagePlus imagePlus, int[] labels)
     {
@@ -49,26 +48,26 @@ public class RegionAnalyisData
             this.regionData.put(label, new RegionData(label));
         }
         
-        computedFeatureNames = new HashSet<String>();
+        computedFeatures = new HashSet<>();
     }
     
     public void updateWith(Feature feature)
     {
-        if (isComputed(feature.getId())) return;
+        if (isComputed(feature.getClass())) return;
         
         feature.updateData(this);
         
-        setAsComputed(feature.getId());
+        setAsComputed(feature.getClass());
     }
     
-    public boolean isComputed(String featureId)
+    public boolean isComputed(Class<? extends Feature> featureClass)
     {
-        return computedFeatureNames.contains(featureId);
+        return computedFeatures.contains(featureClass);
     }
     
-    public void setAsComputed(String featureId)
+    public void setAsComputed(Class<? extends Feature> featureClass)
     {
-        computedFeatureNames.add(featureId);
+        computedFeatures.add(featureClass);
     }
     
     public ResultsTable createTable(Feature... features)
@@ -78,19 +77,20 @@ public class RegionAnalyisData
         ResultsTable table = new ResultsTable();
         for (int i = 0; i < nLabels; i++)
         {
+            table.incrementCounter();
             table.setLabel("" + labels[i], i);
         }
         
         for (Feature f : features)
         {
-            if (!isComputed(f.getId()))
+            if (!isComputed(f.getClass()))
             {
                 throw new RuntimeException("Feature has not been computed: " + f.getClass());
             }
             
             for (int i = 0; i < labels.length; i++)
             {
-                f.populateTable(table, i, regionData.get(labels[i]).getFeature(f.getId()));
+                f.populateTable(table, i, regionData.get(labels[i]).getFeature(f.getClass()));
             }
         }
         return table;
@@ -99,6 +99,6 @@ public class RegionAnalyisData
     
     public void printComputedFeatures()
     {
-        computedFeatureNames.stream().forEach(System.out::println);
+        computedFeatures.stream().forEach(c -> System.out.println(c.getSimpleName()));
     }
 }

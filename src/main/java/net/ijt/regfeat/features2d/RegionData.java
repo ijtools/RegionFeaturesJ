@@ -17,7 +17,7 @@ public class RegionData
      * The data computed on this region, as a map between the feature class name
      * and the feature result.
      */
-    Map<String, Object> features = new HashMap<String, Object>();
+    Map<Class<? extends Feature>, Object> features = new HashMap<>();
     
     /**
      * Creates a new data structure for storing region analysis data for the
@@ -31,14 +31,13 @@ public class RegionData
         this.label = label;
     }
     
-    
-    public Object getFeature(String featureId)
+    public Object getFeature(Class<? extends Feature> featureClass)
     {
-        return features.get(featureId);
+        return features.get(featureClass);
     }
     
-    public void setFeature(String featureId, Object featureValue)
+    public void setFeature(Class<? extends Feature> featureClass, Object featureValue)
     {
-        features.put(featureId, featureValue);
+        features.put(featureClass, featureValue);
     }
 }

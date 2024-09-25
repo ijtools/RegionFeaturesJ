@@ -25,30 +25,8 @@ public class Area extends Feature
     
     public Area()
     {
-        super("area");
     }
 
-//    @Override
-//    public void updateData(RegionAnalyisData results)
-//    {
-//        System.out.println("start computing area");
-//        if (results.isComputed(getId())) return;
-//        System.out.println("  compute it");
-//
-//        ImagePlus labelMap = results.labelMap;
-//        int[] labels = results.labels;
-//            
-//        IntrinsicVolumes2D algo = new IntrinsicVolumes2D();
-//        IntrinsicVolumes2D.Result[] res = algo.analyzeRegions(labelMap.getProcessor(), labels, labelMap.getCalibration());
-//        
-//        for (int i = 0; i < labels.length; i++)
-//        {
-//            results.regionData.get(labels[i]).data.put(getId(), res[i].area);
-//        }
-//        
-//        results.setAsComputed(getId());
-//    }
-    
     @Override
     public void populateTable(ResultsTable table, int row, Object value)
     {

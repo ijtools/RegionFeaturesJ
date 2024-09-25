@@ -24,37 +24,9 @@ public class Circularity extends Feature
 
     public Circularity()
     {
-        super("circularity");
-        this.requiredFeatures.add(Area.instance());
-        this.requiredFeatures.add(Perimeter.instance());
+        this.requiredFeatures.add(Area.class);
+        this.requiredFeatures.add(Perimeter.class);
     }
-    
-//    @Override
-//    public void updateData(RegionAnalyisData results)
-//    {
-//        System.out.println("start computing circularity");
-//        if (results.isComputed(getId())) return;
-//        System.out.println("  compute it");
-//
-//        Area area = Area.instance();
-//        Perimeter perim = Perimeter.instance();
-//        area.updateData(results);
-//        perim.updateData(results);
-//        
-//        int[] labels = results.labels;
-//        for (int i = 0; i < labels.length; i++)
-//        {
-//            RegionData features = results.regionData.get(labels[i]);
-//            
-//            double a = (double) features.getFeature(area.getId());
-//            double p = (double) features.getFeature(perim.getId());
-//            
-//            double circ = 4 * Math.PI * a / (p * p);
-//            features.setFeature(getId(), circ);
-//        }
-//        
-//        results.setAsComputed(getId());
-//    }
     
     @Override
     public Object[] compute(int[] labels, RegionAnalyisData results)
@@ -63,8 +35,8 @@ public class Circularity extends Feature
         for (int i = 0; i < labels.length; i++)
         {
             RegionData region = results.regionData.get(labels[i]);
-            double a = (double) region.getFeature(Area.instance().getId());
-            double p = (double) region.getFeature(Perimeter.instance().getId());
+            double a = (double) region.getFeature(Area.class);
+            double p = (double) region.getFeature(Perimeter.class);
             double circ = 4 * Math.PI * a / (p * p);
             res[i] = circ;
         }
