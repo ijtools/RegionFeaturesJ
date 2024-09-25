@@ -80,7 +80,7 @@ public abstract class Feature
         Object[] res = compute(results.labels, results);
         for (int i = 0; i < results.labels.length; i++)
         {
-            results.regionData.get(results.labels[i]).features.put(this.getClass(), res[i]);
+            results.regionData.get(results.labels[i]).put(this.getClass(), res[i]);
         }
         
         results.setAsComputed(this.getClass());

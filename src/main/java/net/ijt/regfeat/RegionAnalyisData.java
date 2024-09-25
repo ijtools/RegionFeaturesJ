@@ -29,7 +29,7 @@ public class RegionAnalyisData
     /**
      * The features computed for each region.
      */
-    public Map<Integer, RegionData> regionData;
+    public Map<Integer, Map<Class<? extends Feature>, Object>> regionData;
     
     /**
      * The list of features that have been computed.
@@ -41,10 +41,10 @@ public class RegionAnalyisData
         this.labelMap = imagePlus;
         this.labels = labels;
         
-        this.regionData = new HashMap<Integer, RegionData>();
+        this.regionData = new HashMap<Integer, Map<Class<? extends Feature>, Object>>();
         for (int label : labels)
         {
-            this.regionData.put(label, new RegionData(label));
+            this.regionData.put(label, new HashMap<Class<? extends Feature>, Object>());
         }
         
         computedFeatures = new HashSet<>();
@@ -101,7 +101,7 @@ public class RegionAnalyisData
             for (int i = 0; i < labels.length; i++)
             {
                 Feature feature = Feature.create(featureClass);
-                feature.populateTable(table, i, regionData.get(labels[i]).getFeature(featureClass));
+                feature.populateTable(table, i, regionData.get(labels[i]).get(featureClass));
             }
         }
         return table;

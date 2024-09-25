@@ -31,7 +31,7 @@ public class Perimeter extends Feature
         Double[] res = new Double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
-            res[i] = (double) results.regionData.get(labels[i]).getFeature(Perimeter_Crofton_D4.class);
+            res[i] = (double) results.regionData.get(labels[i]).get(Perimeter_Crofton_D4.class);
         }
         return res;
     }

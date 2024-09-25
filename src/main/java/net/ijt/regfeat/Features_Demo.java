@@ -49,7 +49,7 @@ public class Features_Demo
         
         for (int label : labels)
         {
-            System.out.println("circ of " + label + " is " + results.regionData.get(label).features.get(Circularity.class));
+            System.out.println("circ of " + label + " is " + results.regionData.get(label).get(Circularity.class));
         }
         
         @SuppressWarnings("unchecked")

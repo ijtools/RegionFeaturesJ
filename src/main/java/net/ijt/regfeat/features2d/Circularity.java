@@ -3,10 +3,11 @@
  */
 package net.ijt.regfeat.features2d;
 
+import java.util.Map;
+
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionAnalyisData;
-import net.ijt.regfeat.RegionData;
 
 /**
  * The circularity of a region, defined from normalized ratio of area and
@@ -26,9 +27,9 @@ public class Circularity extends Feature
         Double[] res = new Double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
-            RegionData region = results.regionData.get(labels[i]);
-            double a = (double) region.getFeature(Area.class);
-            double p = (double) region.getFeature(Perimeter.class);
+            Map<Class<? extends Feature>, Object> data = results.regionData.get(labels[i]);
+            double a = (double) data.get(Area.class);
+            double p = (double) data.get(Perimeter.class);
             double circ = 4 * Math.PI * a / (p * p);
             res[i] = circ;
         }
