@@ -1,12 +1,15 @@
 /**
  * 
  */
-package net.ijt.regfeat.features2d;
+package net.ijt.regfeat;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import net.ijt.regfeat.features2d.Area;
+import net.ijt.regfeat.features2d.Circularity;
+import net.ijt.regfeat.features2d.Perimeter;
 /**
  * Simple file for demonstrating the usage of features.
  */
@@ -38,10 +41,8 @@ public class Features_Demo
         int[] labels = new int[] {3, 5, 8, 9};
         
         RegionAnalyisData results = new RegionAnalyisData(image, labels);
-        results.updateWith(Perimeter.instance());
-        Circularity circularity = Circularity.instance();
-        System.out.println(Circularity.class.getName());
-        results.updateWith(circularity);
+        results.updateWith(Perimeter.class);
+        results.updateWith(Circularity.class);
         
         System.out.println("Computed features:");
         results.printComputedFeatures();
@@ -51,16 +52,9 @@ public class Features_Demo
             System.out.println("circ of " + label + " is " + results.regionData.get(label).features.get(Circularity.class));
         }
         
-        
-        ResultsTable table = results.createTable(Area.instance(), Perimeter.instance(), circularity);
+        @SuppressWarnings("unchecked")
+        ResultsTable table = results.createTable(Area.class, Perimeter.class, Circularity.class);
         table.show("Features");
-        
-//        ResultsTable table = new ResultsTable();
-//        for (int i = 0; i < labels.length; i++)
-//        {
-//            circularity.populateTable(table, i, results.results.get(labels[i]).getFeature(circularity.getId()));
-//        }
-//        table.show("Circularity");
         
         while(true)
         {

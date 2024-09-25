@@ -4,6 +4,9 @@
 package net.ijt.regfeat.features2d;
 
 import ij.measure.ResultsTable;
+import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.FeatureManager;
+import net.ijt.regfeat.RegionAnalyisData;
 
 /**
  * Computes the perimeter of a 2D region. In practice, this feature is an alias for the Perimeter_Crofton_D4 feature.

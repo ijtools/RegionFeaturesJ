@@ -6,6 +6,9 @@ package net.ijt.regfeat.features2d;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
+import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.FeatureManager;
+import net.ijt.regfeat.RegionAnalyisData;
 
 /**
  * Computation of perimeter using discretization of Crofton formula with four

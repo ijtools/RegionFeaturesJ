@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.ijt.regfeat.features2d;
+package net.ijt.regfeat;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -15,44 +15,7 @@ import ij.measure.ResultsTable;
  */
 public abstract class Feature
 {
-    /**
-     * The list of features that are required to compute this feature.
-     */
-    protected Collection<Class<? extends Feature>> requiredFeatures = new ArrayList<>(2);
-    
-    
-    protected Feature()
-    {
-    }
-    
-    
-    public void updateData(RegionAnalyisData results)
-    {
-        System.out.println("start computing feature: " + this.getClass().getSimpleName());
-        if (results.isComputed(this.getClass())) return;
-        System.out.println("  compute it");
-        
-        // check required features
-        for (Class<? extends Feature> fClass : requiredFeatures)
-        {
-            Feature feature = getFeature(fClass);
-            if (feature != null)
-            {
-                feature.updateData(results);
-            }
-        }
-        
-        // process computation
-        Object[] res = compute(results.labels, results);
-        for (int i = 0; i < results.labels.length; i++)
-        {
-            results.regionData.get(results.labels[i]).features.put(this.getClass(), res[i]);
-        }
-        
-        results.setAsComputed(this.getClass());
-    }
-    
-    private Feature getFeature(Class<? extends Feature> featureClass)
+    public static final Feature create(Class<? extends Feature> featureClass)
     {
         try
         {
@@ -84,6 +47,43 @@ public abstract class Feature
             e.printStackTrace();
         }
         return null;
+    }
+    
+    /**
+     * The list of features that are required to compute this feature.
+     */
+    protected Collection<Class<? extends Feature>> requiredFeatures = new ArrayList<>(2);
+    
+    
+    protected Feature()
+    {
+    }
+    
+    
+    public void updateData(RegionAnalyisData results)
+    {
+        System.out.println("start computing feature: " + this.getClass().getSimpleName());
+        if (results.isComputed(this.getClass())) return;
+        System.out.println("  compute it");
+        
+        // check required features
+        for (Class<? extends Feature> fClass : requiredFeatures)
+        {
+            Feature feature = create(fClass);
+            if (feature != null)
+            {
+                feature.updateData(results);
+            }
+        }
+        
+        // process computation
+        Object[] res = compute(results.labels, results);
+        for (int i = 0; i < results.labels.length; i++)
+        {
+            results.regionData.get(results.labels[i]).features.put(this.getClass(), res[i]);
+        }
+        
+        results.setAsComputed(this.getClass());
     }
     
     /**

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.ijt.regfeat.features2d;
+package net.ijt.regfeat;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -19,17 +19,17 @@ public class RegionAnalyisData
     /**
      * The labels of the regions to be analyzed.
      */
-    int[] labels;
+    public int[] labels;
     
     /**
      * The image containing the map of region label for each pixel / voxel.
      */
-    ImagePlus labelMap;
+    public ImagePlus labelMap;
     
     /**
      * The features computed for each region.
      */
-    Map<Integer, RegionData> regionData;
+    public Map<Integer, RegionData> regionData;
     
     /**
      * A map of boolean flags identifying which features have been already
@@ -51,14 +51,16 @@ public class RegionAnalyisData
         computedFeatures = new HashSet<>();
     }
     
-    public void updateWith(Feature feature)
+    public void updateWith(Class<? extends Feature> featureClass)
     {
-        if (isComputed(feature.getClass())) return;
+        if (isComputed(featureClass)) return;
         
+        Feature feature = Feature.create(featureClass);
         feature.updateData(this);
         
-        setAsComputed(feature.getClass());
+        setAsComputed(featureClass);
     }
+    
     
     public boolean isComputed(Class<? extends Feature> featureClass)
     {
@@ -68,6 +70,43 @@ public class RegionAnalyisData
     public void setAsComputed(Class<? extends Feature> featureClass)
     {
         computedFeatures.add(featureClass);
+    }
+    
+    @SuppressWarnings("unchecked")
+    public ResultsTable createTable(Class<? extends Feature>... classes)
+    {
+        // manually check validity of input parameters
+        for (Class<?> clazz : classes)
+        {
+            if (!Feature.class.isAssignableFrom(clazz))
+            {
+                throw new RuntimeException("Requires the class arguments to inherots the Feature class");
+            }
+        }
+        
+        // Initialize labels
+        int nLabels = labels.length;
+        ResultsTable table = new ResultsTable();
+        for (int i = 0; i < nLabels; i++)
+        {
+            table.incrementCounter();
+            table.setLabel("" + labels[i], i);
+        }
+        
+        for (Class<? extends Feature> featureClass : classes)
+        {
+            if (!isComputed(featureClass))
+            {
+                throw new RuntimeException("Feature has not been computed: " + featureClass);
+            }
+            
+            for (int i = 0; i < labels.length; i++)
+            {
+                Feature feature = Feature.create(featureClass);
+                feature.populateTable(table, i, regionData.get(labels[i]).getFeature(featureClass));
+            }
+        }
+        return table;
     }
     
     public ResultsTable createTable(Feature... features)

@@ -4,6 +4,10 @@
 package net.ijt.regfeat.features2d;
 
 import ij.measure.ResultsTable;
+import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.FeatureManager;
+import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionData;
 
 /**
  * The circularity of a region, defined from normalized ratio of area and
