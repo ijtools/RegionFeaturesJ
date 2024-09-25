@@ -32,8 +32,7 @@ public class RegionAnalyisData
     public Map<Integer, RegionData> regionData;
     
     /**
-     * A map of boolean flags identifying which features have been already
-     * computed.
+     * The list of features that have been computed.
      */
     Collection<Class<? extends Feature>> computedFeatures;
     
@@ -60,7 +59,6 @@ public class RegionAnalyisData
         
         setAsComputed(featureClass);
     }
-    
     
     public boolean isComputed(Class<? extends Feature> featureClass)
     {
@@ -108,33 +106,6 @@ public class RegionAnalyisData
         }
         return table;
     }
-    
-    public ResultsTable createTable(Feature... features)
-    {
-        // Initialize labels
-        int nLabels = labels.length;
-        ResultsTable table = new ResultsTable();
-        for (int i = 0; i < nLabels; i++)
-        {
-            table.incrementCounter();
-            table.setLabel("" + labels[i], i);
-        }
-        
-        for (Feature f : features)
-        {
-            if (!isComputed(f.getClass()))
-            {
-                throw new RuntimeException("Feature has not been computed: " + f.getClass());
-            }
-            
-            for (int i = 0; i < labels.length; i++)
-            {
-                f.populateTable(table, i, regionData.get(labels[i]).getFeature(f.getClass()));
-            }
-        }
-        return table;
-    }
-    
     
     public void printComputedFeatures()
     {

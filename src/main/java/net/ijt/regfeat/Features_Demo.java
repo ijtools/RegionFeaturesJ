@@ -60,12 +60,6 @@ public class Features_Demo
         {
           ;  
         }
-//        FeatureManager fm = FeatureManager.getInstance();
-//        fm.addFeature(Area.instance());
-////        fm.addFeature(Area.instance());
-//        fm.addFeature(Perimeter_Crofton_D4.instance());
-//        
-//        fm.printFeatureList();
     }
     
 }
