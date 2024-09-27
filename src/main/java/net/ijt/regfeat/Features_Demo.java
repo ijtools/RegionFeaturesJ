@@ -37,7 +37,6 @@ public class Features_Demo
             }
         }
         ImagePlus image = new ImagePlus("labels", array);
-        
         int[] labels = new int[] {3, 5, 8, 9};
         
         RegionAnalyisData results = new RegionAnalyisData(image, labels);
