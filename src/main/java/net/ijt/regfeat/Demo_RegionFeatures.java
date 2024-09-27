@@ -8,6 +8,7 @@ import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import net.ijt.regfeat.morpho2d.Area;
+import net.ijt.regfeat.morpho2d.Centroid;
 import net.ijt.regfeat.morpho2d.Circularity;
 import net.ijt.regfeat.morpho2d.Perimeter;
 /**
@@ -27,6 +28,7 @@ public class Demo_RegionFeatures
                 .add(Area.class)
                 .add(Perimeter.class)
                 .add(Circularity.class)
+                .add(Centroid.class)
                 .computeAll()
                 .createTable();
         
