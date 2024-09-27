@@ -27,6 +27,13 @@ public class RegionAnalyisData
     public int[] labels;
     
     /**
+     * The map of features indexed by their class. When feature is created for
+     * the first time, it is indexed within the results class to retrieve it in
+     * case it is requested later.
+     */
+    public Map<Class<? extends Feature>, Feature> features;
+    
+    /**
      * The features computed for each region.
      */
     public Map<Integer, Map<Class<? extends Feature>, Object>> regionData;
@@ -41,6 +48,7 @@ public class RegionAnalyisData
         this.labelMap = imagePlus;
         this.labels = labels;
         
+        this.features = new HashMap<Class<? extends Feature>, Feature>();
         this.regionData = new HashMap<Integer, Map<Class<? extends Feature>, Object>>();
         for (int label : labels)
         {
@@ -54,7 +62,7 @@ public class RegionAnalyisData
     {
         if (isComputed(featureClass)) return;
         
-        Feature feature = Feature.create(featureClass);
+        Feature feature = getFeature(featureClass);
         feature.updateData(this);
         
         setAsComputed(featureClass);
@@ -68,6 +76,17 @@ public class RegionAnalyisData
     public void setAsComputed(Class<? extends Feature> featureClass)
     {
         computedFeatures.add(featureClass);
+    }
+    
+    public Feature getFeature(Class<? extends Feature> featureClass)
+    {
+        Feature feature = this.features.get(featureClass);
+        if (feature == null)
+        {
+            feature = Feature.create(featureClass);
+            this.features.put(featureClass, feature);
+        }
+        return feature;
     }
     
     @SuppressWarnings("unchecked")
@@ -100,7 +119,7 @@ public class RegionAnalyisData
             
             for (int i = 0; i < labels.length; i++)
             {
-                Feature feature = Feature.create(featureClass);
+                Feature feature = getFeature(featureClass);
                 feature.populateTable(table, i, regionData.get(labels[i]).get(featureClass));
             }
         }

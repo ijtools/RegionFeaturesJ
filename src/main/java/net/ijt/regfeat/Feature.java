@@ -85,9 +85,9 @@ public abstract class Feature
     {
         for (Class<? extends Feature> fClass : requiredFeatures)
         {
-            Feature feature = create(fClass); // TODO: use a map of features to avoid new creation at each call
-            if (feature != null)
+            if (!results.isComputed(fClass))
             {
+                Feature feature = results.getFeature(fClass);
                 feature.updateData(results);
             }
         }
