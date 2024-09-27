@@ -1,39 +1,44 @@
 /**
  * 
  */
-package net.ijt.regfeat.morpho2d;
+package net.ijt.regfeat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 import ij.ImagePlus;
+import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.morpho2d.Area;
+import net.ijt.regfeat.morpho2d.Circularity;
+import net.ijt.regfeat.morpho2d.Perimeter;
 
 /**
  * 
  */
-public class CircularityTest
+public class RegionFeaturesTest
 {
+
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Circularity#compute(net.ijt.regfeat.RegionAnalyisData)}.
+     * Test method for {@link net.ijt.regfeat.RegionFeatures#createTable()}.
      */
     @Test
-    public final void testCompute()
+    public final void testCreateTable()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
         
-        Circularity feature = new Circularity();
-        Object[] res = feature.compute(data);
+        ResultsTable table = RegionFeatures.initialize(labelMap, LabelImages.findAllLabels(labelMap))
+                .add(Circularity.class)
+                .add(Area.class)
+                .add(Perimeter.class)
+                .computeAll()
+                .createTable();
                 
-        Object res3 = res[3];
-        assertTrue(res3 instanceof Double);
-        assertEquals((double) res3, 1.0, 0.2);
+        assertEquals(4, table.getCounter());
+        assertEquals(2, table.getLastColumn());
     }
 
     private static final ImagePlus createImagePlus()

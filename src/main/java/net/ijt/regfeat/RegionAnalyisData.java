@@ -58,12 +58,29 @@ public class RegionAnalyisData
         computedFeatures = new HashSet<>();
     }
     
+    /**
+     * Updates the informations stored within this result class with the feature
+     * identified by the specified class, if it is not already computed.
+     * 
+     * @param featureClass
+     *            the class to compute
+     */
     public void updateWith(Class<? extends Feature> featureClass)
     {
         if (isComputed(featureClass)) return;
         
         Feature feature = getFeature(featureClass);
-        feature.updateData(this);
+        
+        feature.ensureRequiredFeaturesAreComputed(this);
+        
+        // compute feature
+        Object[] res = feature.compute(this);
+        
+        // update mapping into results data
+        for (int i = 0; i < this.labels.length; i++)
+        {
+            this.regionData.get(this.labels[i]).put(featureClass, res[i]);
+        }
         
         setAsComputed(featureClass);
     }

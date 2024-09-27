@@ -87,8 +87,7 @@ public abstract class Feature
         {
             if (!results.isComputed(fClass))
             {
-                Feature feature = results.getFeature(fClass);
-                feature.updateData(results);
+                results.updateWith(fClass);
             }
         }
     }
