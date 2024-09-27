@@ -31,8 +31,19 @@ public class Area extends Feature
     }
     
     @Override
-    public void populateTable(ResultsTable table, int row, Object value)
+    public void populateTable(ResultsTable table, Object obj)
     {
-        table.setValue("Area", row, (double) value);
+        if (obj instanceof double[])
+        {
+            double[] array = (double[]) obj;
+            for (int r = 0; r < array.length; r++)
+            {
+                table.setValue("Area", r, array[r]);
+            }
+        }
+        else
+        {
+            throw new RuntimeException("Requires object argument to be an array of double");
+        }
     }
 }

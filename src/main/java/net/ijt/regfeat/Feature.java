@@ -80,6 +80,6 @@ public abstract class Feature
      */
     public abstract Object compute(RegionAnalyisData results);
     
-    public abstract void populateTable(ResultsTable table, int row, Object value);
+    public abstract void populateTable(ResultsTable table, Object value);
     
 }

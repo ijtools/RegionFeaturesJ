@@ -127,8 +127,8 @@ public class RegionAnalyisData
             for (int i = 0; i < labels.length; i++)
             {
                 Feature feature = getFeature(featureClass);
-                Object[] dat = (Object[]) results.get(featureClass);
-                feature.populateTable(table, i, dat[i]);
+                Object res = results.get(featureClass);
+                feature.populateTable(table, res);
             }
         }
         return table;

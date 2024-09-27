@@ -48,7 +48,7 @@ public class Features_Demo
         
         for (int i = 0; i < labels.length; i++)
         {
-          System.out.println("circ of " + labels[i] + " is " + ((Object[]) data.results.get(Circularity.class))[i]);
+          System.out.println("circ of " + labels[i] + " is " + ((double[]) data.results.get(Circularity.class))[i]);
         }
         
         @SuppressWarnings("unchecked")
