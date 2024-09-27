@@ -22,8 +22,11 @@ public class Circularity extends Feature
     }
     
     @Override
-    public Object[] compute(int[] labels, RegionAnalyisData results)
+    public Object[] compute(RegionAnalyisData results)
     {
+        ensureRequiredFeaturesAreComputed(results);
+        
+        int[] labels = results.labels;
         Double[] res = new Double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {

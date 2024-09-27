@@ -17,14 +17,14 @@ import ij.measure.ResultsTable;
 public class RegionAnalyisData
 {
     /**
-     * The labels of the regions to be analyzed.
-     */
-    public int[] labels;
-    
-    /**
      * The image containing the map of region label for each pixel / voxel.
      */
     public ImagePlus labelMap;
+    
+    /**
+     * The labels of the regions to be analyzed.
+     */
+    public int[] labels;
     
     /**
      * The features computed for each region.

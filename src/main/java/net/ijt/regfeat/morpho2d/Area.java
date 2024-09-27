@@ -15,15 +15,15 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class Area extends Feature
 {
     @Override
-    public Object[] compute(int[] labels, RegionAnalyisData results)
+    public Object[] compute(RegionAnalyisData results)
     {
         ImagePlus labelMap = results.labelMap;
             
         IntrinsicVolumes2D algo = new IntrinsicVolumes2D();
-        IntrinsicVolumes2D.Result[] res = algo.analyzeRegions(labelMap.getProcessor(), labels, labelMap.getCalibration());
+        IntrinsicVolumes2D.Result[] res = algo.analyzeRegions(labelMap.getProcessor(), results.labels, labelMap.getCalibration());
         
-        Double[] areas = new Double[labels.length];
-        for (int i = 0; i < labels.length; i++)
+        Double[] areas = new Double[results.labels.length];
+        for (int i = 0; i < results.labels.length; i++)
         {
             areas[i] = res[i].area;
         }

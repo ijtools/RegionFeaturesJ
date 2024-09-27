@@ -16,9 +16,10 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class Perimeter_Crofton_D4 extends Feature
 {
     @Override
-    public Object[] compute(int[] labels, RegionAnalyisData results)
+    public Object[] compute(RegionAnalyisData results)
     {
         ImagePlus labelMap = results.labelMap;
+        int[] labels = results.labels;
             
         IntrinsicVolumes2D algo = new IntrinsicVolumes2D();
         IntrinsicVolumes2D.Result[] res = algo.analyzeRegions(labelMap.getProcessor(), labels, labelMap.getCalibration());

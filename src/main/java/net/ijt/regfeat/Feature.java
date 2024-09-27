@@ -66,18 +66,13 @@ public abstract class Feature
         if (results.isComputed(this.getClass())) return;
         System.out.println("  compute it");
         
-        // check required features
-        for (Class<? extends Feature> fClass : requiredFeatures)
-        {
-            Feature feature = create(fClass);
-            if (feature != null)
-            {
-                feature.updateData(results);
-            }
-        }
+        // check required features are computed
+        ensureRequiredFeaturesAreComputed(results);
         
         // process computation
-        Object[] res = compute(results.labels, results);
+        Object[] res = compute(results);
+        
+        // update mapping into results data
         for (int i = 0; i < results.labels.length; i++)
         {
             results.regionData.get(results.labels[i]).put(this.getClass(), res[i]);
@@ -86,20 +81,31 @@ public abstract class Feature
         results.setAsComputed(this.getClass());
     }
     
+    public void ensureRequiredFeaturesAreComputed(RegionAnalyisData results)
+    {
+        for (Class<? extends Feature> fClass : requiredFeatures)
+        {
+            Feature feature = create(fClass); // TODO: use a map of features to avoid new creation at each call
+            if (feature != null)
+            {
+                feature.updateData(results);
+            }
+        }
+    }
+    
     /**
      * Computes the feature for each of the regions specified by labels in
      * <code>labels</code>, based on the data stored in <code>results</code>.
+     * All required features must have been computed.
      * 
      * @see RegionAnalysisData#updateWith(Feature)
      * 
-     * @param labels
-     *            the labels of the regions to analyze
      * @param results
      *            a data structure containing data for computing this feature
      * @return an array the same size as labels containing result of analysis
      *         for each region
      */
-    public abstract Object[] compute(int[] labels, RegionAnalyisData results);
+    public abstract Object[] compute(RegionAnalyisData results);
     
     public abstract void populateTable(ResultsTable table, int row, Object value);
     

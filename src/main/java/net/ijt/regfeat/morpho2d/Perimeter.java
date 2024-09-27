@@ -19,7 +19,7 @@ public class Perimeter extends Feature
     }
     
     @Override
-    public Object[] compute(int[] labels, RegionAnalyisData results)
+    public Object[] compute(RegionAnalyisData results)
     {
         // check required features have been computed
         if (!results.isComputed(Perimeter_Crofton_D4.class))
@@ -28,6 +28,7 @@ public class Perimeter extends Feature
         }
         
         // convert into an array of double
+        int[] labels = results.labels;
         Double[] res = new Double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
