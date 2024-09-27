@@ -39,20 +39,20 @@ public class Features_Demo
         ImagePlus image = new ImagePlus("labels", array);
         int[] labels = new int[] {3, 5, 8, 9};
         
-        RegionAnalyisData results = new RegionAnalyisData(image, labels);
-        results.updateWith(Perimeter.class);
-        results.updateWith(Circularity.class);
+        RegionAnalyisData data = new RegionAnalyisData(image, labels);
+        data.updateWith(Perimeter.class);
+        data.updateWith(Circularity.class);
         
         System.out.println("Computed features:");
-        results.printComputedFeatures();
+        data.printComputedFeatures();
         
-        for (int label : labels)
+        for (int i = 0; i < labels.length; i++)
         {
-            System.out.println("circ of " + label + " is " + results.regionData.get(label).get(Circularity.class));
+          System.out.println("circ of " + labels[i] + " is " + ((Object[]) data.results.get(Circularity.class))[i]);
         }
         
         @SuppressWarnings("unchecked")
-        ResultsTable table = results.createTable(Area.class, Perimeter.class, Circularity.class);
+        ResultsTable table = data.createTable(Area.class, Perimeter.class, Circularity.class);
         table.show("Features");
         
         while(true)

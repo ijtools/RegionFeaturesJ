@@ -63,8 +63,9 @@ public class RegionFeatures
             
             for (int i = 0; i < data.labels.length; i++)
             {
-                Feature feature = Feature.create(featureClass);
-                feature.populateTable(table, i, data.regionData.get(data.labels[i]).get(featureClass));
+                Feature feature = this.data.getFeature(featureClass);
+                Object[] dat = (Object[]) this.data.results.get(featureClass);
+                feature.populateTable(table, i, dat[i]);
             }
         }
         return table;

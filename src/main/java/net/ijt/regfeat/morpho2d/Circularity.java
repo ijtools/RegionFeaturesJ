@@ -3,8 +3,6 @@
  */
 package net.ijt.regfeat.morpho2d;
 
-import java.util.Map;
-
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionAnalyisData;
@@ -26,13 +24,14 @@ public class Circularity extends Feature
     {
         ensureRequiredFeaturesAreComputed(results);
         
+        Double[] areas = (Double[]) results.results.get(Area.class);
+        Double[] perims = (Double[]) results.results.get(Perimeter.class);
         int[] labels = results.labels;
         Double[] res = new Double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
-            Map<Class<? extends Feature>, Object> data = results.regionData.get(labels[i]);
-            double a = (double) data.get(Area.class);
-            double p = (double) data.get(Perimeter.class);
+            double a = areas[i];
+            double p = perims[i];
             double circ = 4 * Math.PI * a / (p * p);
             res[i] = circ;
         }

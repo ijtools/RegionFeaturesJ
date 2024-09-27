@@ -27,14 +27,7 @@ public class Perimeter extends Feature
             throw new RuntimeException("Requires Perimeter_Crofton_D4 to have been computed");
         }
         
-        // convert into an array of double
-        int[] labels = results.labels;
-        Double[] res = new Double[labels.length];
-        for (int i = 0; i < labels.length; i++)
-        {
-            res[i] = (double) results.regionData.get(labels[i]).get(Perimeter_Crofton_D4.class);
-        }
-        return res;
+        return (Object[]) results.results.get(Perimeter_Crofton_D4.class);
     }
     
     @Override

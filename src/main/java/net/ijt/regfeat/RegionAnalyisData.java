@@ -34,9 +34,9 @@ public class RegionAnalyisData
     public Map<Class<? extends Feature>, Feature> features;
     
     /**
-     * The features computed for each region.
+     * The results computed for each feature. 
      */
-    public Map<Integer, Map<Class<? extends Feature>, Object>> regionData;
+    public Map<Class<? extends Feature>, Object> results;
     
     /**
      * The list of features that have been computed.
@@ -49,11 +49,7 @@ public class RegionAnalyisData
         this.labels = labels;
         
         this.features = new HashMap<Class<? extends Feature>, Feature>();
-        this.regionData = new HashMap<Integer, Map<Class<? extends Feature>, Object>>();
-        for (int label : labels)
-        {
-            this.regionData.put(label, new HashMap<Class<? extends Feature>, Object>());
-        }
+        this.results = new HashMap<Class<? extends Feature>, Object>();
         
         computedFeatures = new HashSet<>();
     }
@@ -75,12 +71,7 @@ public class RegionAnalyisData
         
         // compute feature
         Object[] res = feature.compute(this);
-        
-        // update mapping into results data
-        for (int i = 0; i < this.labels.length; i++)
-        {
-            this.regionData.get(this.labels[i]).put(featureClass, res[i]);
-        }
+        this.results.put(featureClass, res);
         
         setAsComputed(featureClass);
     }
@@ -114,7 +105,7 @@ public class RegionAnalyisData
         {
             if (!Feature.class.isAssignableFrom(clazz))
             {
-                throw new RuntimeException("Requires the class arguments to inherots the Feature class");
+                throw new RuntimeException("Requires the class arguments to inherits the Feature class");
             }
         }
         
@@ -137,7 +128,8 @@ public class RegionAnalyisData
             for (int i = 0; i < labels.length; i++)
             {
                 Feature feature = getFeature(featureClass);
-                feature.populateTable(table, i, regionData.get(labels[i]).get(featureClass));
+                Object[] dat = (Object[]) results.get(featureClass);
+                feature.populateTable(table, i, dat[i]);
             }
         }
         return table;
