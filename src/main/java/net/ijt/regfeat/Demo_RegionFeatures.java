@@ -7,9 +7,9 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
-import net.ijt.regfeat.features2d.Area;
-import net.ijt.regfeat.features2d.Circularity;
-import net.ijt.regfeat.features2d.Perimeter;
+import net.ijt.regfeat.morpho2d.Area;
+import net.ijt.regfeat.morpho2d.Circularity;
+import net.ijt.regfeat.morpho2d.Perimeter;
 /**
  * Simple file for demonstrating the usage of features.
  */

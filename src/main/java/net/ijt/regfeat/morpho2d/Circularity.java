@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.ijt.regfeat.features2d;
+package net.ijt.regfeat.morpho2d;
 
 import java.util.Map;
 
