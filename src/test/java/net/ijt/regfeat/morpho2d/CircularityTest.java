@@ -4,7 +4,6 @@
 package net.ijt.regfeat.morpho2d;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -29,11 +28,10 @@ public class CircularityTest
         RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
         
         Circularity feature = new Circularity();
-        Object[] res = feature.compute(data);
+        double[] res = (double[]) feature.compute(data);
                 
-        Object res3 = res[3];
-        assertTrue(res3 instanceof Double);
-        assertEquals((double) res3, 1.0, 0.2);
+        double res3 = res[3];
+        assertEquals(res3, 1.0, 0.2);
     }
 
     private static final ImagePlus createImagePlus()

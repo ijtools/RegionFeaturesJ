@@ -19,7 +19,7 @@ public class Perimeter extends Feature
     }
     
     @Override
-    public Object[] compute(RegionAnalyisData results)
+    public double[] compute(RegionAnalyisData results)
     {
         // check required features have been computed
         if (!results.isComputed(Perimeter_Crofton_D4.class))
@@ -27,7 +27,7 @@ public class Perimeter extends Feature
             throw new RuntimeException("Requires Perimeter_Crofton_D4 to have been computed");
         }
         
-        return (Object[]) results.results.get(Perimeter_Crofton_D4.class);
+        return (double[]) results.results.get(Perimeter_Crofton_D4.class);
     }
     
     @Override

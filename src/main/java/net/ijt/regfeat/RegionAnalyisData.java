@@ -69,9 +69,8 @@ public class RegionAnalyisData
         
         feature.ensureRequiredFeaturesAreComputed(this);
         
-        // compute feature
-        Object[] res = feature.compute(this);
-        this.results.put(featureClass, res);
+        // compute feature, and index into results
+        this.results.put(featureClass, feature.compute(this));
         
         setAsComputed(featureClass);
     }
