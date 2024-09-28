@@ -68,9 +68,9 @@ public abstract class Feature
      * @return an array the same size as labels containing result of analysis
      *         for each region
      */
-    public abstract Object compute(RegionAnalyisData results);
+    public abstract Object compute(RegionAnalyisData data);
     
-    public abstract void populateTable(ResultsTable table, Object value);
+    public abstract void populateTable(ResultsTable table, Object obj);
     
     public Collection<Class<? extends Feature>>requiredFeatures()
     {
