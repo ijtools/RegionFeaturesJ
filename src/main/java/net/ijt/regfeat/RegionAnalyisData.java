@@ -58,10 +58,21 @@ public class RegionAnalyisData
         
         Feature feature = getFeature(featureClass);
         
-        feature.ensureRequiredFeaturesAreComputed(this);
+        ensureRequiredFeaturesAreComputed(feature);
         
         // compute feature, and index into results
         this.results.put(featureClass, feature.compute(this));
+    }
+    
+    public void ensureRequiredFeaturesAreComputed(Feature feature)
+    {
+        for (Class<? extends Feature> fClass : feature.requiredFeatures())
+        {
+            if (!isComputed(fClass))
+            {
+                updateWith(fClass);
+            }
+        }
     }
     
     public boolean isComputed(Class<? extends Feature> featureClass)

@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 import ij.measure.ResultsTable;
 
@@ -55,17 +56,6 @@ public abstract class Feature
     protected Collection<Class<? extends Feature>> requiredFeatures = new ArrayList<>(2);
     
     
-    public void ensureRequiredFeaturesAreComputed(RegionAnalyisData results)
-    {
-        for (Class<? extends Feature> fClass : requiredFeatures)
-        {
-            if (!results.isComputed(fClass))
-            {
-                results.updateWith(fClass);
-            }
-        }
-    }
-    
     /**
      * Computes the feature for each of the regions specified by labels in
      * <code>labels</code>, based on the data stored in <code>results</code>.
@@ -82,4 +72,8 @@ public abstract class Feature
     
     public abstract void populateTable(ResultsTable table, Object value);
     
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Collections.unmodifiableCollection(this.requiredFeatures);
+    }
 }

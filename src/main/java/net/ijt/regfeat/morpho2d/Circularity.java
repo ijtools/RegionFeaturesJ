@@ -20,15 +20,15 @@ public class Circularity extends Feature
     }
     
     @Override
-    public double[] compute(RegionAnalyisData results)
+    public double[] compute(RegionAnalyisData data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(results);
-        double[] areas = (double[]) results.results.get(Area.class);
-        double[] perims = (double[]) results.results.get(Perimeter.class);
+        data.ensureRequiredFeaturesAreComputed(this);
+        double[] areas = (double[]) data.results.get(Area.class);
+        double[] perims = (double[]) data.results.get(Perimeter.class);
         
         // iterate over labels to compute new feature
-        int[] labels = results.labels;
+        int[] labels = data.labels;
         double[] res = new double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
