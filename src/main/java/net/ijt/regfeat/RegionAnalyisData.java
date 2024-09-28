@@ -3,9 +3,7 @@
  */
 package net.ijt.regfeat;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import ij.ImagePlus;
@@ -38,11 +36,6 @@ public class RegionAnalyisData
      */
     public Map<Class<? extends Feature>, Object> results;
     
-    /**
-     * The list of features that have been computed.
-     */
-    Collection<Class<? extends Feature>> computedFeatures;
-    
     public RegionAnalyisData(ImagePlus imagePlus, int[] labels)
     {
         this.labelMap = imagePlus;
@@ -50,8 +43,6 @@ public class RegionAnalyisData
         
         this.features = new HashMap<Class<? extends Feature>, Feature>();
         this.results = new HashMap<Class<? extends Feature>, Object>();
-        
-        computedFeatures = new HashSet<>();
     }
     
     /**
@@ -71,18 +62,11 @@ public class RegionAnalyisData
         
         // compute feature, and index into results
         this.results.put(featureClass, feature.compute(this));
-        
-        setAsComputed(featureClass);
     }
     
     public boolean isComputed(Class<? extends Feature> featureClass)
     {
-        return computedFeatures.contains(featureClass);
-    }
-    
-    public void setAsComputed(Class<? extends Feature> featureClass)
-    {
-        computedFeatures.add(featureClass);
+        return results.containsKey(featureClass);
     }
     
     public Feature getFeature(Class<? extends Feature> featureClass)
@@ -136,6 +120,6 @@ public class RegionAnalyisData
     
     public void printComputedFeatures()
     {
-        computedFeatures.stream().forEach(c -> System.out.println(c.getSimpleName()));
+        results.keySet().stream().forEach(c -> System.out.println(c.getSimpleName()));
     }
 }
