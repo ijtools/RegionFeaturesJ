@@ -5,7 +5,7 @@ package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * The circularity of a region, defined from normalized ratio of area and
@@ -20,7 +20,7 @@ public class Circularity extends Feature
     }
     
     @Override
-    public double[] compute(RegionAnalyisData data)
+    public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);

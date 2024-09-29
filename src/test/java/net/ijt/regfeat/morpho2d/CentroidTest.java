@@ -14,7 +14,7 @@ import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
@@ -29,7 +29,7 @@ public class CentroidTest
     public final void testPopulateTable()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         
         Centroid feature = new Centroid();
         Point2D[] res = (Point2D[]) feature.compute(data);
@@ -40,13 +40,13 @@ public class CentroidTest
     }
 
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionAnalyisData)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testComputeRegionAnalyisData()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         Centroid feature = new Centroid();
 
         ResultsTable table = new ResultsTable();

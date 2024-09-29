@@ -7,7 +7,7 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computation of perimeter using discretization of Crofton formula with four
@@ -16,7 +16,7 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class Perimeter_Crofton_D4 extends Feature
 {
     @Override
-    public double[] compute(RegionAnalyisData results)
+    public double[] compute(RegionFeatures results)
     {
         ImagePlus labelMap = results.labelMap;
         int[] labels = results.labels;

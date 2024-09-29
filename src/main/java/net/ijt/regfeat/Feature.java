@@ -61,14 +61,14 @@ public abstract class Feature
      * <code>labels</code>, based on the data stored in <code>results</code>.
      * All required features must have been computed.
      * 
-     * @see RegionAnalysisData#updateWith(Feature)
+     * @see RegionAnalysisData#process(Feature)
      * 
      * @param results
      *            a data structure containing data for computing this feature
      * @return an array the same size as labels containing result of analysis
      *         for each region
      */
-    public abstract Object compute(RegionAnalyisData data);
+    public abstract Object compute(RegionFeatures data);
     
     public abstract void populateTable(ResultsTable table, Object obj);
     

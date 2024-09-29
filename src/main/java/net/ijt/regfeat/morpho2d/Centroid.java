@@ -9,7 +9,7 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes centroid of each regions within the label map.
@@ -17,7 +17,7 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class Centroid extends Feature
 {
     @Override
-    public Point2D[] compute(RegionAnalyisData results)
+    public Point2D[] compute(RegionFeatures results)
     {
         ImageProcessor labelMap = results.labelMap.getProcessor();
         Calibration calib = results.labelMap.getCalibration();

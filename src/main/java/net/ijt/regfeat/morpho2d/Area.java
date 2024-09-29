@@ -7,7 +7,7 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * A feature that computes the area of 2D regions.
@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class Area extends Feature
 {
     @Override
-    public double[] compute(RegionAnalyisData results)
+    public double[] compute(RegionFeatures results)
     {
         ImagePlus labelMap = results.labelMap;
             

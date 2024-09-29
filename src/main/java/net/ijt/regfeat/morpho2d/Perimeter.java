@@ -5,7 +5,7 @@ package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes the perimeter of a 2D region. In practice, this feature is an alias
@@ -19,7 +19,7 @@ public class Perimeter extends Feature
     }
     
     @Override
-    public double[] compute(RegionAnalyisData results)
+    public double[] compute(RegionFeatures results)
     {
         // check required features have been computed
         if (!results.isComputed(Perimeter_Crofton_D4.class))

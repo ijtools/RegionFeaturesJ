@@ -11,7 +11,6 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.morpho2d.Area;
 import net.ijt.regfeat.morpho2d.Circularity;
 import net.ijt.regfeat.morpho2d.Perimeter;
@@ -21,7 +20,6 @@ import net.ijt.regfeat.morpho2d.Perimeter;
  */
 public class RegionFeaturesTest
 {
-
     /**
      * Test method for {@link net.ijt.regfeat.RegionFeatures#createTable()}.
      */
@@ -30,11 +28,10 @@ public class RegionFeaturesTest
     {
         ImagePlus labelMap = createImagePlus();
         
-        ResultsTable table = RegionFeatures.initialize(labelMap, LabelImages.findAllLabels(labelMap))
+        ResultsTable table = RegionFeatures.initialize(labelMap)
                 .add(Circularity.class)
                 .add(Area.class)
                 .add(Perimeter.class)
-                .computeAll()
                 .createTable();
                 
         assertEquals(4, table.getCounter());

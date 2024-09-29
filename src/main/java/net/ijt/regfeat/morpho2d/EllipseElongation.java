@@ -8,7 +8,7 @@ import java.util.Arrays;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Ellipse;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
@@ -22,7 +22,7 @@ public class EllipseElongation extends Feature
     
 
     @Override
-    public double[] compute(RegionAnalyisData data)
+    public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);

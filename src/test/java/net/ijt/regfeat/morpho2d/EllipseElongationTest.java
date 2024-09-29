@@ -12,7 +12,7 @@ import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
@@ -20,13 +20,13 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class EllipseElongationTest
 {
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionAnalyisData)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testComputeRegionAnalyisData()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         
         EllipseElongation feature = new EllipseElongation();
         double[] res = (double[]) feature.compute(data);
@@ -46,7 +46,7 @@ public class EllipseElongationTest
     public final void testPopulateTable()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         EllipseElongation feature = new EllipseElongation();
 
         ResultsTable table = new ResultsTable();

@@ -11,7 +11,7 @@ import ij.ImagePlus;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
@@ -19,13 +19,13 @@ import net.ijt.regfeat.RegionAnalyisData;
 public class CircularityTest
 {
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Circularity#compute(net.ijt.regfeat.RegionAnalyisData)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Circularity#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testCompute()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionAnalyisData data = new RegionAnalyisData(labelMap, LabelImages.findAllLabels(labelMap));
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         
         Circularity feature = new Circularity();
         double[] res = (double[]) feature.compute(data);

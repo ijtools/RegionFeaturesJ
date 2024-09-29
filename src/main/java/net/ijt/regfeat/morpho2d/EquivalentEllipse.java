@@ -14,7 +14,7 @@ import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Ellipse;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionAnalyisData;
+import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Compute equivalent ellipse of regions stored within label map.
@@ -28,7 +28,7 @@ public class EquivalentEllipse extends Feature
 {
 
     @Override
-    public Ellipse[] compute(RegionAnalyisData data)
+    public Ellipse[] compute(RegionFeatures data)
     {
         // retrieve label map and list of labels
         ImageProcessor labelMap = data.labelMap.getProcessor();
