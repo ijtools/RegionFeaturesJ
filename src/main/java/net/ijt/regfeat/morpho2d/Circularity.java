@@ -41,8 +41,9 @@ public class Circularity extends Feature
     }
     
     @Override
-    public void populateTable(ResultsTable table, Object obj)
+    public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        Object obj = data.results.get(Circularity.class);
         if (obj instanceof double[])
         {
             double[] array = (double[]) obj;

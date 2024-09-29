@@ -70,7 +70,7 @@ public abstract class Feature
      */
     public abstract Object compute(RegionFeatures data);
     
-    public abstract void populateTable(ResultsTable table, Object obj);
+    public abstract void updateTable(ResultsTable table, RegionFeatures data);
     
     public Collection<Class<? extends Feature>>requiredFeatures()
     {

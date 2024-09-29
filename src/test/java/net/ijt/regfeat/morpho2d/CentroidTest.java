@@ -23,7 +23,7 @@ public class CentroidTest
 {
 
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#populateTable(ij.measure.ResultsTable, java.lang.Object)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */
     @Test
     public final void testPopulateTable()
@@ -46,11 +46,13 @@ public class CentroidTest
     public final void testComputeRegionAnalyisData()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
-        Centroid feature = new Centroid();
+        RegionFeatures data = RegionFeatures.initialize(labelMap)
+                .add(Centroid.class)
+                .computeAll();
 
         ResultsTable table = new ResultsTable();
-        feature.populateTable(table, feature.compute(data));
+        Centroid feature = new Centroid();
+        feature.updateTable(table, data);
         
         assertEquals(4, table.getCounter());
         assertEquals(1, table.getLastColumn());

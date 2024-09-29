@@ -126,14 +126,7 @@ public class RegionFeatures
         // ensure everything is computed
         computeAll();
         
-        // Initialize labels
-        int nLabels = this.labels.length;
-        ResultsTable table = new ResultsTable();
-        for (int i = 0; i < nLabels; i++)
-        {
-            table.incrementCounter();
-            table.setLabel("" + this.labels[i], i);
-        }
+        ResultsTable table = initializeTable(this.labels);
         
         for (Class<? extends Feature> featureClass : this.featureClasses)
         {
@@ -142,15 +135,22 @@ public class RegionFeatures
                 throw new RuntimeException("Feature has not been computed: " + featureClass);
             }
             
-            for (int i = 0; i < this.labels.length; i++)
-            {
-                Feature feature = getFeature(featureClass);
-                Object res = this.results.get(featureClass);
-                feature.populateTable(table, res);
-            }
+            Feature feature = getFeature(featureClass);
+            feature.updateTable(table, this);
         }
         return table;
-
+    }
+    
+    private static final ResultsTable initializeTable(int[] labels)
+    {
+        // Initialize label column in table
+        ResultsTable table = new ResultsTable();
+        for (int i = 0; i < labels.length; i++)
+        {
+            table.incrementCounter();
+            table.setLabel("" + labels[i], i);
+        }
+        return table;
     }
 
     public void printComputedFeatures()

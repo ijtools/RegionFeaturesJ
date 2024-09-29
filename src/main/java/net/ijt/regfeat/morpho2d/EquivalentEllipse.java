@@ -145,8 +145,9 @@ public class EquivalentEllipse extends Feature
     }
 
     @Override
-    public void populateTable(ResultsTable table, Object obj)
+    public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        Object obj = data.results.get(this.getClass());
         if (obj instanceof Ellipse[])
         {
             Ellipse[] array = (Ellipse[]) obj;

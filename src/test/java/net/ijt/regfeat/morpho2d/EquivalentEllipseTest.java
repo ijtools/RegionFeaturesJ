@@ -40,17 +40,19 @@ public class EquivalentEllipseTest
     }
     
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#populateTable(ij.measure.ResultsTable, java.lang.Object)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */
     @Test
     public final void testPopulateTable()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
+        RegionFeatures data = RegionFeatures.initialize(labelMap)
+                .add(EquivalentEllipse.class)
+                .computeAll();
         
         EquivalentEllipse feature = new EquivalentEllipse();
         ResultsTable table = new ResultsTable();
-        feature.populateTable(table, feature.compute(data));
+        feature.updateTable(table, data);
         
         assertEquals(4, table.getCounter());
         assertEquals(4, table.getLastColumn());
