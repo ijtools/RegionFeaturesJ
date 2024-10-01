@@ -3,9 +3,7 @@
  */
 package net.ijt.regfeat.morpho2d;
 
-import static org.junit.Assert.*;
-
-import java.awt.geom.Point2D;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -13,17 +11,18 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import inra.ijpb.geometry.Box2D;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
  */
-public class CentroidTest
+public class BoundsTest
 {
 
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionFeatures)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Bounds#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testCompute()
@@ -31,33 +30,40 @@ public class CentroidTest
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         
-        Centroid feature = new Centroid();
-        Point2D[] res = (Point2D[]) feature.compute(data);
-                
-        Point2D res3 = res[3];
-        assertEquals(res3.getX(), 4.5, 0.01);
-        assertEquals(res3.getY(), 4.5, 0.01);
+        Bounds feature = new Bounds();
+        Box2D[] res = (Box2D[]) feature.compute(data);
+        
+        Box2D res0 = res[0];
+        assertEquals(res0.getXMin(), 1.0, 0.01);
+        assertEquals(res0.getYMin(), 1.0, 0.01);
+        assertEquals(res0.getXMax(), 2.0, 0.01);
+        assertEquals(res0.getYMax(), 2.0, 0.01);
+        Box2D res3 = res[3];
+        assertEquals(res3.getXMin(), 3.0, 0.01);
+        assertEquals(res3.getYMin(), 3.0, 0.01);
+        assertEquals(res3.getXMax(), 7.0, 0.01);
+        assertEquals(res3.getYMax(), 7.0, 0.01);
     }
-
+    
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.Bounds#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */
     @Test
     public final void testPopulateTable()
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = RegionFeatures.initialize(labelMap)
-                .add(Centroid.class)
+                .add(Bounds.class)
                 .computeAll();
 
         ResultsTable table = new ResultsTable();
-        Centroid feature = new Centroid();
+        Bounds feature = new Bounds();
         feature.updateTable(table, data);
         
         assertEquals(4, table.getCounter());
-        assertEquals(1, table.getLastColumn());
+        assertEquals(3, table.getLastColumn());
     }
-    
+
     private static final ImagePlus createImagePlus()
     {
         ImageProcessor array = new ByteProcessor(8, 8);

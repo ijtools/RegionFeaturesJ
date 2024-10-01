@@ -23,7 +23,7 @@ public class EllipseElongationTest
      * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
-    public final void testComputeRegionAnalyisData()
+    public final void testCompute()
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
