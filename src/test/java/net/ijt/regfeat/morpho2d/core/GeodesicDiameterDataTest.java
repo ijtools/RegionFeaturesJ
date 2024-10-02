@@ -1,9 +1,9 @@
 /**
  * 
  */
-package net.ijt.regfeat.morpho2d;
+package net.ijt.regfeat.morpho2d.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -11,52 +11,47 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
-import inra.ijpb.geometry.Ellipse;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
  */
-public class EquivalentEllipseTest
+public class GeodesicDiameterDataTest
 {
 
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.EquivalentEllipse#compute(net.ijt.regfeat.RegionFeatures)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.core.GeodesicDiameterData#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testCompute()
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
-        EquivalentEllipse feature = new EquivalentEllipse();
+        GeodesicDiameterData feature = new GeodesicDiameterData();
 
-        Ellipse[] res = (Ellipse[]) feature.compute(data);
+        Object[] res = (Object[]) feature.compute(data);
         
-        assertEquals(res[0].center().getX(), 1.5, 0.01);
-        assertEquals(res[0].center().getY(), 1.5, 0.01);
-        assertEquals(res[3].center().getX(), 5.0, 0.01);
-        assertEquals(res[3].center().getY(), 5.0, 0.01);
+        assertEquals(res.length, 4);
     }
     
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.core.GeodesicDiameterData#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */
     @Test
     public final void testUpdateTable()
     {
         ImagePlus labelMap = createImagePlus();
-        RegionFeatures data = RegionFeatures.initialize(labelMap)
-                .add(EquivalentEllipse.class)
-                .computeAll();
+        RegionFeatures data = RegionFeatures.initialize(labelMap);
+        data.process(GeodesicDiameterData.class);
         
-        EquivalentEllipse feature = new EquivalentEllipse();
+        GeodesicDiameterData feature = new GeodesicDiameterData();
         ResultsTable table = new ResultsTable();
         feature.updateTable(table, data);
         
         assertEquals(4, table.getCounter());
-        assertEquals(4, table.getLastColumn());
     }
+
 
     private static final ImagePlus createImagePlus()
     {
