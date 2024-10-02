@@ -1,13 +1,14 @@
 /**
  * 
  */
-package net.ijt.regfeat.morpho2d;
+package net.ijt.regfeat.morpho2d.core;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.morpho2d.EulerNumber;
 
 /**
  * Euler number using the C8 connectivity.

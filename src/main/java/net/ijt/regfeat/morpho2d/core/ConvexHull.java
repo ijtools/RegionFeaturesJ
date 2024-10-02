@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.ijt.regfeat.morpho2d;
+package net.ijt.regfeat.morpho2d.core;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;

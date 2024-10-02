@@ -6,6 +6,7 @@ package net.ijt.regfeat.morpho2d;
 import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.morpho2d.core.EulerNumber_C4;
 
 /**
  * Computes the Euler number of 2D regions. Uses the default C4 connectivity. In

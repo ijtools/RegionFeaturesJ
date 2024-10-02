@@ -11,6 +11,7 @@ import inra.ijpb.geometry.Box2D;
 import inra.ijpb.geometry.Polygon2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
  * Computes the convexity, as the ratio of area over convex area.

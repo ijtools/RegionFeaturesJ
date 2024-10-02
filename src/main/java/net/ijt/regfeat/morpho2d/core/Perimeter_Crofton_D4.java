@@ -1,21 +1,21 @@
 /**
  * 
  */
-package net.ijt.regfeat.morpho2d;
+package net.ijt.regfeat.morpho2d.core;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.morpho2d.IntrinsicVolumes;
 
 /**
- * Euler number using the C4 connectivity.
- * 
- * @see EulerNumber
+ * Computation of perimeter using discretization of Crofton formula with four
+ * directions.
  */
-public class EulerNumber_C4 extends Feature
+public class Perimeter_Crofton_D4 extends Feature
 {
-    public EulerNumber_C4()
+    public Perimeter_Crofton_D4()
     {
         this.requiredFeatures.add(IntrinsicVolumes.class);
     }
@@ -27,12 +27,12 @@ public class EulerNumber_C4 extends Feature
         ensureRequiredFeaturesAreComputed(data);
         IntrinsicVolumes2D.Result[] res = (IntrinsicVolumes2D.Result[]) data.results.get(IntrinsicVolumes.class);
         
-        double[] eulers = new double[res.length];
+        double[] perims = new double[res.length];
         for (int i = 0; i < res.length; i++)
         {
-            eulers[i] = res[i].eulerNumber;
+            perims[i] = res[i].perimeter;
         }
-        return eulers;
+        return perims;
     }
     
     @Override
@@ -44,7 +44,7 @@ public class EulerNumber_C4 extends Feature
             double[] array = (double[]) obj;
             for (int r = 0; r < array.length; r++)
             {
-                table.setValue("Euler Number_C4", r, array[r]);
+                table.setValue("Perimeter_Crofton_D4", r, array[r]);
             }
         }
         else
