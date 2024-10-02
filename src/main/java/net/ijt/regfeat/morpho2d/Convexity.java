@@ -33,7 +33,7 @@ public class Convexity extends Feature
         double[] convexities = new double[areas.length];
         for (int i = 0; i < areas.length; i++)
         {
-            convexities[i] = convexAreas[i] / areas[i];
+            convexities[i] = areas[i] / convexAreas[i];
         }
         
         return convexities;

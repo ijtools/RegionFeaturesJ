@@ -103,6 +103,11 @@ public class RegionFeatures
         return this;
     }
     
+    public boolean contains(Class<? extends Feature> featureClass)
+    {
+        return this.featureClasses.contains(featureClass);
+    }
+    
     public RegionFeatures computeAll()
     {
         this.featureClasses.stream().forEach(this::process);
