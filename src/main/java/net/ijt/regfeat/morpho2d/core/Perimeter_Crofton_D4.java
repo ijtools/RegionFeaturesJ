@@ -7,7 +7,6 @@ import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
-import net.ijt.regfeat.morpho2d.IntrinsicVolumes;
 
 /**
  * Computation of perimeter using discretization of Crofton formula with four

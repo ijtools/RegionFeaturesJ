@@ -8,7 +8,6 @@ import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.EulerNumber;
-import net.ijt.regfeat.morpho2d.IntrinsicVolumes;
 
 /**
  * Euler number using the C4 connectivity.
