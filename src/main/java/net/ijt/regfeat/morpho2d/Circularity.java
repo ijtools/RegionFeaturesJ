@@ -23,7 +23,7 @@ public class Circularity extends Feature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        data.ensureRequiredFeaturesAreComputed(this);
+        ensureRequiredFeaturesAreComputed(data);
         double[] areas = (double[]) data.results.get(Area.class);
         double[] perims = (double[]) data.results.get(Perimeter.class);
         

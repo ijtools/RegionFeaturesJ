@@ -26,6 +26,11 @@ public class Convexity extends Feature
     @Override
     public Object compute(RegionFeatures data)
     {
+        // retrieve required feature values
+        ensureRequiredFeaturesAreComputed(data);
+        double[] areas = (double[]) data.results.get(Area.class);
+        Polygon2D[] hulls = (Polygon2D[]) data.results.get(ConvexHull.class);
+        
         // retrieve label map data
         int[] labels = data.labels;
         Calibration calib = data.labelMap.getCalibration();
@@ -35,12 +40,8 @@ public class Convexity extends Feature
             pixelArea = calib.pixelWidth * calib.pixelHeight;
         }
         
-        // retrieve data already computed
-        double[] areas = (double[]) data.results.get(Area.class);
-        Polygon2D[] hulls = (Polygon2D[]) data.results.get(ConvexHull.class);
-        double[] convexities = new double[labels.length];
-        
         // iterate over labels
+        double[] convexities = new double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
             Polygon2D convexHull = hulls[i];
@@ -51,7 +52,6 @@ public class Convexity extends Feature
             int xmax = (int) box.getXMax();
             int ymin = (int) box.getYMin();
             int ymax = (int) box.getYMax();
-            
             
             // counts the number of pixels with integer coordinates within the convex hull
             double convexArea = 0;

@@ -27,7 +27,7 @@ public class EllipseElongationTest
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
-        
+   
         EllipseElongation feature = new EllipseElongation();
         double[] res = (double[]) feature.compute(data);
         
@@ -38,7 +38,6 @@ public class EllipseElongationTest
         assertEquals(res[3], 1.0, 0.01);
     }
     
-
     /**
      * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */

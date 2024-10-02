@@ -75,22 +75,10 @@ public class RegionFeatures
         if (isComputed(featureClass)) return;
         
         Feature feature = getFeature(featureClass);
-        
-        ensureRequiredFeaturesAreComputed(feature);
+        feature.ensureRequiredFeaturesAreComputed(this);
         
         // compute feature, and index into results
         this.results.put(featureClass, feature.compute(this));
-    }
-    
-    public void ensureRequiredFeaturesAreComputed(Feature feature)
-    {
-        for (Class<? extends Feature> fClass : feature.requiredFeatures())
-        {
-            if (!isComputed(fClass))
-            {
-                process(fClass);
-            }
-        }
     }
     
     public boolean isComputed(Class<? extends Feature> featureClass)

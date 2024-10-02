@@ -76,4 +76,17 @@ public abstract class Feature
     {
         return Collections.unmodifiableCollection(this.requiredFeatures);
     }
+    
+    protected void ensureRequiredFeaturesAreComputed(RegionFeatures data)
+    {
+        Class<? extends Feature> featureClass = this.getClass();
+        Feature feature = data.getFeature(featureClass);
+        for (Class<? extends Feature> fClass : feature.requiredFeatures())
+        {
+            if (!data.isComputed(fClass))
+            {
+                data.process(fClass);
+            }
+        }
+    }
 }

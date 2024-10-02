@@ -26,7 +26,7 @@ public class CircularityTest
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
-        
+            
         Circularity feature = new Circularity();
         double[] res = (double[]) feature.compute(data);
                 

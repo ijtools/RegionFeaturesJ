@@ -25,7 +25,7 @@ public class EllipseElongation extends Feature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        data.ensureRequiredFeaturesAreComputed(this);
+        ensureRequiredFeaturesAreComputed(data);
         Ellipse[] ellipses = (Ellipse[]) data.results.get(EquivalentEllipse.class);
         
         // iterate over labels to compute new feature
