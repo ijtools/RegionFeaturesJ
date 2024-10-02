@@ -11,7 +11,9 @@ import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
+ * Elongation of Equivalent ellipse.
  * 
+ * @see EquivalentEllipse.
  */
 public class EllipseElongation extends Feature
 {

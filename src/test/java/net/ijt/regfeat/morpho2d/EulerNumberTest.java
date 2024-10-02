@@ -16,10 +16,10 @@ import net.ijt.regfeat.RegionFeatures;
 /**
  * 
  */
-public class AreaTest
+public class EulerNumberTest
 {
     /**
-     * Test method for {@link net.ijt.regfeat.morpho2d.Area#compute(net.ijt.regfeat.RegionFeatures)}.
+     * Test method for {@link net.ijt.regfeat.morpho2d.EulerNumber#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testCompute()
@@ -27,14 +27,14 @@ public class AreaTest
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         
-        Area feature = new Area();
+        EulerNumber feature = new EulerNumber();
         double[] res = (double[]) feature.compute(data);
                 
         assertEquals(res.length, 4);
-        assertEquals(res[0],  1.0, 0.01);
-        assertEquals(res[1],  4.0, 0.01);
-        assertEquals(res[2],  4.0, 0.01);
-        assertEquals(res[3], 16.0, 0.01);
+        assertEquals(res[0], 1, 0.01);
+        assertEquals(res[1], 1, 0.01);
+        assertEquals(res[2], 1, 0.01);
+        assertEquals(res[3], 1, 0.01);
     }
 
     private static final ImagePlus createImagePlus()

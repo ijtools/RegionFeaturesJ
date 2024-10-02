@@ -3,7 +3,6 @@
  */
 package net.ijt.regfeat.morpho2d;
 
-import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
@@ -14,16 +13,20 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Area extends Feature
 {
-    @Override
-    public double[] compute(RegionFeatures results)
+    public Area()
     {
-        ImagePlus labelMap = results.labelMap;
-            
-        IntrinsicVolumes2D algo = new IntrinsicVolumes2D();
-        IntrinsicVolumes2D.Result[] res = algo.analyzeRegions(labelMap.getProcessor(), results.labels, labelMap.getCalibration());
+        this.requiredFeatures.add(IntrinsicVolumes.class);
+    }
+    
+    @Override
+    public double[] compute(RegionFeatures data)
+    {
+        // retrieve required feature values
+        ensureRequiredFeaturesAreComputed(data);
+        IntrinsicVolumes2D.Result[] res = (IntrinsicVolumes2D.Result[]) data.results.get(IntrinsicVolumes.class);
         
-        double[] areas = new double[results.labels.length];
-        for (int i = 0; i < results.labels.length; i++)
+        double[] areas = new double[res.length];
+        for (int i = 0; i < res.length; i++)
         {
             areas[i] = res[i].area;
         }
