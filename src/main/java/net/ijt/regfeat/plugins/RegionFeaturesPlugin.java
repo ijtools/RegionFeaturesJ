@@ -12,6 +12,7 @@ import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.Area;
+import net.ijt.regfeat.morpho2d.AverageThickness;
 import net.ijt.regfeat.morpho2d.Bounds;
 import net.ijt.regfeat.morpho2d.Centroid;
 import net.ijt.regfeat.morpho2d.Circularity;
@@ -20,7 +21,13 @@ import net.ijt.regfeat.morpho2d.EllipseElongation;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
 import net.ijt.regfeat.morpho2d.EulerNumber;
 import net.ijt.regfeat.morpho2d.GeodesicDiameter;
+import net.ijt.regfeat.morpho2d.GeodesicElongation;
+import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
+import net.ijt.regfeat.morpho2d.MaxFeretDiameter;
+import net.ijt.regfeat.morpho2d.OrientedBoundingBox;
+import net.ijt.regfeat.morpho2d.OrientedBoxElongation;
 import net.ijt.regfeat.morpho2d.Perimeter;
+import net.ijt.regfeat.morpho2d.Tortuosity;
 
 /**
  * 
@@ -119,21 +126,14 @@ public class RegionFeaturesPlugin implements PlugInFilter
         gd.addCheckbox("Equivalent_Ellipse", initialChoice.contains(EquivalentEllipse.class));
         gd.addCheckbox("Ellipse_Elong.", initialChoice.contains(EllipseElongation.class));
         gd.addCheckbox("Convexity", initialChoice.contains(Convexity.class));
-        // gd.addCheckbox("Max._Feret Diameter",
-        // initialChoice.contains(Feature.MAX_FERET_DIAMETER));
-        // gd.addCheckbox("Oriented_Box",
-        // initialChoice.contains(Feature.ORIENTED_BOX));
-        // gd.addCheckbox("Oriented_Box_Elong.",
-        // initialChoice.contains(Feature.ORIENTED_BOX_ELONGATION));
+        gd.addCheckbox("Max._Feret Diameter", initialChoice.contains(MaxFeretDiameter.class));
+        gd.addCheckbox("Oriented_Box", initialChoice.contains(OrientedBoundingBox.class));
+        gd.addCheckbox("Oriented_Box_Elong.", initialChoice.contains(OrientedBoxElongation.class));
         gd.addCheckbox("Geodesic Diameter", initialChoice.contains(GeodesicDiameter.class));
-        // gd.addCheckbox("Tortuosity",
-        // initialChoice.contains(Feature.TORTUOSITY));
-        // gd.addCheckbox("Max._Inscribed_Disc",
-        // initialChoice.contains(Feature.MAX_INSCRIBED_DISK));
-        // gd.addCheckbox("Average_Thickness",
-        // initialChoice.contains(Feature.AVERAGE_THICKNESS));
-        // gd.addCheckbox("Geodesic_Elong.",
-        // initialChoice.contains(Feature.GEODESIC_ELONGATION));
+        gd.addCheckbox("Tortuosity", initialChoice.contains(Tortuosity.class));
+        gd.addCheckbox("Max._Inscribed_Disc", initialChoice.contains(LargestInscribedDisk.class));
+        gd.addCheckbox("Average_Thickness", initialChoice.contains(AverageThickness.class));
+        gd.addCheckbox("Geodesic_Elong.", initialChoice.contains(GeodesicElongation.class));
         gd.showDialog();
 
         // If cancel was clicked, do nothing
@@ -152,15 +152,14 @@ public class RegionFeaturesPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);
         if (gd.getNextBoolean()) features.add(EllipseElongation.class);
         if (gd.getNextBoolean()) features.add(Convexity.class);
-        // if (gd.getNextBoolean()) features.add(Feature.MAX_FERET_DIAMETER);
-        // if (gd.getNextBoolean()) features.add(Feature.ORIENTED_BOX);
-        // if (gd.getNextBoolean())
-        // features.add(Feature.ORIENTED_BOX_ELONGATION);
+        if (gd.getNextBoolean()) features.add(MaxFeretDiameter.class);
+        if (gd.getNextBoolean()) features.add(OrientedBoundingBox.class);
+        if (gd.getNextBoolean()) features.add(OrientedBoxElongation.class);
         if (gd.getNextBoolean()) features.add(GeodesicDiameter.class);
-        // if (gd.getNextBoolean()) features.add(Feature.TORTUOSITY);
-        // if (gd.getNextBoolean()) features.add(Feature.MAX_INSCRIBED_DISK);
-        // if (gd.getNextBoolean()) features.add(Feature.AVERAGE_THICKNESS);
-        // if (gd.getNextBoolean()) features.add(Feature.GEODESIC_ELONGATION);
+        if (gd.getNextBoolean()) features.add(Tortuosity.class);
+        if (gd.getNextBoolean()) features.add(LargestInscribedDisk.class);
+        if (gd.getNextBoolean()) features.add(AverageThickness.class);
+        if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
 
         return features;
     }
