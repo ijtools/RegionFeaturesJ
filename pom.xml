@@ -17,10 +17,10 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!-- Artifact is the base name of the generated jar. --> 
     <!-- Feel free to update to what you want, but remember that --> 
     <!-- ImageJ plugins require an underscore '_' in the name... --> 
-    <artifactId>Region_Features</artifactId>
+    <artifactId>Region_FeaturesJ</artifactId>
     <!-- Good practice are to use semantic versioning, --> 
     <!-- and to remove the "-SNAPSHOT" suffix before releasing new version' --> 
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1.0</version>
     <!-- The name of the project at it will appear in IDE or during compilation --> 
     <!-- (may be different from artifactID) --> 
     <name>Region_Features</name>
