@@ -3,10 +3,11 @@
  */
 package net.ijt.regfeat.morpho2d;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
@@ -40,6 +41,21 @@ public class EquivalentEllipseTest
     }
     
     /**
+     * Test method for {@link net.ijt.regfeat.morpho2d.EquivalentEllipse#compute(net.ijt.regfeat.RegionFeatures)}.
+     */
+    @Test
+    public final void testCompute_wheatGrains()
+    {
+        ImagePlus labelMap = IJ.openImage(getClass().getResource("/grains-med-WTH-lbl.tif").getFile());
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
+        
+        EquivalentEllipse feature = new EquivalentEllipse();
+        Ellipse[] res = (Ellipse[]) feature.compute(data);
+        
+        assertEquals(96, res.length);
+    }
+    
+    /**
      * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */
     @Test
@@ -57,6 +73,19 @@ public class EquivalentEllipseTest
         assertEquals(4, table.getCounter());
         assertEquals(4, table.getLastColumn());
     }
+    
+    @Test
+    public final void testDrawAsOverlay()
+    {
+        ImagePlus labelMap = IJ.openImage(getClass().getResource("/grains-med-WTH-lbl.tif").getFile());
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
+        data.process(EquivalentEllipse.class);
+        
+        EquivalentEllipse feature = new EquivalentEllipse();
+        feature.addToOverlay(data, labelMap);
+        labelMap.show();
+    }
+    
 
     private static final ImagePlus createImagePlus()
     {

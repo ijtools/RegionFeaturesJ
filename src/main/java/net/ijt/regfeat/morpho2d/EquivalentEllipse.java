@@ -5,9 +5,14 @@ package net.ijt.regfeat.morpho2d;
 
 import static java.lang.Math.sqrt;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.HashMap;
 
+import ij.ImagePlus;
+import ij.gui.Overlay;
+import ij.gui.PolygonRoi;
+import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
@@ -175,4 +180,94 @@ public class EquivalentEllipse extends Feature
         }
     }
 
+    public void addToOverlay(RegionFeatures data, ImagePlus target)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof Ellipse[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of Ellipse");
+        }
+        Ellipse[] ellipses = (Ellipse[]) obj;
+        
+        // get spatial calibration of target image
+        Calibration calib = target.getCalibration();
+        
+        // create overlay
+        Overlay overlay = new Overlay();
+        
+        // add each ellipse to the overlay
+        for (int i = 0; i < ellipses.length; i++) 
+        {
+            // Coordinates of inscribed circle, in pixel coordinates
+            Ellipse ellipse = ellipses[i];
+            ellipse = uncalibrate(ellipse, calib);
+
+            // roi corresponding to ellipse
+            addRoiToOverlay(overlay, createRoi(ellipse), Color.BLUE);
+        }
+        
+        target.setOverlay(overlay);
+    }
+    
+    /**
+     * Determines the ellipse corresponding to the uncalibrated version of this
+     * ellipse, assuming it was defined in calibrated coordinates.
+     * 
+     * @param ellipse
+     *            the ellipse in calibrated coordinates
+     * @param calib
+     *            the spatial calibration to consider
+     * @return the circle in pixel coordinates
+     */
+    private final static Ellipse uncalibrate(Ellipse ellipse, Calibration calib)
+    {
+        Point2D center = ellipse.center();
+        double xc = (center.getX() - calib.xOrigin) / calib.pixelWidth;
+        double yc = (center.getY() - calib.yOrigin) / calib.pixelHeight;
+        double radius1 = ellipse.radius1() / calib.pixelWidth;
+        double radius2 = ellipse.radius2() / calib.pixelWidth;
+        return new Ellipse(xc, yc, radius1, radius2, ellipse.orientation());
+    }
+    
+    private final static Roi createRoi(Ellipse ellipse)
+    {
+        // Coordinates of ellipse, in pixel coordinates
+        Point2D center = ellipse.center();
+        double xc = center.getX();
+        double yc = center.getY();
+        
+        double r1 = ellipse.radius1();
+        double r2 = ellipse.radius2();
+        double theta = Math.toRadians(ellipse.orientation());
+        
+        double cot = Math.cos(theta);
+        double sit = Math.sin(theta);
+        
+        int nVertices = 100;
+        float[] xv = new float[nVertices];
+        float[] yv = new float[nVertices];
+        for (int i = 0; i < nVertices; i++)
+        {
+            double t = i * Math.PI * 2.0 / nVertices;
+            double x = Math.cos(t) * r1;
+            double y = Math.sin(t) * r2;
+            
+            xv[i] = (float) (x * cot - y * sit + xc);
+            yv[i] = (float) (x * sit + y * cot + yc);
+        }
+        
+        return new PolygonRoi(xv, yv, nVertices, Roi.POLYGON);
+    }
+
+    private static final void addRoiToOverlay(Overlay overlay, Roi roi, Color color)
+    {
+        roi.setStrokeColor(color);
+        overlay.add(roi);
+    }
+    
+    public static void main(String... args)
+    {
+        System.out.println("hi");
+    }
 }
