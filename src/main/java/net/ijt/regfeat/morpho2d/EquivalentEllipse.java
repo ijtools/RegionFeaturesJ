@@ -204,7 +204,8 @@ public class EquivalentEllipse extends Feature
             ellipse = uncalibrate(ellipse, calib);
 
             // roi corresponding to ellipse
-            addRoiToOverlay(overlay, createRoi(ellipse), Color.BLUE);
+            Color color = data.labelColors[i];
+            addRoiToOverlay(overlay, createRoi(ellipse), color);
         }
         
         target.setOverlay(overlay);
@@ -263,11 +264,7 @@ public class EquivalentEllipse extends Feature
     private static final void addRoiToOverlay(Overlay overlay, Roi roi, Color color)
     {
         roi.setStrokeColor(color);
+        roi.setStrokeWidth(1.5);
         overlay.add(roi);
-    }
-    
-    public static void main(String... args)
-    {
-        System.out.println("hi");
     }
 }

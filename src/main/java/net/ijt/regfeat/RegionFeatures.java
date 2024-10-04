@@ -3,6 +3,7 @@
  */
 package net.ijt.regfeat;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
+import inra.ijpb.color.ColorMaps;
 import inra.ijpb.label.LabelImages;
 
 /**
@@ -54,6 +56,9 @@ public class RegionFeatures
      */
     public Map<Class<? extends Feature>, Object> results;
     
+    public Color[] labelColors;
+    
+    
     public RegionFeatures(ImagePlus imagePlus, int[] labels)
     {
         this.labelMap = imagePlus;
@@ -61,6 +66,22 @@ public class RegionFeatures
         
         this.features = new HashMap<Class<? extends Feature>, Feature>();
         this.results = new HashMap<Class<? extends Feature>, Object>();
+        createLabelColors(this.labels.length);
+    }
+    
+    private void createLabelColors(int nLabels)
+    {
+        byte[][] lut = ColorMaps.CommonLabelMaps.GLASBEY_BRIGHT.computeLut(nLabels, false);
+        this.labelColors = new Color[nLabels];
+        for (int i = 0; i < nLabels; i++)
+        {
+            this.labelColors[i] = createColor(lut[i][0], lut[i][1], lut[i][2]);
+        }
+    }
+    
+    private static final Color createColor(byte r, byte g, byte b)
+    {
+        return new Color(r & 0x00FF, g & 0x00FF, b & 0x00FF);
     }
     
     /**

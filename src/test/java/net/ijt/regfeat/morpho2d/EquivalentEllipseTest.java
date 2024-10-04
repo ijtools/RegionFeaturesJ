@@ -84,6 +84,7 @@ public class EquivalentEllipseTest
         EquivalentEllipse feature = new EquivalentEllipse();
         feature.addToOverlay(data, labelMap);
         labelMap.show();
+//        while(true);
     }
     
 
