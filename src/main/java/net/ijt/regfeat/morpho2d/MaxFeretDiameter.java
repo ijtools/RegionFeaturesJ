@@ -3,9 +3,14 @@
  */
 package net.ijt.regfeat.morpho2d;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import ij.ImagePlus;
+import ij.gui.Overlay;
+import ij.gui.PolygonRoi;
+import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.FeretDiameters;
@@ -89,4 +94,57 @@ public class MaxFeretDiameter extends Feature
         }
     }
 
+    @Override
+    public void overlayResult(ImagePlus image, RegionFeatures data)
+    {
+        // retrieve the result of computation
+        PointPair2D[] diameters = (PointPair2D[]) data.results.get(this.getClass());
+                
+        // get spatial calibration of target image
+        Calibration calib = image.getCalibration();
+        
+        // create overlay
+        Overlay overlay = new Overlay();
+        Roi roi;
+        
+        // add each box to the overlay
+        for (int i = 0; i < diameters.length; i++) 
+        {
+            // Create ROI corresponding to diameter, in pixel coordinates
+            roi = createDiametersRoi(diameters[i], calib);
+            
+            // add ROI to overlay
+            Color color = data.labelColors[i];
+            addRoiToOverlay(overlay, roi, color, 1.5);
+        }
+        
+        image.setOverlay(overlay);
+    }
+    
+    private Roi createDiametersRoi(PointPair2D pointPair, Calibration calib)
+    {
+        if (pointPair == null)
+        {
+            return null;
+        }
+
+        Point2D p1 = calibToPixel(pointPair.p1, calib);
+        Point2D p2 = calibToPixel(pointPair.p2, calib);
+        
+        // Convert to Polyline ROI
+        float[] x = new float[2];
+        float[] y = new float[2];
+        x[0] = (float) p1.getX();
+        y[0] = (float) p1.getY();
+        x[1] = (float) p2.getX();
+        y[1] = (float) p2.getY();
+        return new PolygonRoi(x, y, 2, Roi.POLYLINE);
+    }
+    
+    private Point2D calibToPixel(Point2D point, Calibration calib)
+    {
+        double x = (point.getX() - calib.xOrigin) / calib.pixelWidth;
+        double y = (point.getY() - calib.yOrigin) / calib.pixelHeight;
+        return new Point2D.Double(x, y);
+    }
 }

@@ -75,14 +75,14 @@ public class EquivalentEllipseTest
     }
     
     @Test
-    public final void testDrawAsOverlay()
+    public final void test_overlayResult()
     {
         ImagePlus labelMap = IJ.openImage(getClass().getResource("/grains-med-WTH-lbl.tif").getFile());
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         data.process(EquivalentEllipse.class);
         
         EquivalentEllipse feature = new EquivalentEllipse();
-        feature.addToOverlay(data, labelMap);
+        feature.overlayResult(data, labelMap);
         labelMap.show();
 //        while(true);
     }

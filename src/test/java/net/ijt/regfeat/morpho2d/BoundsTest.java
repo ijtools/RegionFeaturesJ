@@ -13,6 +13,7 @@ import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Box2D;
 import inra.ijpb.label.LabelImages;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -49,7 +50,7 @@ public class BoundsTest
      * Test method for {@link net.ijt.regfeat.morpho2d.Bounds#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
      */
     @Test
-    public final void testPopulateTable()
+    public final void test_updateTable()
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = RegionFeatures.initialize(labelMap)
@@ -62,6 +63,24 @@ public class BoundsTest
         
         assertEquals(4, table.getCounter());
         assertEquals(3, table.getLastColumn());
+    }
+    
+    /**
+     * Test method for {@link net.ijt.regfeat.morpho2d.Bounds#overlayResult(ij.ImagePlus, java.lang.Object)}.
+     */
+    @Test
+    public final void test_overlayResult()
+    {
+        ImagePlus labelMap = createImagePlus();
+        RegionFeatures data = RegionFeatures.initialize(labelMap)
+                .add(Bounds.class)
+                .computeAll();
+        
+        labelMap.show();
+        Feature feature = data.getFeature(Bounds.class);
+        
+        // check only that there is no bug
+        feature.overlayResult(labelMap, data);
     }
 
     private static final ImagePlus createImagePlus()

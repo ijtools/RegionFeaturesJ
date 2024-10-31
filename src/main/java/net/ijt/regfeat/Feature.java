@@ -3,12 +3,16 @@
  */
 package net.ijt.regfeat;
 
+import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import ij.ImagePlus;
+import ij.gui.Overlay;
+import ij.gui.Roi;
 import ij.measure.ResultsTable;
 
 /**
@@ -63,7 +67,7 @@ public abstract class Feature
      * 
      * @see RegionAnalysisData#process(Feature)
      * 
-     * @param results
+     * @param data
      *            a data structure containing data for computing this feature
      * @return an array the same size as labels containing result of analysis
      *         for each region
@@ -71,6 +75,24 @@ public abstract class Feature
     public abstract Object compute(RegionFeatures data);
     
     public abstract void updateTable(ResultsTable table, RegionFeatures data);
+    
+    /**
+     * Overlay the result of feature computation on the specified image
+     * (optional operation). This method must be called after the features have
+     * been computed.
+     * 
+     * By default, this method does nothing. It is expected that mostly features
+     * computed on 2D regions can be displayed.
+     * 
+     * @param image
+     *            the instance of ImagePlus to display to result on.
+     * @param data
+     *            the data structure containing results of features computed on
+     *            regions
+     */
+    public void overlayResult(ImagePlus image, RegionFeatures data)
+    {
+    }
     
     public Collection<Class<? extends Feature>>requiredFeatures()
     {
@@ -88,5 +110,12 @@ public abstract class Feature
                 data.process(fClass);
             }
         }
+    }
+    
+    protected static final void addRoiToOverlay(Overlay overlay, Roi roi, Color color, double strokeWidth)
+    {
+        roi.setStrokeColor(color);
+        roi.setStrokeWidth(strokeWidth);
+        overlay.add(roi);
     }
 }

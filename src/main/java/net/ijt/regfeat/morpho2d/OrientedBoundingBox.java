@@ -3,9 +3,14 @@
  */
 package net.ijt.regfeat.morpho2d;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 
+import ij.ImagePlus;
+import ij.gui.Overlay;
+import ij.gui.PolygonRoi;
+import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.OrientedBox2D;
@@ -66,4 +71,80 @@ public class OrientedBoundingBox extends Feature
         }
     }
 
+    public void overlayResult(RegionFeatures data, ImagePlus target)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof OrientedBox2D[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of Ellipse");
+        }
+        OrientedBox2D[] ellipses = (OrientedBox2D[]) obj;
+        
+        // get spatial calibration of target image
+        Calibration calib = target.getCalibration();
+        
+        // create overlay
+        Overlay overlay = new Overlay();
+        
+        // add each ellipse to the overlay
+        for (int i = 0; i < ellipses.length; i++) 
+        {
+            // Create ROI of oriented box, in pixel coordinates
+            OrientedBox2D box = ellipses[i];
+            Roi roi = createUncalibratedRoi(box, calib);
+
+            // add ROI to overlay
+            Color color = data.labelColors[i];
+            addRoiToOverlay(overlay, roi, color, 1.5);
+        }
+        
+        target.setOverlay(overlay);
+    }
+    
+    /**
+     * Determines the ROI corresponding to the uncalibrated version of this
+     * box, assuming it was defined in calibrated coordinates.
+     * 
+     * @param box
+     *            the oriented box in calibrated coordinates
+     * @param calib
+     *            the spatial calibration to consider
+     * @return the ROI corresponding to the box
+     */
+    private final static Roi createUncalibratedRoi(OrientedBox2D box, Calibration calib)
+    {
+        Point2D center = box.center();
+        double xc = center.getX();
+        double yc = center.getY();
+        double dx = box.length() / 2;
+        double dy = box.width() / 2;
+        double theta = Math.toRadians(box.orientation());
+        double cot = Math.cos(theta);
+        double sit = Math.sin(theta);
+        
+        // coordinates of polygon ROI
+        float[] xp = new float[4];
+        float[] yp = new float[4];
+        
+        // iterate over vertices
+        double x, y;
+        x = xc + dx * cot - dy * sit;
+        y = yc + dx * sit + dy * cot;
+        xp[0] = (float) ((x - calib.xOrigin) / calib.pixelWidth);
+        yp[0] = (float) ((y - calib.yOrigin) / calib.pixelHeight);
+        x = xc - dx * cot - dy * sit;
+        y = yc - dx * sit + dy * cot;
+        xp[1] = (float) ((x - calib.xOrigin) / calib.pixelWidth);
+        yp[1] = (float) ((y - calib.yOrigin) / calib.pixelHeight);
+        x = xc - dx * cot + dy * sit;
+        y = yc - dx * sit - dy * cot;
+        xp[2] = (float) ((x - calib.xOrigin) / calib.pixelWidth);
+        yp[2] = (float) ((y - calib.yOrigin) / calib.pixelHeight);
+        x = xc + dx * cot + dy * sit;
+        y = yc + dx * sit - dy * cot;
+        xp[3] = (float) ((x - calib.xOrigin) / calib.pixelWidth);
+        yp[3] = (float) ((y - calib.yOrigin) / calib.pixelHeight);
+        return new PolygonRoi(xp, yp, 4, Roi.POLYGON);
+    }
 }

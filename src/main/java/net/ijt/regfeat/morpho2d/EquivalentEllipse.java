@@ -180,7 +180,7 @@ public class EquivalentEllipse extends Feature
         }
     }
 
-    public void addToOverlay(RegionFeatures data, ImagePlus target)
+    public void overlayResult(RegionFeatures data, ImagePlus target)
     {
         // retrieve array of ellipses
         Object obj = data.results.get(this.getClass());
@@ -205,7 +205,7 @@ public class EquivalentEllipse extends Feature
 
             // roi corresponding to ellipse
             Color color = data.labelColors[i];
-            addRoiToOverlay(overlay, createRoi(ellipse), color);
+            addRoiToOverlay(overlay, createRoi(ellipse), color, 1.5);
         }
         
         target.setOverlay(overlay);
@@ -259,12 +259,5 @@ public class EquivalentEllipse extends Feature
         }
         
         return new PolygonRoi(xv, yv, nVertices, Roi.POLYGON);
-    }
-
-    private static final void addRoiToOverlay(Overlay overlay, Roi roi, Color color)
-    {
-        roi.setStrokeColor(color);
-        roi.setStrokeWidth(1.5);
-        overlay.add(roi);
     }
 }
