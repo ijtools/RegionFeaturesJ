@@ -5,14 +5,14 @@ package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.PointPair2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * The tortuosity, defined as the ratio of Geodesic diameter over Max Feret
  * Diameter.
  */
-public class Tortuosity extends Feature
+public class Tortuosity extends RegionFeature
 {
     public Tortuosity()
     {

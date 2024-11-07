@@ -5,7 +5,7 @@ package net.ijt.regfeat.morpho2d.core;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.EulerNumber;
 
@@ -14,7 +14,7 @@ import net.ijt.regfeat.morpho2d.EulerNumber;
  * 
  * @see EulerNumber
  */
-public class EulerNumber_C4 extends Feature
+public class EulerNumber_C4 extends RegionFeature
 {
     public EulerNumber_C4()
     {

@@ -16,14 +16,14 @@ import ij.measure.ResultsTable;
 import inra.ijpb.geometry.FeretDiameters;
 import inra.ijpb.geometry.PointPair2D;
 import inra.ijpb.geometry.Polygon2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
  * 
  */
-public class MaxFeretDiameter extends Feature
+public class MaxFeretDiameter extends RegionFeature
 {
 
     public MaxFeretDiameter()

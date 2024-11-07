@@ -12,13 +12,13 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Box2D;
 import inra.ijpb.measure.region2d.BoundingBox;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
- * 
+ * Computes the bounds of each region within a label map.
  */
-public class Bounds extends Feature
+public class Bounds extends RegionFeature
 {
     @Override
     public Object compute(RegionFeatures data)

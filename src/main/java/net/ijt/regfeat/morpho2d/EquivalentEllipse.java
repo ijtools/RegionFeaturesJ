@@ -18,7 +18,7 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Ellipse;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -29,7 +29,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see inra.ijpb.measure.region2d.EquivalentEllipse
  */
-public class EquivalentEllipse extends Feature
+public class EquivalentEllipse extends RegionFeature
 {
 
     @Override

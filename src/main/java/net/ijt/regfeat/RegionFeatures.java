@@ -19,6 +19,9 @@ import inra.ijpb.label.LabelImages;
  */
 public class RegionFeatures
 {
+    // ==================================================
+    // Static methods
+    
     public static final RegionFeatures initialize(ImagePlus imagePlus)
     {
         return new RegionFeatures(imagePlus, LabelImages.findAllLabels(imagePlus));
@@ -28,6 +31,10 @@ public class RegionFeatures
     {
         return new RegionFeatures(imagePlus, labels);
     }
+    
+    
+    // ==================================================
+    // Class members
     
     /**
      * The image containing the map of region label for each pixel / voxel.
@@ -59,6 +66,9 @@ public class RegionFeatures
     public Color[] labelColors;
     
     
+    // ==================================================
+    // Constructors
+    
     public RegionFeatures(ImagePlus imagePlus, int[] labels)
     {
         this.labelMap = imagePlus;
@@ -83,6 +93,10 @@ public class RegionFeatures
     {
         return new Color(r & 0x00FF, g & 0x00FF, b & 0x00FF);
     }
+    
+    
+    // ==================================================
+    // Processing methods
     
     /**
      * Updates the informations stored within this result class with the feature
@@ -150,7 +164,10 @@ public class RegionFeatures
             }
             
             Feature feature = getFeature(featureClass);
-            feature.updateTable(table, this);
+            if (feature instanceof RegionFeature)
+            {
+                ((RegionFeature) feature).updateTable(table, this);
+            }
         }
         return table;
     }

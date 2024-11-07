@@ -7,13 +7,14 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.measure.region2d.AverageThickness.Result;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
- * 
+ * Computes the average thickness of regions, by computing the average of the
+ * distance map on the inner skeleton of each region.
  */
-public class AverageThickness extends Feature
+public class AverageThickness extends RegionFeature
 {
 
     @Override

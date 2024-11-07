@@ -6,7 +6,7 @@ package net.ijt.regfeat.morpho2d.core;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.IntrinsicVolumes2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -14,7 +14,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see Perimeter_Crofton_D4
  */
-public class Perimeter_Crofton_D2 extends Feature
+public class Perimeter_Crofton_D2 extends RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

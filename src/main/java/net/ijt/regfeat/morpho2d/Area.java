@@ -5,14 +5,14 @@ package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.IntrinsicVolumes;
 
 /**
  * A feature that computes the area of 2D regions.
  */
-public class Area extends Feature
+public class Area extends RegionFeature
 {
     public Area()
     {

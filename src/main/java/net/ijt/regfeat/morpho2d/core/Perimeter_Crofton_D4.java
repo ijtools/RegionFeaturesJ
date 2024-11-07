@@ -5,14 +5,14 @@ package net.ijt.regfeat.morpho2d.core;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computation of perimeter using discretization of Crofton formula with four
  * directions.
  */
-public class Perimeter_Crofton_D4 extends Feature
+public class Perimeter_Crofton_D4 extends RegionFeature
 {
     public Perimeter_Crofton_D4()
     {

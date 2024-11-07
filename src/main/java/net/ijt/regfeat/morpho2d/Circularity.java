@@ -4,14 +4,14 @@
 package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * The circularity of a region, defined from normalized ratio of area and
  * squared perimeter.
  */
-public class Circularity extends Feature
+public class Circularity extends RegionFeature
 {
     public Circularity()
     {

@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.OrientedBox2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see OrientedBoundingBox.
  */
-public class OrientedBoxElongation extends Feature
+public class OrientedBoxElongation extends RegionFeature
 {
     public OrientedBoxElongation()
     {

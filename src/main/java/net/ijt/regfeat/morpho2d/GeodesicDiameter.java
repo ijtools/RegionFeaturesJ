@@ -15,14 +15,14 @@ import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.GeodesicDiameter.Result;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.GeodesicDiameterData;
 
 /**
  * Computes the convex area, or area of the convex hull.
  */
-public class GeodesicDiameter extends Feature
+public class GeodesicDiameter extends RegionFeature
 {
     public GeodesicDiameter()
     {

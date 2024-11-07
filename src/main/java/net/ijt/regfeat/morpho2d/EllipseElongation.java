@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Ellipse;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see EquivalentEllipse.
  */
-public class EllipseElongation extends Feature
+public class EllipseElongation extends RegionFeature
 {
     public EllipseElongation()
     {

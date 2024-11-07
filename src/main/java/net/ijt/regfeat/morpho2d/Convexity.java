@@ -4,7 +4,7 @@
 package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -13,7 +13,7 @@ import net.ijt.regfeat.RegionFeatures;
  * @see Area
  * @see ConvexArea
  */
-public class Convexity extends Feature
+public class Convexity extends RegionFeature
 {
     public Convexity()
     {

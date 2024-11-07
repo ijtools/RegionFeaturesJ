@@ -5,14 +5,14 @@ package net.ijt.regfeat.morpho2d;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Circle2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * The GeodesicElongation, defined as the ratio of Geodesic diameter over
  * diameter of largest inscribed disk.
  */
-public class GeodesicElongation extends Feature
+public class GeodesicElongation extends RegionFeature
 {
     public GeodesicElongation()
     {

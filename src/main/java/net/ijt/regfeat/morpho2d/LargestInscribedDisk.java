@@ -15,13 +15,13 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Circle2D;
 import inra.ijpb.measure.region2d.LargestInscribedCircle;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
- * 
+ * Computes the largest inscribed disk within regions of a label map.
  */
-public class LargestInscribedDisk extends Feature
+public class LargestInscribedDisk extends RegionFeature
 {
     @Override
     public Circle2D[] compute(RegionFeatures results)

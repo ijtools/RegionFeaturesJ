@@ -9,13 +9,13 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.measure.region2d.GeodesicDiameter.Result;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
  */
-public class GeodesicDiameterData extends Feature
+public class GeodesicDiameterData extends RegionFeature
 {
 
     @Override

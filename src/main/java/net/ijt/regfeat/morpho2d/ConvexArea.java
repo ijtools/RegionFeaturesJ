@@ -9,14 +9,14 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Box2D;
 import inra.ijpb.geometry.Polygon2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
  * Computes the convex area, or area of the convex hull.
  */
-public class ConvexArea extends Feature
+public class ConvexArea extends RegionFeature
 {
     public ConvexArea()
     {

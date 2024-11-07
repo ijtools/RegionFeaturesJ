@@ -16,7 +16,11 @@ import ij.gui.Roi;
 import ij.measure.ResultsTable;
 
 /**
- * Abstract class for a feature that can compute something on a region. 
+ * Abstract class for a feature that can compute something on a label map.
+ * 
+ * The result of the computation is provided by the <code>compute</code> method. 
+ * 
+ * Results obtained by several features can be aggregated via the <code>overlayResults</code> method.
  */
 public abstract class Feature
 {
