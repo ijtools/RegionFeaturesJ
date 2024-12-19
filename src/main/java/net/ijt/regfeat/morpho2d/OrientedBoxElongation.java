@@ -4,9 +4,11 @@
 package net.ijt.regfeat.morpho2d;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.OrientedBox2D;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -17,11 +19,6 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class OrientedBoxElongation extends RegionFeature
 {
-    public OrientedBoxElongation()
-    {
-        this.requiredFeatures.add(OrientedBoundingBox.class);
-    }
-    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -52,5 +49,10 @@ public class OrientedBoxElongation extends RegionFeature
             throw new RuntimeException("Requires object argument to be an array of double");
         }
     }
-
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(OrientedBoundingBox.class);
+    }
 }

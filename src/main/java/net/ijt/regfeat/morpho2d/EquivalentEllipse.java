@@ -31,7 +31,6 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class EquivalentEllipse extends RegionFeature
 {
-
     @Override
     public Ellipse[] compute(RegionFeatures data)
     {

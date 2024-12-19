@@ -3,7 +3,11 @@
  */
 package net.ijt.regfeat.morpho2d;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ij.measure.ResultsTable;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -15,12 +19,6 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Convexity extends RegionFeature
 {
-    public Convexity()
-    {
-        this.requiredFeatures.add(Area.class);
-        this.requiredFeatures.add(ConvexArea.class);
-    }
-    
     @Override
     public Object compute(RegionFeatures data)
     {
@@ -57,4 +55,9 @@ public class Convexity extends RegionFeature
         }
     }
 
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(Area.class, ConvexArea.class);
+    }
 }

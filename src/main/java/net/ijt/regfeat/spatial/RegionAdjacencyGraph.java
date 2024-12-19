@@ -3,6 +3,8 @@
  */
 package net.ijt.regfeat.spatial;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 
 import ij.ImagePlus;
@@ -21,12 +23,6 @@ import net.ijt.regfeat.morpho2d.Centroid;
  */
 public class RegionAdjacencyGraph extends Feature
 {
-    public RegionAdjacencyGraph()
-    {
-        // TODO: should be able to manage 2D or 3D centroids in the same way
-        this.requiredFeatures.add(Centroid.class);
-    }
-
     @Override
     public Set<LabelPair> compute(RegionFeatures data)
     {
@@ -40,4 +36,11 @@ public class RegionAdjacencyGraph extends Feature
         // nothing to do...
     }
 
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        // TODO: should be able to manage 2D or 3D centroids in the same way
+        return Arrays.asList(Centroid.class);
+    }
 }

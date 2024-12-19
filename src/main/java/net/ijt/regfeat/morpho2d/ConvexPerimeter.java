@@ -4,10 +4,13 @@
 package net.ijt.regfeat.morpho2d;
 
 import java.awt.geom.Point2D;
+import java.util.Arrays;
+import java.util.Collection;
 
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Polygon2D;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
@@ -20,11 +23,6 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  */
 public class ConvexPerimeter extends RegionFeature
 {
-    public ConvexPerimeter()
-    {
-        this.requiredFeatures.add(ConvexHull.class);
-    }
-    
     @Override
     public Object compute(RegionFeatures data)
     {
@@ -78,4 +76,9 @@ public class ConvexPerimeter extends RegionFeature
         }
     }
 
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(ConvexHull.class);
+    }
 }

@@ -6,7 +6,6 @@ package net.ijt.regfeat;
 import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -59,12 +58,6 @@ public abstract class Feature
     }
     
     /**
-     * The list of features that are required to compute this feature.
-     */
-    protected Collection<Class<? extends Feature>> requiredFeatures = new ArrayList<>(2);
-    
-    
-    /**
      * Computes the feature for each of the regions specified by labels in
      * <code>labels</code>, based on the data stored in <code>results</code>.
      * All required features must have been computed.
@@ -98,9 +91,16 @@ public abstract class Feature
     {
     }
     
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    /**
+     * Returns the list of features this feature depends on. The result is given
+     * as a list of classes. Default behavior is to return an empty list (no
+     * dependency).
+     * 
+     * @return the list of features this feature depends on
+     */
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
-        return Collections.unmodifiableCollection(this.requiredFeatures);
+        return Collections.emptyList();
     }
     
     protected void ensureRequiredFeaturesAreComputed(RegionFeatures data)

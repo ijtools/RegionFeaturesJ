@@ -3,7 +3,11 @@
  */
 package net.ijt.regfeat.morpho2d;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ij.measure.ResultsTable;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -13,12 +17,6 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Circularity extends RegionFeature
 {
-    public Circularity()
-    {
-        this.requiredFeatures.add(Area.class);
-        this.requiredFeatures.add(Perimeter.class);
-    }
-    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -56,5 +54,11 @@ public class Circularity extends RegionFeature
         {
             throw new RuntimeException("Requires object argument to be an array of double");
         }
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(Area.class, Perimeter.class);
     }
 }

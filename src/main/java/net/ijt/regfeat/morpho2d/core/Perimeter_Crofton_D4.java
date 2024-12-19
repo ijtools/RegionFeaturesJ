@@ -3,8 +3,12 @@
  */
 package net.ijt.regfeat.morpho2d.core;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -14,11 +18,6 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Perimeter_Crofton_D4 extends RegionFeature
 {
-    public Perimeter_Crofton_D4()
-    {
-        this.requiredFeatures.add(IntrinsicVolumes.class);
-    }
-    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -50,5 +49,11 @@ public class Perimeter_Crofton_D4 extends RegionFeature
         {
             throw new RuntimeException("Requires object argument to be an array of double");
         }
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(IntrinsicVolumes.class);
     }
 }

@@ -6,6 +6,7 @@ package net.ijt.regfeat.morpho2d;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
+import java.util.Collection;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -16,6 +17,7 @@ import ij.measure.ResultsTable;
 import inra.ijpb.geometry.OrientedBox2D;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.measure.region2d.OrientedBoundingBox2D;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
@@ -25,12 +27,6 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  */
 public class OrientedBoundingBox extends RegionFeature
 {
-    public OrientedBoundingBox()
-    {
-        this.requiredFeatures.add(ConvexHull.class);
-    }
-    
-
     @Override
     public OrientedBox2D[] compute(RegionFeatures data)
     {
@@ -146,5 +142,11 @@ public class OrientedBoundingBox extends RegionFeature
         xp[3] = (float) ((x - calib.xOrigin) / calib.pixelWidth);
         yp[3] = (float) ((y - calib.yOrigin) / calib.pixelHeight);
         return new PolygonRoi(xp, yp, 4, Roi.POLYGON);
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(ConvexHull.class);
     }
 }

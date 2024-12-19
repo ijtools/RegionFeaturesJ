@@ -3,7 +3,11 @@
  */
 package net.ijt.regfeat.morpho2d;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import ij.measure.ResultsTable;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.EulerNumber_C4;
@@ -14,11 +18,6 @@ import net.ijt.regfeat.morpho2d.core.EulerNumber_C4;
  */
 public class EulerNumber extends RegionFeature
 {
-    public EulerNumber()
-    {
-        this.requiredFeatures.add(EulerNumber_C4.class);
-    }
-    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -43,5 +42,11 @@ public class EulerNumber extends RegionFeature
         {
             throw new RuntimeException("Requires object argument to be an array of double");
         }
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(EulerNumber_C4.class);
     }
 }

@@ -5,6 +5,8 @@ package net.ijt.regfeat.morpho2d;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import ij.ImagePlus;
@@ -15,6 +17,7 @@ import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.GeodesicDiameter.Result;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.GeodesicDiameterData;
@@ -24,11 +27,6 @@ import net.ijt.regfeat.morpho2d.core.GeodesicDiameterData;
  */
 public class GeodesicDiameter extends RegionFeature
 {
-    public GeodesicDiameter()
-    {
-        this.requiredFeatures.add(GeodesicDiameterData.class);
-    }
-    
     @Override
     public Object compute(RegionFeatures data)
     {
@@ -134,5 +132,11 @@ public class GeodesicDiameter extends RegionFeature
         double x = (point.getX() - calib.xOrigin) / calib.pixelWidth;
         double y = (point.getY() - calib.yOrigin) / calib.pixelHeight;
         return new Point2D.Double(x, y);
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>>requiredFeatures()
+    {
+        return Arrays.asList(GeodesicDiameterData.class);
     }
 }
