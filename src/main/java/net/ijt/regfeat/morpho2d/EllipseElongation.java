@@ -17,7 +17,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see EquivalentEllipse.
  */
-public class EllipseElongation extends RegionFeature
+public class EllipseElongation implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

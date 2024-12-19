@@ -16,7 +16,7 @@ import net.ijt.regfeat.morpho2d.core.EulerNumber_C4;
  * Computes the Euler number of 2D regions. Uses the default C4 connectivity. In
  * practice, this feature is an alias for the EulerNumber_C4 feature.
  */
-public class EulerNumber extends RegionFeature
+public class EulerNumber implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

@@ -23,7 +23,7 @@ import net.ijt.regfeat.morpho2d.Perimeter;
  * @see Perimeter
  * @see EulerNumber
  */
-public class IntrinsicVolumes extends RegionFeature
+public class IntrinsicVolumes implements RegionFeature
 {
     @Override
     public IntrinsicVolumes2D.Result[] compute(RegionFeatures results)

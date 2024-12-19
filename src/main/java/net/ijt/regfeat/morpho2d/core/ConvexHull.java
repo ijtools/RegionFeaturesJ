@@ -17,7 +17,7 @@ import net.ijt.regfeat.RegionFeatures;
 /**
  * Computes the convex hull of each region in pixel coordinates.
  */
-public class ConvexHull extends RegionFeature
+public class ConvexHull implements RegionFeature
 {
 
     @Override

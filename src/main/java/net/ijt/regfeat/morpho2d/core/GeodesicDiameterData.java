@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
 /**
  * 
  */
-public class GeodesicDiameterData extends RegionFeature
+public class GeodesicDiameterData implements RegionFeature
 {
 
     @Override

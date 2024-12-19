@@ -16,7 +16,7 @@ import net.ijt.regfeat.RegionFeatures;
  * Computation of perimeter using discretization of Crofton formula with four
  * directions.
  */
-public class Perimeter_Crofton_D4 extends RegionFeature
+public class Perimeter_Crofton_D4 implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

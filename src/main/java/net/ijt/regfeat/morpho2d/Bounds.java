@@ -12,13 +12,14 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Box2D;
 import inra.ijpb.measure.region2d.BoundingBox;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes the bounds of each region within a label map.
  */
-public class Bounds extends RegionFeature
+public class Bounds implements RegionFeature
 {
     @Override
     public Object compute(RegionFeatures data)
@@ -66,7 +67,7 @@ public class Bounds extends RegionFeature
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            addRoiToOverlay(overlay, roi, color, 1.5);
+            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         image.setOverlay(overlay);

@@ -18,6 +18,7 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Ellipse;
 import inra.ijpb.label.LabelImages;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -29,7 +30,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see inra.ijpb.measure.region2d.EquivalentEllipse
  */
-public class EquivalentEllipse extends RegionFeature
+public class EquivalentEllipse implements RegionFeature
 {
     @Override
     public Ellipse[] compute(RegionFeatures data)
@@ -204,7 +205,7 @@ public class EquivalentEllipse extends RegionFeature
 
             // roi corresponding to ellipse
             Color color = data.labelColors[i];
-            addRoiToOverlay(overlay, createRoi(ellipse), color, 1.5);
+            Feature.addRoiToOverlay(overlay, createRoi(ellipse), color, 1.5);
         }
         
         target.setOverlay(overlay);

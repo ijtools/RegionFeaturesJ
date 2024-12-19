@@ -21,7 +21,7 @@ import ij.measure.ResultsTable;
  * 
  * Results obtained by several features can be aggregated via the <code>overlayResults</code> method.
  */
-public abstract class Feature
+public interface Feature
 {
     /**
      * Creates a new instance of the feature determined by its class. The
@@ -32,7 +32,7 @@ public abstract class Feature
      *            the class of the feature to create.
      * @return an instance of feature with the specified class
      */
-    public static final Feature create(Class<? extends Feature> featureClass)
+    public static Feature create(Class<? extends Feature> featureClass)
     {
         try
         {
@@ -96,7 +96,7 @@ public abstract class Feature
      *            the data structure containing results of features computed on
      *            regions
      */
-    public void overlayResult(ImagePlus image, RegionFeatures data)
+    public default void overlayResult(ImagePlus image, RegionFeatures data)
     {
     }
     
@@ -107,12 +107,12 @@ public abstract class Feature
      * 
      * @return the list of features this feature depends on
      */
-    public Collection<Class<? extends Feature>> requiredFeatures()
+    public default Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Collections.emptyList();
     }
     
-    protected static final void addRoiToOverlay(Overlay overlay, Roi roi, Color color, double strokeWidth)
+    public static void addRoiToOverlay(Overlay overlay, Roi roi, Color color, double strokeWidth)
     {
         roi.setStrokeColor(color);
         roi.setStrokeWidth(strokeWidth);

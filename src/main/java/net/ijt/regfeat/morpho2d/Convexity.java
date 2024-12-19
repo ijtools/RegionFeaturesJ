@@ -17,7 +17,7 @@ import net.ijt.regfeat.RegionFeatures;
  * @see Area
  * @see ConvexArea
  */
-public class Convexity extends RegionFeature
+public class Convexity implements RegionFeature
 {
     @Override
     public Object compute(RegionFeatures data)

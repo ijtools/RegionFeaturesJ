@@ -15,7 +15,7 @@ import net.ijt.regfeat.morpho2d.EulerNumber;
  * 
  * @see EulerNumber
  */
-public class EulerNumber_C8 extends RegionFeature
+public class EulerNumber_C8 implements RegionFeature
 {
     @Override
     public int[] compute(RegionFeatures data)

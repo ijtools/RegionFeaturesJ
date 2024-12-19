@@ -25,7 +25,7 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
 /**
  * 
  */
-public class OrientedBoundingBox extends RegionFeature
+public class OrientedBoundingBox implements RegionFeature
 {
     @Override
     public OrientedBox2D[] compute(RegionFeatures data)
@@ -92,7 +92,7 @@ public class OrientedBoundingBox extends RegionFeature
 
             // add ROI to overlay
             Color color = data.labelColors[i];
-            addRoiToOverlay(overlay, roi, color, 1.5);
+            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         target.setOverlay(overlay);

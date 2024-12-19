@@ -21,7 +21,7 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  * The perimeter is obtained as the length of boundary of the convex hull, and
  * may be different from the perimeter of the image of the convex image.
  */
-public class ConvexPerimeter extends RegionFeature
+public class ConvexPerimeter implements RegionFeature
 {
     @Override
     public Object compute(RegionFeatures data)

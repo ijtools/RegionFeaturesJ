@@ -25,7 +25,7 @@ import net.ijt.regfeat.morpho2d.core.GeodesicDiameterData;
 /**
  * Computes the convex area, or area of the convex hull.
  */
-public class GeodesicDiameter extends RegionFeature
+public class GeodesicDiameter implements RegionFeature
 {
     @Override
     public Object compute(RegionFeatures data)
@@ -86,7 +86,7 @@ public class GeodesicDiameter extends RegionFeature
 
             // add ROI to overlay
             Color color = data.labelColors[i];
-            addRoiToOverlay(overlay, roi, color, 1.5);
+            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         target.setOverlay(overlay);

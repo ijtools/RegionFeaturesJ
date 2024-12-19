@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
  * The circularity of a region, defined from normalized ratio of area and
  * squared perimeter.
  */
-public class Circularity extends RegionFeature
+public class Circularity implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

@@ -21,7 +21,7 @@ import net.ijt.regfeat.morpho2d.Centroid;
  * This class is mostly a wrapper for the methods of the RegionAdjacencyGraph
  * class in the MorphoLibJ library.
  */
-public class RegionAdjacencyGraph extends Feature
+public class RegionAdjacencyGraph implements Feature
 {
     @Override
     public Set<LabelPair> compute(RegionFeatures data)

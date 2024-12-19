@@ -16,7 +16,7 @@ import net.ijt.regfeat.RegionFeatures;
  * The tortuosity, defined as the ratio of Geodesic diameter over Max Feret
  * Diameter.
  */
-public class Tortuosity extends RegionFeature
+public class Tortuosity implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

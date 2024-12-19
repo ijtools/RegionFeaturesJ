@@ -26,7 +26,7 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
 /**
  * 
  */
-public class MaxFeretDiameter extends RegionFeature
+public class MaxFeretDiameter implements RegionFeature
 {
     @Override
     public PointPair2D[] compute(RegionFeatures data)
@@ -112,7 +112,7 @@ public class MaxFeretDiameter extends RegionFeature
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            addRoiToOverlay(overlay, roi, color, 1.5);
+            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         image.setOverlay(overlay);

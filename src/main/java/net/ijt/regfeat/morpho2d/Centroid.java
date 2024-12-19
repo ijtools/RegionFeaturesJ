@@ -14,7 +14,7 @@ import net.ijt.regfeat.RegionFeatures;
 /**
  * Computes centroid of each regions within the label map.
  */
-public class Centroid extends RegionFeature
+public class Centroid implements RegionFeature
 {
     @Override
     public Point2D[] compute(RegionFeatures results)

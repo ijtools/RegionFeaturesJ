@@ -16,7 +16,7 @@ import net.ijt.regfeat.morpho2d.core.IntrinsicVolumes;
 /**
  * A feature that computes the area of 2D regions.
  */
-public class Area extends RegionFeature
+public class Area implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

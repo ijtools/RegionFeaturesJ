@@ -14,7 +14,7 @@ import net.ijt.regfeat.RegionFeatures;
  * Computes the average thickness of regions, by computing the average of the
  * distance map on the inner skeleton of each region.
  */
-public class AverageThickness extends RegionFeature
+public class AverageThickness implements RegionFeature
 {
 
     @Override

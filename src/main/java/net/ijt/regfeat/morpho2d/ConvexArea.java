@@ -19,7 +19,7 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
 /**
  * Computes the convex area, or area of the convex hull.
  */
-public class ConvexArea extends RegionFeature
+public class ConvexArea implements RegionFeature
 {
     @Override
     public Object compute(RegionFeatures data)

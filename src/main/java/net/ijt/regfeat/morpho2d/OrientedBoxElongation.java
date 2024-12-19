@@ -17,7 +17,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see OrientedBoundingBox.
  */
-public class OrientedBoxElongation extends RegionFeature
+public class OrientedBoxElongation implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)

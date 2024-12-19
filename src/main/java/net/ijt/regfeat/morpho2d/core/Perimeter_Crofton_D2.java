@@ -14,7 +14,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see Perimeter_Crofton_D4
  */
-public class Perimeter_Crofton_D2 extends RegionFeature
+public class Perimeter_Crofton_D2 implements RegionFeature
 {
     @Override
     public double[] compute(RegionFeatures data)
