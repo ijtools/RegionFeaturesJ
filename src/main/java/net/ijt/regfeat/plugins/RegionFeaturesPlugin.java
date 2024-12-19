@@ -115,8 +115,6 @@ public class RegionFeaturesPlugin implements PlugInFilter
     private static final RegionFeatures chooseFeatures(ImagePlus labelMap, RegionFeatures initialChoice)
     {
         GenericDialog gd = new GenericDialog("Analyze Regions");
-        // gd.addCheckbox("Pixel_Count",
-        // initialChoice.contains(Feature.PIXEL_COUNT));
         gd.addCheckbox("Area", initialChoice.contains(Area.class));
         gd.addCheckbox("Perimeter", initialChoice.contains(Perimeter.class));
         gd.addCheckbox("Circularity", initialChoice.contains(Circularity.class));
