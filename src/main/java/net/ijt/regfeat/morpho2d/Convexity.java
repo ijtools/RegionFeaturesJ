@@ -23,7 +23,7 @@ public class Convexity extends RegionFeature
     public Object compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         double[] areas = (double[]) data.results.get(Area.class);
         double[] convexAreas = (double[]) data.results.get(ConvexArea.class);
         

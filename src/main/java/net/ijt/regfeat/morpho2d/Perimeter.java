@@ -22,7 +22,7 @@ public class Perimeter extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         return (double[]) data.results.get(Perimeter_Crofton_D4.class);
     }
     

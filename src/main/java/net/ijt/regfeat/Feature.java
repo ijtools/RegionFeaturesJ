@@ -23,6 +23,15 @@ import ij.measure.ResultsTable;
  */
 public abstract class Feature
 {
+    /**
+     * Creates a new instance of the feature determined by its class. The
+     * Feature must provide an empty constructor. Returns <code>null</code> if
+     * the creation fails.
+     * 
+     * @param featureClass
+     *            the class of the feature to create.
+     * @return an instance of feature with the specified class
+     */
     public static final Feature create(Class<? extends Feature> featureClass)
     {
         try
@@ -62,7 +71,7 @@ public abstract class Feature
      * <code>labels</code>, based on the data stored in <code>results</code>.
      * All required features must have been computed.
      * 
-     * @see RegionAnalysisData#process(Feature)
+     * @see RegionFeatures#process(Feature)
      * 
      * @param data
      *            a data structure containing data for computing this feature
@@ -101,19 +110,6 @@ public abstract class Feature
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Collections.emptyList();
-    }
-    
-    protected void ensureRequiredFeaturesAreComputed(RegionFeatures data)
-    {
-        Class<? extends Feature> featureClass = this.getClass();
-        Feature feature = data.getFeature(featureClass);
-        for (Class<? extends Feature> fClass : feature.requiredFeatures())
-        {
-            if (!data.isComputed(fClass))
-            {
-                data.process(fClass);
-            }
-        }
     }
     
     protected static final void addRoiToOverlay(Overlay overlay, Roi roi, Color color, double strokeWidth)

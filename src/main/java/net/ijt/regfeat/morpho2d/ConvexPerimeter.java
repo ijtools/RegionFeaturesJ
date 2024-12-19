@@ -18,8 +18,8 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
 /**
  * Computes the convex perimeter, or perimeter of the convex hull.
  * 
- * The perimeter is obtained from the polygon length, and may be different from
- * the perimeter of the image of the convex image.
+ * The perimeter is obtained as the length of boundary of the convex hull, and
+ * may be different from the perimeter of the image of the convex image.
  */
 public class ConvexPerimeter extends RegionFeature
 {
@@ -27,7 +27,7 @@ public class ConvexPerimeter extends RegionFeature
     public Object compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         Polygon2D[] hulls = (Polygon2D[]) data.results.get(ConvexHull.class);
         
         // retrieve calibration

@@ -22,7 +22,7 @@ public class EulerNumber extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         return (double[]) data.results.get(EulerNumber_C4.class);
     }
     

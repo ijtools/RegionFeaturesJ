@@ -22,7 +22,7 @@ public class Tortuosity extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         double[] geodDiams = (double[]) data.results.get(GeodesicDiameter.class);
         PointPair2D[] feretDiams = (PointPair2D[]) data.results.get(MaxFeretDiameter.class);
         

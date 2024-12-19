@@ -22,7 +22,7 @@ public class Perimeter_Crofton_D4 extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         IntrinsicVolumes2D.Result[] res = (IntrinsicVolumes2D.Result[]) data.results.get(IntrinsicVolumes.class);
         
         double[] perims = new double[res.length];

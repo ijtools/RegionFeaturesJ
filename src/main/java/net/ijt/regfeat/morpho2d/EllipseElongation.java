@@ -23,7 +23,7 @@ public class EllipseElongation extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         Ellipse[] ellipses = (Ellipse[]) data.results.get(EquivalentEllipse.class);
         
         // iterate over labels to compute new feature

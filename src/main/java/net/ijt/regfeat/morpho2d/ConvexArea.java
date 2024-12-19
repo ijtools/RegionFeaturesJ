@@ -25,7 +25,7 @@ public class ConvexArea extends RegionFeature
     public Object compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         Polygon2D[] hulls = (Polygon2D[]) data.results.get(ConvexHull.class);
         
         // retrieve label map data

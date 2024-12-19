@@ -23,7 +23,7 @@ public class OrientedBoxElongation extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         OrientedBox2D[] OrientedBoxs = (OrientedBox2D[]) data.results.get(OrientedBoundingBox.class);
         
         // iterate over labels to compute new feature

@@ -32,7 +32,7 @@ public class MaxFeretDiameter extends RegionFeature
     public PointPair2D[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         Polygon2D[] hulls = (Polygon2D[]) data.results.get(ConvexHull.class);
         int nLabels = hulls.length;
         

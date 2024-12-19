@@ -22,7 +22,7 @@ public class GeodesicElongation extends RegionFeature
     public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         double[] geodDiams = (double[]) data.results.get(GeodesicDiameter.class);
         Circle2D[] circles = (Circle2D[]) data.results.get(LargestInscribedDisk.class);
         

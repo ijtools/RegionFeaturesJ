@@ -31,7 +31,7 @@ public class GeodesicDiameter extends RegionFeature
     public Object compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         Result[] results = (Result[]) data.results.get(GeodesicDiameterData.class);
         
         // iterate over labels

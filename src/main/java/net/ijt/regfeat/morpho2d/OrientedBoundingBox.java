@@ -31,7 +31,7 @@ public class OrientedBoundingBox extends RegionFeature
     public OrientedBox2D[] compute(RegionFeatures data)
     {
         // retrieve required feature values
-        ensureRequiredFeaturesAreComputed(data);
+        data.ensureRequiredFeaturesAreComputed(this);
         Polygon2D[] hulls = (Polygon2D[]) data.results.get(ConvexHull.class);
         
         // retrieve spatial calibration of image
