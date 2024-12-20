@@ -59,6 +59,12 @@ public class RegionFeatures
     public Map<Class<? extends Feature>, Feature> features;
     
     /**
+     * A map for storing optional data that can be used to compute additional
+     * features, for example region intensities.
+     */
+    public Map<String, ImagePlus> imageData;
+    
+    /**
      * The results computed for each feature. 
      */
     public Map<Class<? extends Feature>, Object> results;
@@ -71,11 +77,16 @@ public class RegionFeatures
     
     public RegionFeatures(ImagePlus imagePlus, int[] labels)
     {
+        // store locally label map data
         this.labelMap = imagePlus;
         this.labels = labels;
         
+        // initialize data structures
         this.features = new HashMap<Class<? extends Feature>, Feature>();
+        this.imageData = new HashMap<String, ImagePlus>();
         this.results = new HashMap<Class<? extends Feature>, Object>();
+        
+        // additional setup
         createLabelColors(this.labels.length);
     }
     
@@ -134,13 +145,9 @@ public class RegionFeatures
     
     public void ensureRequiredFeaturesAreComputed(Feature feature)
     {
-        for (Class<? extends Feature> fClass : feature.requiredFeatures())
-        {
-            if (!isComputed(fClass))
-            {
-                process(fClass);
-            }
-        }
+        feature.requiredFeatures().stream()
+            .filter(fc -> !isComputed(fc))
+            .forEach(fc -> process(fc));
     }
 
     public RegionFeatures add(Class<? extends Feature> featureClass)
@@ -152,6 +159,17 @@ public class RegionFeatures
     public boolean contains(Class<? extends Feature> featureClass)
     {
         return this.featureClasses.contains(featureClass);
+    }
+    
+    public RegionFeatures addImageData(String dataName, ImagePlus image)
+    {
+        this.imageData.put(dataName, image);
+        return this;
+    }
+    
+    public ImagePlus getImageData(String dataName)
+    {
+        return this.imageData.get(dataName);
     }
     
     public RegionFeatures computeAll()
