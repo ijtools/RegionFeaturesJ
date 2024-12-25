@@ -12,7 +12,12 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.intensity.IntensityStandardDeviation;
+import net.ijt.regfeat.intensity.IntensityVariance;
+import net.ijt.regfeat.intensity.MaxIntensity;
 import net.ijt.regfeat.intensity.MeanIntensity;
+import net.ijt.regfeat.intensity.MedianIntensity;
+import net.ijt.regfeat.intensity.MinIntensity;
 
 /**
  * 
@@ -87,7 +92,16 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         gd.addChoice("Intensity Image", names, names[inputIndex]);
         gd.addChoice("Label Map", names, names[labelsIndex]);
         gd.addMessage("Measurements:");
-        gd.addCheckbox("Mean", features.contains(MeanIntensity.class));
+        String[] labels = new String[] { "Mean", "Median", "Min.", "Max.", "Variance", "Std. Dev." };
+        boolean[] states = new boolean[] { 
+                features.contains(MeanIntensity.class),
+                features.contains(MedianIntensity.class),
+                features.contains(MinIntensity.class),
+                features.contains(MaxIntensity.class),
+                features.contains(IntensityVariance.class),
+                features.contains(IntensityStandardDeviation.class),
+        };
+        gd.addCheckboxGroup(3, 2, labels, states);
         
         // create the dialog, with operator options
         gd.showDialog();
@@ -128,6 +142,11 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         RegionFeatures features = RegionFeatures.initialize(labelMap);
         features.addImageData("intensity", inputImage);
         if (gd.getNextBoolean()) features.add(MeanIntensity.class);
+        if (gd.getNextBoolean()) features.add(MedianIntensity.class);
+        if (gd.getNextBoolean()) features.add(MinIntensity.class);
+        if (gd.getNextBoolean()) features.add(MaxIntensity.class);
+        if (gd.getNextBoolean()) features.add(IntensityVariance.class);
+        if (gd.getNextBoolean()) features.add(IntensityStandardDeviation.class);
         
         
         // Call the main processing method
@@ -141,6 +160,5 @@ public class RegionIntensitiesPlugin implements PlugInFilter
 
         // keep choices for next plugin call
         this.features = features;
-
     }
 }
