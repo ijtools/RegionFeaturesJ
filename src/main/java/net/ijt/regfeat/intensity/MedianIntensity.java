@@ -5,7 +5,6 @@ package net.ijt.regfeat.intensity;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Stream;
 
 import net.ijt.regfeat.Feature;
@@ -27,11 +26,10 @@ public class MedianIntensity extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        @SuppressWarnings("unchecked")
-        List<Double>[] allValues = (List<Double>[]) data.results.get(IntensityValues.class);
+        double[][] allValues = (double[][]) data.results.get(IntensityValues.class);
 
-        // calculate average intensity per region, by converting each List of
-        // Double into a DoubleStream instance
+        // calculate average intensity per region, by converting each array of
+        // double into a DoubleStream instance
         return Stream.of(allValues)
                 .mapToDouble(values -> median(values))
                 .toArray();
@@ -41,14 +39,15 @@ public class MedianIntensity extends SingleValueFeature
      * Computes the median value of the Double values within the list.
      * 
      * @param values
-     *            a list of Double
-     * @return the median of the values, or NaN if the list is empty
+     *            an array of double values
+     * @return the median of the values within the array, or NaN if the array is
+     *         empty
      */
-    private static final double median(List<Double> values)
+    private static final double median(double[] values)
     {
-        if (values.isEmpty()) return Double.NaN;
+        if (values.length == 0) return Double.NaN;
                 
-        double[] arr = values.stream().mapToDouble(Double::doubleValue).toArray();
+        double[] arr = Arrays.copyOf(values, values.length);
         Arrays.sort(arr);
         return arr[arr.length / 2];
     }

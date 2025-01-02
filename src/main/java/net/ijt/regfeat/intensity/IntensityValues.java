@@ -3,14 +3,16 @@
  */
 package net.ijt.regfeat.intensity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
+import net.ijt.regfeat.ElementCount;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -21,7 +23,7 @@ import net.ijt.regfeat.RegionFeatures;
 public final class IntensityValues implements RegionFeature
 {
     @Override
-    public List<Double>[] compute(RegionFeatures data)
+    public double[][] compute(RegionFeatures data)
     {
         // retrieve necessary data
         ImagePlus intensityImage = data.getImageData("intensity");
@@ -32,13 +34,19 @@ public final class IntensityValues implements RegionFeature
         
         int nLabels = data.labels.length;
         
-        // initializes one array list for each label
-        @SuppressWarnings("unchecked")
-        ArrayList<Double>[] regionValues = (ArrayList<Double>[]) new ArrayList[nLabels];
+        // retrieve number of elements of each region
+        data.ensureRequiredFeaturesAreComputed(this);
+        int[] counts = (int[]) data.results.get(ElementCount.class);
+        
+        // initializes one array for each label
+        double[][] regionValues = new double[nLabels][];
         for (int i = 0; i < nLabels; i++)
         {
-            regionValues[i] = new ArrayList<Double>();
+            regionValues[i] = new double[counts[i]];
         }
+        
+        // initialize one counter for each array
+        int[] counters = new int[nLabels];
         
         // create associative hash table to know the index of each label
         Map<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(data.labels);
@@ -66,8 +74,9 @@ public final class IntensityValues implements RegionFeature
                     if (label == 0) continue;
                     if (!labelIndices.containsKey(label)) continue;
                     
-                    // add current intensity value to the list associated to current region
-                    regionValues[labelIndices.get(label)].add((double) valueMap.getf(x, y));
+                    // add current intensity value to the array associated to the current region
+                    int index = labelIndices.get(label);
+                    regionValues[index][counters[index]++] = (double) valueMap.getf(x, y);
                 }
             }
         }
@@ -81,4 +90,9 @@ public final class IntensityValues implements RegionFeature
         // nothing to do...
     }
 
+    @Override
+    public Collection<Class<? extends Feature>> requiredFeatures()
+    {
+        return Arrays.asList(ElementCount.class);
+    }
 }

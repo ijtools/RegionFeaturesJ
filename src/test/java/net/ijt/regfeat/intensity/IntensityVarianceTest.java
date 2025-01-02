@@ -27,10 +27,9 @@ public class IntensityVarianceTest
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         data.addImageData("intensity", TestImages.createIntensityImage_FourRegions_7x7());
         
-        data.add(IntensityVariance.class);
-        data.computeAll();
-        
-        double[] res = new IntensityVariance().compute(data);
+        IntensityVariance feature = new IntensityVariance();
+        data.add(feature.getClass());
+        double[] res = feature.compute(data);
         
         assertNotNull(res);
         assertEquals(4, res.length);
@@ -38,6 +37,29 @@ public class IntensityVarianceTest
         assertEquals(  1.0, res[1], 0.1);
         assertEquals(100.0, res[2], 0.1);
         assertEquals( 75.7, res[3], 0.1);
+    }
+
+    /**
+     * Test method for {@link net.ijt.regfeat.intensity.MeanIntensity#compute(net.ijt.regfeat.RegionFeatures)}.
+     */
+    @Test
+    public final void testCompute_withEmptyRegion()
+    {
+        ImagePlus labelMap = TestImages.createLabeMap_FourRegions_7x7();
+        RegionFeatures data = new RegionFeatures(labelMap, new int[] {3, 5, 7, 8, 9});
+        data.addImageData("intensity", TestImages.createIntensityImage_FourRegions_7x7());
+        
+        IntensityVariance feature = new IntensityVariance();
+        data.add(feature.getClass());
+        double[] res = feature.compute(data);
+        
+        assertNotNull(res);
+        assertEquals(5, res.length);
+        assertTrue(Double.isNaN(res[0]));
+        assertEquals(  1.0, res[1], 0.1);
+        assertTrue(Double.isNaN(res[2]));
+        assertEquals(100.0, res[3], 0.1);
+        assertEquals( 75.7, res[4], 0.1);
     }
 
     /**

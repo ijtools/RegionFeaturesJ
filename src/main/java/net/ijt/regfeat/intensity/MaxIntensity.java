@@ -5,7 +5,7 @@ package net.ijt.regfeat.intensity;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import net.ijt.regfeat.Feature;
@@ -27,14 +27,12 @@ public class MaxIntensity extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        @SuppressWarnings("unchecked")
-        List<Double>[] allValues = (List<Double>[]) data.results.get(IntensityValues.class);
+        double[][] allValues = (double[][]) data.results.get(IntensityValues.class);
 
-        // calculate maximum intensity per region, by converting each List of
-        // Double into a DoubleStream instance
+        // calculate maximum intensity per region, by converting each array of
+        // double into a DoubleStream instance
         return Stream.of(allValues)
-                .mapToDouble(values -> values.stream()
-                        .mapToDouble(Double::doubleValue)
+                .mapToDouble(values -> DoubleStream.of(values)
                         .max()
                         .orElse(Double.NaN))
                 .toArray();

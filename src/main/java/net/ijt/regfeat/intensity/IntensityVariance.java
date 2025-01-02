@@ -5,7 +5,6 @@ package net.ijt.regfeat.intensity;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
@@ -26,8 +25,7 @@ public class IntensityVariance extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        @SuppressWarnings("unchecked")
-        List<Double>[] allValues = (List<Double>[]) data.results.get(IntensityValues.class);
+        double[][] allValues = (double[][]) data.results.get(IntensityValues.class);
         double[] meanValues = (double[]) data.results.get(MeanIntensity.class);
 
         // allocate result array
@@ -37,15 +35,22 @@ public class IntensityVariance extends SingleValueFeature
         // calculate variance of intensity per region
         for (int i = 0; i < nLabels; i++)
         {
-            double sumSq = 0;
-            for (double v : allValues[i])
-            {
-                double v2 = v - meanValues[i];
-                sumSq += v2 * v2;
-            }
-            vars[i] = sumSq / (allValues[i].size() - 1);
+            vars[i] = variance(allValues[i], meanValues[i]);
         }
         return vars;
+    }
+    
+    private static final double variance(double[] values, double mean)
+    {
+        // requires at least two values to compute variance
+        if (values.length < 2) return Double.NaN;
+        
+        double sumSq = 0;
+        for (double v : values)
+        {
+            sumSq += (v - mean) * (v - mean);
+        }
+        return sumSq / (values.length - 1);
     }
 
     @Override
