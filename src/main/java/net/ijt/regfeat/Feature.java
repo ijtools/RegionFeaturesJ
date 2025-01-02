@@ -80,6 +80,17 @@ public interface Feature
      */
     public abstract Object compute(RegionFeatures data);
     
+    /**
+     * Updates the specified result table with the result of this feature.
+     * Depending on features, this method may populate one or several columns.
+     * In the case of utility or intermediary feature, the implementation of
+     * this method may be empty.
+     * 
+     * @param table
+     *            the results table to populate
+     * @param data
+     *            the class containing all the computed features.
+     */
     public abstract void updateTable(ResultsTable table, RegionFeatures data);
     
     /**
