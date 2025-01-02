@@ -13,13 +13,14 @@ Simply put the `RegionFeaturesJ.jar` into the plugins directory of the current I
 
 ### GUI Use
 
-Once ImageJ is restarted, it provides a new `RegionFEaturesJ` plugin within the Plugins->IJTools->Analysis menu.
+Once ImageJ is restarted, it provides a new `RegionFeaturesJ` plugin within the Plugins->IJTools->Analysis menu.
 
-The behaviour of the dialog is similar to the "Analyze Regions" Plugin in MorphoLibJ. Results are displayed in a ResultsTable.
+The behavior of the dialog is similar to that of the "Analyze Regions" Plugin in MorphoLibJ. 
+Results are displayed in a ResultsTable.
 
 ### Programmatic use
 
-A RegionFeatures object may be initialized with an image containing a label map, i.e. an image (8-bits, 16-bits, or 32-bits) 
+A RegionFeatures object may be initialized with an image containing a **label map**, i.e. an image (8-bits, 16-bits, or 32-bits) 
 containing for each pixel the integer label of the region it belongs to.
 ```java
 // setup an ImagePlus containing the label map
@@ -52,7 +53,7 @@ ResultsTable table = RegionFeatures.initialize(image)
 ```
 
 The computation result of a specific feature can be obtained by inspecting the "results" field. 
-It may be necessary to ensure the feature is computed by using the `computeAll()` method.
+It may be necessary to ensure that the feature is computed by using the `computeAll()` method.
 For example the centroid can be retrieved as follow:
 ```java
 features.computeAll();
@@ -61,15 +62,17 @@ Point2D[] obj = (Point2D[]) features.results.get(Centroid.class);
 
 ### Adding its own feature
 
-It is possible to include its own user-defined feature(s) into the resulting Table. Each use feature must extends the `Feature` class, and implement two methods:
+It is possible to include its own user-defined feature(s) into the resulting Table, without having to modify the plugin.
+Each user-defined feature must implement the `Feature` interface, and implement two methods:
 
 * The `compute(...)` method is used to retrieve data that were already computef from the regions. It returns an object whose class is specific to the feature.
-* the `updateTable(...)` method populates the ResultsTable with the feature data computed on the image. It may contains only a subset of the information computed during the process.
+* the `updateTable(...)` method populates the `ResultsTable` with the feature data computed on the image. It may contain only a subset of the information computed during the process.
 
 It is possible to rely on other features for computing new features. For example, the "Circularity" feature is computed based on the "Area" and "Perimeter" features.
-When implementing a feature, it is possible to declare in the constructor which features it depends on. Then, when the feature is computed, 
-it can first control that required feature area computed, and compute them if necessary. 
-Note that the results TAble is populated only with features that are specified by using the `add(featureClass)` method.
+When implementing a feature, it is possible to declare which features it depends on, by overriding the `requiredFeatures()` method. 
+Then, when the feature is computed, 
+it can first control that required features are computed, and compute them if necessary. 
+Note that the results Table is populated only with features that are specified by using the `add(featureClass)` method.
 
 ### Planned extension
 
