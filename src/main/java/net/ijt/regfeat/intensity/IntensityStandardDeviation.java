@@ -12,7 +12,13 @@ import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
 
 /**
- * Compute the standard deviation of intensity within each region. 
+ * Compute the standard deviation of intensity within each region. Standard
+ * deviation is computed as the square root of the variance.
+ * 
+ * @see MeanIntensity
+ * @see IntensityVariance
+ * @see IntensitySkewness
+ * @see IntensityKurtosis
  */
 public class IntensityStandardDeviation extends SingleValueFeature
 {

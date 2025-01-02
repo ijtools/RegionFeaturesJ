@@ -11,7 +11,12 @@ import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
 
 /**
- * Compute the variance of intensity within each region. 
+ * Compute the variance of intensity values within each region.
+ * 
+ * @see MeanIntensity
+ * @see IntensityStandardDeviation
+ * @see IntensitySkewness
+ * @see IntensityKurtosis
  */
 public class IntensityVariance extends SingleValueFeature
 {
