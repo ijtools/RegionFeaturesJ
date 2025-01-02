@@ -12,6 +12,8 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.intensity.IntensityKurtosis;
+import net.ijt.regfeat.intensity.IntensitySkewness;
 import net.ijt.regfeat.intensity.IntensityStandardDeviation;
 import net.ijt.regfeat.intensity.IntensityVariance;
 import net.ijt.regfeat.intensity.MaxIntensity;
@@ -92,7 +94,7 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         gd.addChoice("Intensity Image", names, names[inputIndex]);
         gd.addChoice("Label Map", names, names[labelsIndex]);
         gd.addMessage("Measurements:");
-        String[] labels = new String[] { "Mean", "Median", "Min.", "Max.", "Variance", "Std. Dev." };
+        String[] labels = new String[] { "Mean", "Median", "Minimum", "Maximum", "Variance", "Standard Deviation", "Skewness", "Kurtosis" };
         boolean[] states = new boolean[] { 
                 features.contains(MeanIntensity.class),
                 features.contains(MedianIntensity.class),
@@ -100,8 +102,10 @@ public class RegionIntensitiesPlugin implements PlugInFilter
                 features.contains(MaxIntensity.class),
                 features.contains(IntensityVariance.class),
                 features.contains(IntensityStandardDeviation.class),
+                features.contains(IntensitySkewness.class),
+                features.contains(IntensityKurtosis.class),
         };
-        gd.addCheckboxGroup(3, 2, labels, states);
+        gd.addCheckboxGroup(4, 2, labels, states);
         
         // create the dialog, with operator options
         gd.showDialog();
@@ -147,6 +151,8 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(MaxIntensity.class);
         if (gd.getNextBoolean()) features.add(IntensityVariance.class);
         if (gd.getNextBoolean()) features.add(IntensityStandardDeviation.class);
+        if (gd.getNextBoolean()) features.add(IntensitySkewness.class);
+        if (gd.getNextBoolean()) features.add(IntensityKurtosis.class);
         
         
         // Call the main processing method
