@@ -6,18 +6,25 @@ package net.ijt.regfeat.morpho2d;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ij.measure.ResultsTable;
 import inra.ijpb.geometry.PointPair2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 
 /**
  * The tortuosity, defined as the ratio of Geodesic diameter over Max Feret
  * Diameter.
+ * 
+ * @see GeodesicDiameter
+ * @see MaxFeretDiameter
  */
-public class Tortuosity implements RegionFeature
+public class Tortuosity extends SingleValueFeature
 {
+    public Tortuosity()
+    {
+        super("Tortuosity");
+    }
+    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -39,25 +46,7 @@ public class Tortuosity implements RegionFeature
     }
     
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(Tortuosity.class);
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Tortuosity", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-    
-    @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(GeodesicDiameter.class, MaxFeretDiameter.class);
     }

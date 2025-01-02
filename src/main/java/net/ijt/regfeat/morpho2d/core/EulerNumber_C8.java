@@ -4,10 +4,9 @@
 package net.ijt.regfeat.morpho2d.core;
 
 import ij.ImagePlus;
-import ij.measure.ResultsTable;
 import inra.ijpb.measure.IntrinsicVolumes2D;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho2d.EulerNumber;
 
 /**
@@ -15,30 +14,26 @@ import net.ijt.regfeat.morpho2d.EulerNumber;
  * 
  * @see EulerNumber
  */
-public class EulerNumber_C8 implements RegionFeature
+public class EulerNumber_C8 extends SingleValueFeature
 {
-    @Override
-    public int[] compute(RegionFeatures data)
+    public EulerNumber_C8()
     {
-        ImagePlus labelMap = data.labelMap;
-        return IntrinsicVolumes2D.eulerNumbers(labelMap.getProcessor(), data.labels, 8);
+        super("Euler_Number_C8");
     }
     
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
+    public double[] compute(RegionFeatures data)
     {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof int[])
+        // retrieve Euler Number
+        ImagePlus labelMap = data.labelMap;
+        int[] intEuler = IntrinsicVolumes2D.eulerNumbers(labelMap.getProcessor(), data.labels, 8);
+        
+        // convert to array of double
+        double[] eulers = new double[intEuler.length];
+        for (int i = 0; i < intEuler.length; i++)
         {
-            int[] array = (int[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Euler Number_C8", r, array[r]);
-            }
+            eulers[i] = intEuler[i];
         }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
+        return eulers;
     }
 }

@@ -15,20 +15,27 @@ import ij.gui.PointRoi;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import ij.measure.Calibration;
-import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.GeodesicDiameter.Result;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho2d.core.GeodesicDiameterData;
 
 /**
- * Computes the convex area, or area of the convex hull.
+ * Computes the geodesic diameter of each region.
+ * 
+ * @see GeodesicElongation
+ * @see Tortuosity
  */
-public class GeodesicDiameter implements RegionFeature
+public class GeodesicDiameter extends SingleValueFeature
 {
+    public GeodesicDiameter()
+    {
+        super("Geodesic_Diameter");
+    }
+    
     @Override
-    public Object compute(RegionFeatures data)
+    public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
@@ -44,33 +51,11 @@ public class GeodesicDiameter implements RegionFeature
         return geodDiams;
     }
 
-    @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Geodesic_Diameter", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-
     public void overlayResult(RegionFeatures data, ImagePlus target)
     {
-        // retrieve array of ellipses
-        Object obj = data.results.get(this.getClass());
-        if (!(obj instanceof Result[]))
-        {
-            throw new RuntimeException("Requires object argument to be an array of inra.ijpb.measure.region2d.GeodesicDiameter.Result");
-        }
-        Result[] results = (Result[]) obj;
+        // retrieve required feature values
+        data.ensureRequiredFeaturesAreComputed(this);
+        Result[] results = (Result[]) data.results.get(GeodesicDiameterData.class);
         
         // get spatial calibration of target image
         Calibration calib = target.getCalibration();
@@ -135,7 +120,7 @@ public class GeodesicDiameter implements RegionFeature
     }
     
     @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(GeodesicDiameterData.class);
     }

@@ -6,11 +6,10 @@ package net.ijt.regfeat.morpho2d.core;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho2d.EulerNumber;
 
 /**
@@ -18,8 +17,13 @@ import net.ijt.regfeat.morpho2d.EulerNumber;
  * 
  * @see EulerNumber
  */
-public class EulerNumber_C4 implements RegionFeature
+public class EulerNumber_C4 extends SingleValueFeature
 {
+    public EulerNumber_C4()
+    {
+        super("Euler_Number_C4");
+    }
+    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -33,24 +37,6 @@ public class EulerNumber_C4 implements RegionFeature
             eulers[i] = res[i].eulerNumber;
         }
         return eulers;
-    }
-    
-    @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Euler Number_C4", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
     }
     
     @Override

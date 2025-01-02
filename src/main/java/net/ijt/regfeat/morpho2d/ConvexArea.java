@@ -8,21 +8,25 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import ij.measure.Calibration;
-import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Box2D;
 import inra.ijpb.geometry.Polygon2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
  * Computes the convex area, or area of the convex hull.
  */
-public class ConvexArea implements RegionFeature
+public class ConvexArea extends SingleValueFeature
 {
+    public ConvexArea()
+    {
+        super("Convex_Area");
+    }
+    
     @Override
-    public Object compute(RegionFeatures data)
+    public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
@@ -71,25 +75,7 @@ public class ConvexArea implements RegionFeature
     }
 
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Convex_Area", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-
-    @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(ConvexHull.class);
     }

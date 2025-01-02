@@ -8,6 +8,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import ij.ImagePlus;
+import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
@@ -35,6 +36,25 @@ public class AreaTest
         assertEquals(res[1],  4.0, 0.01);
         assertEquals(res[2],  4.0, 0.01);
         assertEquals(res[3], 16.0, 0.01);
+    }
+
+    /**
+     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#updateTable(ij.measure.ResultsTable, java.lang.Object)}.
+     */
+    @Test
+    public final void testPopulateTable()
+    {
+        ImagePlus labelMap = createImagePlus();
+        RegionFeatures data = RegionFeatures.initialize(labelMap)
+                .add(Area.class)
+                .computeAll();
+
+        Area feature = new Area();
+        ResultsTable table = new ResultsTable();
+        feature.updateTable(table, data);
+        
+        assertEquals(4, table.getCounter());
+        assertEquals(0, table.getLastColumn());
     }
 
     private static final ImagePlus createImagePlus()

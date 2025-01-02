@@ -8,11 +8,10 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import ij.measure.Calibration;
-import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Polygon2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
@@ -21,10 +20,15 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  * The perimeter is obtained as the length of boundary of the convex hull, and
  * may be different from the perimeter of the image of the convex image.
  */
-public class ConvexPerimeter implements RegionFeature
+public class ConvexPerimeter extends SingleValueFeature
 {
+    public ConvexPerimeter()
+    {
+        super("Convex_Perimeter");
+    }
+    
     @Override
-    public Object compute(RegionFeatures data)
+    public double[] compute(RegionFeatures data)
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
@@ -59,25 +63,7 @@ public class ConvexPerimeter implements RegionFeature
     }
 
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Convex_Area", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-
-    @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(ConvexHull.class);
     }

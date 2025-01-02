@@ -6,18 +6,22 @@ package net.ijt.regfeat.morpho2d;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Circle2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 
 /**
  * The GeodesicElongation, defined as the ratio of Geodesic diameter over
  * diameter of largest inscribed disk.
  */
-public class GeodesicElongation implements RegionFeature
+public class GeodesicElongation extends SingleValueFeature
 {
+    public GeodesicElongation()
+    {
+        super("Geodesic_Elongation");
+    }
+    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -39,25 +43,7 @@ public class GeodesicElongation implements RegionFeature
     }
     
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(GeodesicElongation.class);
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("GeodesicElongation", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-    
-    @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(GeodesicDiameter.class, LargestInscribedDisk.class);
     }
