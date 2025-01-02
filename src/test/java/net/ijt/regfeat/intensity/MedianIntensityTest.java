@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
 /**
  * 
  */
-public class MeanIntensityTest
+public class MedianIntensityTest
 {
     /**
      * Test method for {@link net.ijt.regfeat.intensity.MeanIntensity#compute(net.ijt.regfeat.RegionFeatures)}.
@@ -27,10 +27,10 @@ public class MeanIntensityTest
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         data.addImageData("intensity", TestImages.createIntensityImage_FourRegions_7x7());
         
-        data.add(MeanIntensity.class);
+        data.add(MedianIntensity.class);
         data.computeAll();
         
-        double[] res = new MeanIntensity().compute(data);
+        double[] res = new MedianIntensity().compute(data);
         
         assertNotNull(res);
         assertEquals(4, res.length);
@@ -50,7 +50,7 @@ public class MeanIntensityTest
         
         ResultsTable table = RegionFeatures.initialize(labelMap)
                 .addImageData("intensity", TestImages.createIntensityImage_FourRegions_7x7())
-                .add(MeanIntensity.class)
+                .add(MedianIntensity.class)
                 .createTable();
         
         assertEquals(4, table.getCounter());

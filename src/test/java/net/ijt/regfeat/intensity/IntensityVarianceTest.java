@@ -15,10 +15,10 @@ import net.ijt.regfeat.RegionFeatures;
 /**
  * 
  */
-public class MeanIntensityTest
+public class IntensityVarianceTest
 {
     /**
-     * Test method for {@link net.ijt.regfeat.intensity.MeanIntensity#compute(net.ijt.regfeat.RegionFeatures)}.
+     * Test method for {@link net.ijt.regfeat.intensity.MaxIntensity#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testCompute()
@@ -27,21 +27,21 @@ public class MeanIntensityTest
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
         data.addImageData("intensity", TestImages.createIntensityImage_FourRegions_7x7());
         
-        data.add(MeanIntensity.class);
+        data.add(IntensityVariance.class);
         data.computeAll();
         
-        double[] res = new MeanIntensity().compute(data);
+        double[] res = new IntensityVariance().compute(data);
         
         assertNotNull(res);
         assertEquals(4, res.length);
-        assertEquals(11.0, res[0], 0.01);
-        assertEquals(14.0, res[1], 0.01);
-        assertEquals(41.0, res[2], 0.01);
-        assertEquals(44.0, res[3], 0.01);
+        assertTrue(Double.isNaN(res[0]));
+        assertEquals(  1.0, res[1], 0.1);
+        assertEquals(100.0, res[2], 0.1);
+        assertEquals( 75.7, res[3], 0.1);
     }
 
     /**
-     * Test method for {@link net.ijt.regfeat.intensity.MeanIntensity#updateTable(ij.measure.ResultsTable, net.ijt.regfeat.RegionFeatures)}.
+     * Test method for {@link net.ijt.regfeat.intensity.MaxIntensity#updateTable(ij.measure.ResultsTable, net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
     public final void testUpdateTable()
@@ -50,7 +50,7 @@ public class MeanIntensityTest
         
         ResultsTable table = RegionFeatures.initialize(labelMap)
                 .addImageData("intensity", TestImages.createIntensityImage_FourRegions_7x7())
-                .add(MeanIntensity.class)
+                .add(IntensityVariance.class)
                 .createTable();
         
         assertEquals(4, table.getCounter());
