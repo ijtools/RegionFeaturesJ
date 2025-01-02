@@ -7,16 +7,20 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 
 /**
  * Compute the variance of intensity within each region. 
  */
-public class IntensityVariance implements RegionFeature
+public class IntensityVariance extends SingleValueFeature
 {
+    public IntensityVariance()
+    {
+        super("Variance");
+    }
+    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -45,26 +49,7 @@ public class IntensityVariance implements RegionFeature
     }
 
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Variance", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-
-    
-    @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(IntensityValues.class, MeanIntensity.class);
     }

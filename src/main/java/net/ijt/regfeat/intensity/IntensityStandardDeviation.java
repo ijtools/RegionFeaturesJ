@@ -5,17 +5,22 @@ package net.ijt.regfeat.intensity;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.DoubleStream;
 
-import ij.measure.ResultsTable;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.SingleValueFeature;
 
 /**
  * Compute the standard deviation of intensity within each region. 
  */
-public class IntensityStandardDeviation implements RegionFeature
+public class IntensityStandardDeviation extends SingleValueFeature
 {
+    public IntensityStandardDeviation()
+    {
+        super("Standard_Deviation");
+    }
+    
     @Override
     public double[] compute(RegionFeatures data)
     {
@@ -23,39 +28,12 @@ public class IntensityStandardDeviation implements RegionFeature
         data.ensureRequiredFeaturesAreComputed(this);
         double[] variances = (double[]) data.results.get(IntensityVariance.class);
 
-        // allocate result array
-        int nLabels = data.labels.length;
-        double[] std = new double[nLabels];
-        
-        // calculate median intensity per region
-        for (int i = 0; i < nLabels; i++)
-        {
-            std[i] = Math.sqrt(variances[i]);
-        }
-        return std;
+        // calculate standard deviation of intensities per region
+        return DoubleStream.of(variances).map(Math::sqrt).toArray();
     }
 
     @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        Object obj = data.results.get(this.getClass());
-        if (obj instanceof double[])
-        {
-            double[] array = (double[]) obj;
-            for (int r = 0; r < array.length; r++)
-            {
-                table.setValue("Std. Dev.", r, array[r]);
-            }
-        }
-        else
-        {
-            throw new RuntimeException("Requires object argument to be an array of double");
-        }
-    }
-
-    
-    @Override
-    public Collection<Class<? extends Feature>>requiredFeatures()
+    public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(IntensityVariance.class);
     }
