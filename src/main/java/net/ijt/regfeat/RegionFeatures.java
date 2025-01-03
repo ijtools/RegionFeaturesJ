@@ -11,13 +11,14 @@ import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
+import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.color.ColorMaps;
 import inra.ijpb.label.LabelImages;
 
 /**
  * The class containing results (and data?) for the analysis of regions within an image.
  */
-public class RegionFeatures
+public class RegionFeatures extends AlgoStub
 {
     // ==================================================
     // Static methods
@@ -124,6 +125,7 @@ public class RegionFeatures
         ensureRequiredFeaturesAreComputed(feature);
         
         // compute feature, and index into results
+        this.fireStatusChanged(this, "Compute feature: " + featureClass.getSimpleName());
         this.results.put(featureClass, feature.compute(this));
     }
     
@@ -180,6 +182,7 @@ public class RegionFeatures
     
     public ResultsTable createTable()
     {
+        this.fireStatusChanged(this, "RegionFeatures: create result table");
         // ensure everything is computed
         computeAll();
         

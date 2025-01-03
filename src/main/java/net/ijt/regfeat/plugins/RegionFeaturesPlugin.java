@@ -14,6 +14,7 @@ import ij.gui.GenericDialog;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
+import inra.ijpb.algo.DefaultAlgoListener;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
@@ -200,7 +201,7 @@ public class RegionFeaturesPlugin implements PlugInFilter
         RegionFeatures analyzer = options.createAnalyzer(imagePlus);
         
         // Call the main processing method
-        // DefaultAlgoListener.monitor(morphoFeatures);
+        DefaultAlgoListener.monitor(analyzer);
         return analyzer.createTable();
     }
 
@@ -217,16 +218,16 @@ public class RegionFeaturesPlugin implements PlugInFilter
         gd.addCheckbox("Bounding_Box", features.contains(Bounds.class));
         gd.addCheckbox("Centroid", features.contains(Centroid.class));
         gd.addCheckbox("Equivalent_Ellipse", features.contains(EquivalentEllipse.class));
-        gd.addCheckbox("Ellipse_Elong.", features.contains(EllipseElongation.class));
+        gd.addCheckbox("Ellipse_Elongation", features.contains(EllipseElongation.class));
         gd.addCheckbox("Convexity", features.contains(Convexity.class));
         gd.addCheckbox("Max._Feret Diameter", features.contains(MaxFeretDiameter.class));
         gd.addCheckbox("Oriented_Box", features.contains(OrientedBoundingBox.class));
         gd.addCheckbox("Oriented_Box_Elong.", features.contains(OrientedBoxElongation.class));
-        gd.addCheckbox("Geodesic Diameter", features.contains(GeodesicDiameter.class));
+        gd.addCheckbox("Geodesic_Diameter", features.contains(GeodesicDiameter.class));
         gd.addCheckbox("Tortuosity", features.contains(Tortuosity.class));
-        gd.addCheckbox("Max._Inscribed_Disc", features.contains(LargestInscribedDisk.class));
+        gd.addCheckbox("Max._Inscribed_Disk", features.contains(LargestInscribedDisk.class));
         gd.addCheckbox("Average_Thickness", features.contains(AverageThickness.class));
-        gd.addCheckbox("Geodesic_Elong.", features.contains(GeodesicElongation.class));
+        gd.addCheckbox("Geodesic_Elongation.", features.contains(GeodesicElongation.class));
         gd.showDialog();
 
         // If cancel was clicked, do nothing
