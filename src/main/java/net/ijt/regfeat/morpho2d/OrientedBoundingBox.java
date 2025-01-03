@@ -54,11 +54,11 @@ public class OrientedBoundingBox implements RegionFeature
             {
                 OrientedBox2D obox = array[r];
                 Point2D center = obox.center();
-                table.setValue("Box.Center.X",  r, center.getX());
-                table.setValue("Box.Center.Y",  r, center.getY());
-                table.setValue("Box.Length",    r, obox.length());
-                table.setValue("Box.Width",     r, obox.width());
-                table.setValue("Box.Orientation", r, obox.orientation());
+                table.setValue("Oriented_Box_Center_X",  r, center.getX());
+                table.setValue("Oriented_Box_Center_Y",  r, center.getY());
+                table.setValue("Oriented_Box_Length",    r, obox.length());
+                table.setValue("Oriented_Box_Width",     r, obox.width());
+                table.setValue("Oriented_Box_Orientation", r, obox.orientation());
             }
         }
         else

@@ -38,10 +38,10 @@ public class Bounds implements RegionFeature
             Box2D box = boxes[i];
             
             // coordinates of centroid
-            table.setValue("Bounds2D.XMin", i, box.getXMin());
-            table.setValue("Bounds2D.XMax", i, box.getXMax());
-            table.setValue("Bounds2D.YMin", i, box.getYMin());
-            table.setValue("Bounds2D.YMax", i, box.getYMax());
+            table.setValue("Bounds2D_XMin", i, box.getXMin());
+            table.setValue("Bounds2D_XMax", i, box.getXMax());
+            table.setValue("Bounds2D_YMin", i, box.getYMin());
+            table.setValue("Bounds2D_YMax", i, box.getYMax());
         }
     }
     

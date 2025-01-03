@@ -46,15 +46,15 @@ public class GeodesicDiameterData implements RegionFeature
 
                 // coordinates of max inscribed circle
                 table.setValue("Radius", r, res.innerRadius);
-                table.setValue("InitPoint.X", r, res.initialPoint.getX());
-                table.setValue("InitPoint.Y", r, res.initialPoint.getY());
-                table.setValue("GeodesicElongation", r, Math.max(res.diameter / (res.innerRadius * 2), 1.0));
+                table.setValue("InitPoint_X", r, res.initialPoint.getX());
+                table.setValue("InitPoint_Y", r, res.initialPoint.getY());
+                table.setValue("Geodesic_Elongation", r, Math.max(res.diameter / (res.innerRadius * 2), 1.0));
 
                 // coordinate of first and second geodesic extremities 
-                table.setValue("Extremity1.X", r, res.firstExtremity.getX());
-                table.setValue("Extremity1.Y", r, res.firstExtremity.getY());
-                table.setValue("Extremity2.X", r, res.secondExtremity.getX());
-                table.setValue("Extremity2.Y", r, res.secondExtremity.getY());
+                table.setValue("Extremity1_X", r, res.firstExtremity.getX());
+                table.setValue("Extremity1_Y", r, res.firstExtremity.getY());
+                table.setValue("Extremity2_X", r, res.secondExtremity.getX());
+                table.setValue("Extremity2_Y", r, res.secondExtremity.getY());
             }
         }
         else

@@ -34,8 +34,8 @@ public class Centroid implements RegionFeature
             for (int r = 0; r < array.length; r++)
             {
                 Point2D point = array[r];
-                table.setValue("Centroid.X", r, point.getX());
-                table.setValue("Centroid.Y", r, point.getY());
+                table.setValue("Centroid_X", r, point.getX());
+                table.setValue("Centroid_Y", r, point.getY());
             }
         }
         else

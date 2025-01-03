@@ -163,15 +163,15 @@ public class EquivalentEllipse implements RegionFeature
                 
                 // coordinates of centroid
                 Point2D center = ellipse.center();
-                table.setValue("Ellipse.Center.X", r, center.getX());
-                table.setValue("Ellipse.Center.Y", r, center.getY());
+                table.setValue("Ellipse_Center_X", r, center.getX());
+                table.setValue("Ellipse_Center_Y", r, center.getY());
                 
                 // ellipse size
-                table.setValue("Ellipse.Radius1", r, ellipse.radius1());
-                table.setValue("Ellipse.Radius2", r, ellipse.radius2());
+                table.setValue("Ellipse_Radius_1", r, ellipse.radius1());
+                table.setValue("Ellipse_Radius_2", r, ellipse.radius2());
         
                 // ellipse orientation (degrees)
-                table.setValue("Ellipse.Orientation", r, ellipse.orientation());
+                table.setValue("Ellipse_Orientation", r, ellipse.orientation());
             }
         }
         else
