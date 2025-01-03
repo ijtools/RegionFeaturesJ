@@ -3,6 +3,9 @@
  */
 package net.ijt.regfeat.plugins;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.GenericDialog;
@@ -10,6 +13,7 @@ import ij.measure.ResultsTable;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.Area;
 import net.ijt.regfeat.morpho2d.AverageThickness;
@@ -43,10 +47,9 @@ public class RegionFeaturesPlugin implements PlugInFilter
     ImagePlus imagePlus;
 
     /**
-     * The class containing both the features to compute and the results of
-     * computations.
+     * The options to create the region feature analyzer
      */
-    RegionFeatures features;
+    static Options initialOptions = null;
 
     
     // ====================================================
@@ -67,14 +70,18 @@ public class RegionFeaturesPlugin implements PlugInFilter
         }
         this.imagePlus = imp;
 
-        // initialize MorphometricFeatures2D instance if necessary
-        this.features = RegionFeatures.initialize(imp)
-                .add(Area.class)
-                .add(Perimeter.class)
-                .add(EulerNumber.class)
-                .add(Centroid.class)
-                .add(EllipseElongation.class)
-                .add(GeodesicDiameter.class);
+        // initialize options if necessary
+        if (initialOptions == null)
+        {
+            initialOptions = new Options();
+            initialOptions.features.add(Area.class);
+            initialOptions.features.add(Perimeter.class);
+            initialOptions.features.add(EulerNumber.class);
+            initialOptions.features.add(Centroid.class);
+            initialOptions.features.add(EllipseElongation.class);
+            initialOptions.features.add(GeodesicDiameter.class);
+        }
+        
         return DOES_ALL | NO_CHANGES;
     }
 
@@ -85,7 +92,6 @@ public class RegionFeaturesPlugin implements PlugInFilter
      */
     public void run(ImageProcessor ip)
     {
-        // check if image is a label image
         // Check if image may be a label image
         if (!LabelImages.isLabelImageType(imagePlus))
         {
@@ -93,45 +99,50 @@ public class RegionFeaturesPlugin implements PlugInFilter
             return;
         }
 
-        // create the dialog, with operator options
-        RegionFeatures morphoFeatures = chooseFeatures(imagePlus, features);
+        // Choose analysis options from interactive dialog
+        Options options = chooseOptions(imagePlus, initialOptions);
         // If cancel was clicked, features is null
-        if (morphoFeatures == null)
-        { return; }
+        if (options == null) return;
 
+        // create a Region feature analyzer from options
+        RegionFeatures analyzer = options.createAnalyzer(imagePlus);
+        
         // Call the main processing method
         // DefaultAlgoListener.monitor(morphoFeatures);
-        morphoFeatures.computeAll();
-        ResultsTable table = morphoFeatures.createTable();
+        analyzer.computeAll();
+        ResultsTable table = analyzer.createTable();
 
         // show result
         String tableName = imagePlus.getShortTitle() + "-Morphometry";
         table.show(tableName);
 
         // keep choices for next plugin call
-        this.features = morphoFeatures;
+        initialOptions = options;
     }
 
-    private static final RegionFeatures chooseFeatures(ImagePlus labelMap, RegionFeatures initialChoice)
+    private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
     {
-        GenericDialog gd = new GenericDialog("Analyze Regions");
-        gd.addCheckbox("Area", initialChoice.contains(Area.class));
-        gd.addCheckbox("Perimeter", initialChoice.contains(Perimeter.class));
-        gd.addCheckbox("Circularity", initialChoice.contains(Circularity.class));
-        gd.addCheckbox("Euler_Number", initialChoice.contains(EulerNumber.class));
-        gd.addCheckbox("Bounding_Box", initialChoice.contains(Bounds.class));
-        gd.addCheckbox("Centroid", initialChoice.contains(Centroid.class));
-        gd.addCheckbox("Equivalent_Ellipse", initialChoice.contains(EquivalentEllipse.class));
-        gd.addCheckbox("Ellipse_Elong.", initialChoice.contains(EllipseElongation.class));
-        gd.addCheckbox("Convexity", initialChoice.contains(Convexity.class));
-        gd.addCheckbox("Max._Feret Diameter", initialChoice.contains(MaxFeretDiameter.class));
-        gd.addCheckbox("Oriented_Box", initialChoice.contains(OrientedBoundingBox.class));
-        gd.addCheckbox("Oriented_Box_Elong.", initialChoice.contains(OrientedBoxElongation.class));
-        gd.addCheckbox("Geodesic Diameter", initialChoice.contains(GeodesicDiameter.class));
-        gd.addCheckbox("Tortuosity", initialChoice.contains(Tortuosity.class));
-        gd.addCheckbox("Max._Inscribed_Disc", initialChoice.contains(LargestInscribedDisk.class));
-        gd.addCheckbox("Average_Thickness", initialChoice.contains(AverageThickness.class));
-        gd.addCheckbox("Geodesic_Elong.", initialChoice.contains(GeodesicElongation.class));
+        GenericDialog gd = new GenericDialog("Region Features");
+        
+        // a collection of check boxes to choose features
+        Collection<Class<? extends Feature>> features = initialChoice.features;
+        gd.addCheckbox("Area", features.contains(Area.class));
+        gd.addCheckbox("Perimeter", features.contains(Perimeter.class));
+        gd.addCheckbox("Circularity", features.contains(Circularity.class));
+        gd.addCheckbox("Euler_Number", features.contains(EulerNumber.class));
+        gd.addCheckbox("Bounding_Box", features.contains(Bounds.class));
+        gd.addCheckbox("Centroid", features.contains(Centroid.class));
+        gd.addCheckbox("Equivalent_Ellipse", features.contains(EquivalentEllipse.class));
+        gd.addCheckbox("Ellipse_Elong.", features.contains(EllipseElongation.class));
+        gd.addCheckbox("Convexity", features.contains(Convexity.class));
+        gd.addCheckbox("Max._Feret Diameter", features.contains(MaxFeretDiameter.class));
+        gd.addCheckbox("Oriented_Box", features.contains(OrientedBoundingBox.class));
+        gd.addCheckbox("Oriented_Box_Elong.", features.contains(OrientedBoxElongation.class));
+        gd.addCheckbox("Geodesic Diameter", features.contains(GeodesicDiameter.class));
+        gd.addCheckbox("Tortuosity", features.contains(Tortuosity.class));
+        gd.addCheckbox("Max._Inscribed_Disc", features.contains(LargestInscribedDisk.class));
+        gd.addCheckbox("Average_Thickness", features.contains(AverageThickness.class));
+        gd.addCheckbox("Geodesic_Elong.", features.contains(GeodesicElongation.class));
         gd.showDialog();
 
         // If cancel was clicked, do nothing
@@ -139,7 +150,8 @@ public class RegionFeaturesPlugin implements PlugInFilter
         { return null; }
 
         // Extract features to quantify from image
-        RegionFeatures features = RegionFeatures.initialize(labelMap);
+        Options options = new Options();
+        features = options.features;
         // if (gd.getNextBoolean()) features.add(Feature.PIXEL_COUNT);
         if (gd.getNextBoolean()) features.add(Area.class);
         if (gd.getNextBoolean()) features.add(Perimeter.class);
@@ -159,6 +171,28 @@ public class RegionFeaturesPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(AverageThickness.class);
         if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
 
-        return features;
+        return options;
+    }
+    
+    static class Options
+    {
+        /**
+         * The list of features to compute.
+         */
+        ArrayList<Class<? extends Feature>> features = new ArrayList<>();
+        
+        /**
+         * Creates a new Region Feature Analyzer for the specified image.
+         * 
+         * @param imagePlus
+         *            the image containing the label map.
+         * @return a new RegionFeatures instance.
+         */
+        public RegionFeatures createAnalyzer(ImagePlus imagePlus)
+        {
+            RegionFeatures analyzer = RegionFeatures.initialize(imagePlus);
+            features.stream().forEachOrdered(feature -> analyzer.add(feature));
+            return analyzer;
+        }
     }
 }
