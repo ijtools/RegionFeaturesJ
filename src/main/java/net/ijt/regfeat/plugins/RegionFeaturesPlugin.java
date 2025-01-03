@@ -5,9 +5,11 @@ package net.ijt.regfeat.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 import ij.IJ;
 import ij.ImagePlus;
+import ij.ImageStack;
 import ij.gui.GenericDialog;
 import ij.measure.ResultsTable;
 import ij.plugin.filter.PlugInFilter;
@@ -103,21 +105,103 @@ public class RegionFeaturesPlugin implements PlugInFilter
         Options options = chooseOptions(imagePlus, initialOptions);
         // If cancel was clicked, features is null
         if (options == null) return;
+        // keep choices for next plugin call
+        initialOptions = options;
+        
+        ResultsTable table = analyze(imagePlus, options);
 
+        // show result
+        String tableName = imagePlus.getShortTitle() + "-Morphometry";
+        table.show(tableName);
+    }
+    
+    private static final ResultsTable analyze(ImagePlus imagePlus, Options options)
+    {
+        // retrieve dimensions
+        int nChannels = imagePlus.getNChannels();
+        int nFrames = imagePlus.getNFrames();
+        
+        // process simple case
+        if (nChannels * nFrames == 1)
+        {
+            return analyzeSingleSlice(imagePlus, options);
+        }
+        
+        ImageStack stack = imagePlus.getStack();
+        ArrayList<ResultsTable> allTables = new ArrayList<ResultsTable>(nChannels * nFrames);
+
+        // iterate over slices 
+        for (int iFrame = 0; iFrame < nFrames; iFrame++)
+        {
+            for (int iChannel = 0; iChannel < nChannels; iChannel++)
+            {
+                int index = imagePlus.getStackIndex(iChannel, 0, iFrame);
+                ImageProcessor array = stack.getProcessor(index);
+                ImagePlus sliceImage = new ImagePlus(imagePlus.getTitle(), array);
+                sliceImage.copyScale(imagePlus);
+
+                allTables.add(analyzeSingleSlice(sliceImage, options));
+            }
+        }
+
+        ResultsTable res = new ResultsTable();
+        Iterator<ResultsTable> iter = allTables.iterator();
+        
+        // create string patterns
+        String pattC = "_c%0" + Math.max((int) Math.ceil(Math.log10(nChannels-1)), 1) + "d";
+        String pattT = "_t%0" + Math.max((int) Math.ceil(Math.log10(nFrames-1)), 1) + "d";
+        StringBuilder sb = new StringBuilder();
+        
+        // iterate over individual tables
+        for (int iFrame = 0; iFrame < nFrames; iFrame++)
+        {
+            String tStr = String.format(pattT, iFrame);
+            
+            for (int iChannel = 0; iChannel < nChannels; iChannel++)
+            {
+                String cStr = String.format(pattC, iChannel);
+                
+                ResultsTable tbl = iter.next();
+                for (int iRow = 0; iRow < tbl.getCounter(); iRow++)
+                {
+                    // start new row
+                    res.incrementCounter();
+                    
+                    String labelString = tbl.getLabel(iRow);
+                    
+                    // create label for the new row
+                    sb.setLength(0);
+                    sb.append("L" + labelString);
+                    if (nFrames > 1) sb.append(tStr);
+                    if (nChannels > 1) sb.append(cStr);
+                    res.addLabel(sb.toString());
+                    
+                    // add columns for meta-data
+                    res.addValue("Region", Integer.parseInt(labelString));
+                    if (nChannels > 1) res.addValue("Channel", iChannel);
+                    if (nFrames > 1) res.addValue("Frame", iFrame);
+                    
+                    // copy all column values
+                    for (String colName : tbl.getHeadings())
+                    {
+                        if ("Label".equalsIgnoreCase(colName)) continue;
+                        res.addValue(colName, tbl.getValue(colName, iRow));
+                    }
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    private static final ResultsTable analyzeSingleSlice(ImagePlus imagePlus, Options options)
+    {
         // create a Region feature analyzer from options
         RegionFeatures analyzer = options.createAnalyzer(imagePlus);
         
         // Call the main processing method
         // DefaultAlgoListener.monitor(morphoFeatures);
-        analyzer.computeAll();
-        ResultsTable table = analyzer.createTable();
-
-        // show result
-        String tableName = imagePlus.getShortTitle() + "-Morphometry";
-        table.show(tableName);
-
-        // keep choices for next plugin call
-        initialOptions = options;
+        return analyzer.createTable();
     }
 
     private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
