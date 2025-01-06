@@ -16,34 +16,27 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.DefaultAlgoListener;
 import inra.ijpb.label.LabelImages;
+import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
-import net.ijt.regfeat.morpho2d.Area;
-import net.ijt.regfeat.morpho2d.AverageThickness;
-import net.ijt.regfeat.morpho2d.Bounds;
-import net.ijt.regfeat.morpho2d.Centroid;
-import net.ijt.regfeat.morpho2d.Circularity;
-import net.ijt.regfeat.morpho2d.Convexity;
-import net.ijt.regfeat.morpho2d.EllipseElongation;
-import net.ijt.regfeat.morpho2d.EquivalentEllipse;
-import net.ijt.regfeat.morpho2d.EulerNumber;
-import net.ijt.regfeat.morpho2d.GeodesicDiameter;
-import net.ijt.regfeat.morpho2d.GeodesicElongation;
-import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
-import net.ijt.regfeat.morpho2d.MaxFeretDiameter;
-import net.ijt.regfeat.morpho2d.OrientedBoundingBox;
-import net.ijt.regfeat.morpho2d.OrientedBoxElongation;
-import net.ijt.regfeat.morpho2d.Perimeter;
-import net.ijt.regfeat.morpho2d.Tortuosity;
+import net.ijt.regfeat.morpho3d.Bounds3D;
+import net.ijt.regfeat.morpho3d.Centroid3D;
+import net.ijt.regfeat.morpho3d.EllipsoidElongations;
+import net.ijt.regfeat.morpho3d.EquivalentEllipsoid;
+import net.ijt.regfeat.morpho3d.EulerNumber;
+import net.ijt.regfeat.morpho3d.MeanBreadth;
+import net.ijt.regfeat.morpho3d.Sphericity;
+import net.ijt.regfeat.morpho3d.SurfaceArea;
+import net.ijt.regfeat.morpho3d.Volume;
 
 /**
- * The interactive plugin for computing morphological features from 2D regions
+ * The interactive plugin for computing morphological features from 3D regions
  * represented as label maps.
  * 
- * @see RegionFeatures3DPlugin
+ * @see RegionFeaturesPlugin
  * @see RegionIntensitiesPlugin
  */
-public class RegionFeaturesPlugin implements PlugInFilter
+public class RegionFeatures3DPlugin implements PlugInFilter
 {
     // ====================================================
     // Class variables
@@ -81,12 +74,10 @@ public class RegionFeaturesPlugin implements PlugInFilter
         if (initialOptions == null)
         {
             initialOptions = new Options();
-            initialOptions.features.add(Area.class);
-            initialOptions.features.add(Perimeter.class);
-            initialOptions.features.add(EulerNumber.class);
-            initialOptions.features.add(Centroid.class);
-            initialOptions.features.add(EllipseElongation.class);
-            initialOptions.features.add(GeodesicDiameter.class);
+            initialOptions.features.add(Volume.class);
+            initialOptions.features.add(SurfaceArea.class);
+            initialOptions.features.add(Sphericity.class);
+            initialOptions.features.add(EquivalentEllipsoid.class);
         }
         
         return DOES_ALL | NO_CHANGES;
@@ -211,27 +202,20 @@ public class RegionFeaturesPlugin implements PlugInFilter
 
     private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
     {
-        GenericDialog gd = new GenericDialog("Region Features");
+        GenericDialog gd = new GenericDialog("Region Features 3D");
         
         // a collection of check boxes to choose features
         Collection<Class<? extends Feature>> features = initialChoice.features;
-        gd.addCheckbox("Area", features.contains(Area.class));
-        gd.addCheckbox("Perimeter", features.contains(Perimeter.class));
-        gd.addCheckbox("Circularity", features.contains(Circularity.class));
+        gd.addCheckbox("Voxel_Count", features.contains(ElementCount.class));
+        gd.addCheckbox("Volume", features.contains(Volume.class));
+        gd.addCheckbox("Surface Area", features.contains(SurfaceArea.class));
+        gd.addCheckbox("Mean_Breadth", features.contains(MeanBreadth.class));
         gd.addCheckbox("Euler_Number", features.contains(EulerNumber.class));
-        gd.addCheckbox("Bounding_Box", features.contains(Bounds.class));
-        gd.addCheckbox("Centroid", features.contains(Centroid.class));
-        gd.addCheckbox("Equivalent_Ellipse", features.contains(EquivalentEllipse.class));
-        gd.addCheckbox("Ellipse_Elongation", features.contains(EllipseElongation.class));
-        gd.addCheckbox("Convexity", features.contains(Convexity.class));
-        gd.addCheckbox("Max._Feret Diameter", features.contains(MaxFeretDiameter.class));
-        gd.addCheckbox("Oriented_Box", features.contains(OrientedBoundingBox.class));
-        gd.addCheckbox("Oriented_Box_Elong.", features.contains(OrientedBoxElongation.class));
-        gd.addCheckbox("Geodesic_Diameter", features.contains(GeodesicDiameter.class));
-        gd.addCheckbox("Tortuosity", features.contains(Tortuosity.class));
-        gd.addCheckbox("Max._Inscribed_Disk", features.contains(LargestInscribedDisk.class));
-        gd.addCheckbox("Average_Thickness", features.contains(AverageThickness.class));
-        gd.addCheckbox("Geodesic_Elongation.", features.contains(GeodesicElongation.class));
+        gd.addCheckbox("Sphericity", features.contains(Sphericity.class));
+        gd.addCheckbox("Bounding_Box", features.contains(Bounds3D.class));
+        gd.addCheckbox("Centroid", features.contains(Centroid3D.class));
+        gd.addCheckbox("Equivalent_Ellipsoid", features.contains(EquivalentEllipsoid.class));
+        gd.addCheckbox("Ellipsoid_Elongations", features.contains(EllipsoidElongations.class));
         gd.showDialog();
 
         // If cancel was clicked, do nothing
@@ -241,24 +225,16 @@ public class RegionFeaturesPlugin implements PlugInFilter
         // Extract features to quantify from image
         Options options = new Options();
         features = options.features;
-        // if (gd.getNextBoolean()) features.add(Feature.PIXEL_COUNT);
-        if (gd.getNextBoolean()) features.add(Area.class);
-        if (gd.getNextBoolean()) features.add(Perimeter.class);
-        if (gd.getNextBoolean()) features.add(Circularity.class);
+        if (gd.getNextBoolean()) features.add(ElementCount.class);
+        if (gd.getNextBoolean()) features.add(Volume.class);
+        if (gd.getNextBoolean()) features.add(SurfaceArea.class);
+        if (gd.getNextBoolean()) features.add(MeanBreadth.class);
         if (gd.getNextBoolean()) features.add(EulerNumber.class);
-        if (gd.getNextBoolean()) features.add(Bounds.class);
-        if (gd.getNextBoolean()) features.add(Centroid.class);
-        if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);
-        if (gd.getNextBoolean()) features.add(EllipseElongation.class);
-        if (gd.getNextBoolean()) features.add(Convexity.class);
-        if (gd.getNextBoolean()) features.add(MaxFeretDiameter.class);
-        if (gd.getNextBoolean()) features.add(OrientedBoundingBox.class);
-        if (gd.getNextBoolean()) features.add(OrientedBoxElongation.class);
-        if (gd.getNextBoolean()) features.add(GeodesicDiameter.class);
-        if (gd.getNextBoolean()) features.add(Tortuosity.class);
-        if (gd.getNextBoolean()) features.add(LargestInscribedDisk.class);
-        if (gd.getNextBoolean()) features.add(AverageThickness.class);
-        if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
+        if (gd.getNextBoolean()) features.add(Sphericity.class);
+        if (gd.getNextBoolean()) features.add(Bounds3D.class);
+        if (gd.getNextBoolean()) features.add(Centroid3D.class);
+        if (gd.getNextBoolean()) features.add(EquivalentEllipsoid.class);
+        if (gd.getNextBoolean()) features.add(EllipsoidElongations.class);
 
         return options;
     }

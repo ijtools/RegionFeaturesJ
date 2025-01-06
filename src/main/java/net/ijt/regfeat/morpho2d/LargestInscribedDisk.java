@@ -43,8 +43,8 @@ public class LargestInscribedDisk implements RegionFeature
             {
                 Circle2D circle = array[r];
                 // coordinates of circle center
-                table.setValue("Inscribed_Disk.Center_X", r, circle.getCenter().getX());
-                table.setValue("Inscribed_Disk.Center_Y", r, circle.getCenter().getY());
+                table.setValue("Inscribed_Disk_Center_X", r, circle.getCenter().getX());
+                table.setValue("Inscribed_Disk_Center_Y", r, circle.getCenter().getY());
                 
                 // circle radius
                 table.setValue("Inscribed_Disk_Radius", r, circle.getRadius());

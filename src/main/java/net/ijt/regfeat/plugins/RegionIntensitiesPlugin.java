@@ -22,7 +22,17 @@ import net.ijt.regfeat.intensity.MedianIntensity;
 import net.ijt.regfeat.intensity.MinIntensity;
 
 /**
+ * The interactive plugin for computing features based on intensities from 2D or
+ * 3D regions represented as label maps.
  * 
+ * The plugin requires to choose two images:
+ * <ul>
+ * <li>the image containing the label map,</li>
+ * <li>the image containing the intensities.</li>
+ * </ul>
+ * 
+ * @see RegionFeaturesPlugin
+ * @see RegionFeatures3DPlugin
  */
 public class RegionIntensitiesPlugin implements PlugInFilter
 {
@@ -59,9 +69,14 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         }
         this.imagePlus = imp;
 
-        // initialize MorphometricFeatures2D instance if necessary
+        // initialize RegionFeatures instance if necessary, populated with some
+        // default intensity features
         this.features = RegionFeatures.initialize(imp)
                 .add(MeanIntensity.class)
+                .add(MedianIntensity.class)
+                .add(MinIntensity.class)
+                .add(MaxIntensity.class)
+                .add(IntensityStandardDeviation.class)
                 ;
         return DOES_ALL | NO_CHANGES;
     }
