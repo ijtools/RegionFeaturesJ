@@ -114,12 +114,80 @@ public class RegionMorphologyPlugin implements PlugInFilter
         initialOptions = options;
         
         ResultsTable table = analyze(imagePlus, options);
-
+        if (options.includeImageName)
+        {
+            table = insertImageNameColumn(table, imagePlus.getShortTitle());
+        }
+        
         // show result
         String tableName = imagePlus.getShortTitle() + "-Morphometry";
         table.show(tableName);
     }
     
+    private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
+        {
+            GenericDialog gd = new GenericDialog("Region Features");
+            
+            // a collection of check boxes to choose features
+            Collection<Class<? extends Feature>> features = initialChoice.features;
+            String[] featureNames = new String[] {
+                    "Area", "Perimeter", 
+                    "Circularity", "Euler_Number",
+                    "Bounding_Box", "Centroid",
+                    "Equivalent_Ellipse", "Ellipse_Elongation",
+                    "Convexity", "Max_Feret_Diameter",
+                    "Oriented_Box", "Oriented_Box_Elongation",
+                    "Geodesic_Diameter", "Tortuosity",
+                    "Max_Inscribed_Disk", "Average_Thickness",
+                    "Geodesic_Elongation",
+            };
+            boolean[] states = new boolean[] {
+                    features.contains(Area.class), features.contains(Perimeter.class),
+                    features.contains(Circularity.class), features.contains(EulerNumber.class),
+                    features.contains(Bounds.class), features.contains(Centroid.class),
+                    features.contains(EquivalentEllipse.class), features.contains(EllipseElongation.class),
+                    features.contains(Convexity.class), features.contains(MaxFeretDiameter.class),
+                    features.contains(OrientedBoundingBox.class), features.contains(OrientedBoxElongation.class),
+                    features.contains(GeodesicDiameter.class), features.contains(Tortuosity.class),
+                    features.contains(LargestInscribedDisk.class), features.contains(AverageThickness.class),
+                    features.contains(GeodesicElongation.class),
+            };
+            gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
+            gd.addMessage("");
+            gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
+            gd.showDialog();
+    
+            // If cancel was clicked, do nothing
+            if (gd.wasCanceled())
+            { return null; }
+    
+            // Extract features to quantify from image
+            Options options = new Options();
+            features = options.features;
+            // if (gd.getNextBoolean()) features.add(Feature.PIXEL_COUNT);
+            if (gd.getNextBoolean()) features.add(Area.class);
+            if (gd.getNextBoolean()) features.add(Perimeter.class);
+            if (gd.getNextBoolean()) features.add(Circularity.class);
+            if (gd.getNextBoolean()) features.add(EulerNumber.class);
+            if (gd.getNextBoolean()) features.add(Bounds.class);
+            if (gd.getNextBoolean()) features.add(Centroid.class);
+            if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);
+            if (gd.getNextBoolean()) features.add(EllipseElongation.class);
+            if (gd.getNextBoolean()) features.add(Convexity.class);
+            if (gd.getNextBoolean()) features.add(MaxFeretDiameter.class);
+            if (gd.getNextBoolean()) features.add(OrientedBoundingBox.class);
+            if (gd.getNextBoolean()) features.add(OrientedBoxElongation.class);
+            if (gd.getNextBoolean()) features.add(GeodesicDiameter.class);
+            if (gd.getNextBoolean()) features.add(Tortuosity.class);
+            if (gd.getNextBoolean()) features.add(LargestInscribedDisk.class);
+            if (gd.getNextBoolean()) features.add(AverageThickness.class);
+            if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
+            
+            options.includeImageName = gd.getNextBoolean();
+    
+            return options;
+        }
+
     private static final ResultsTable analyze(ImagePlus imagePlus, Options options)
     {
         // retrieve dimensions
@@ -209,58 +277,28 @@ public class RegionMorphologyPlugin implements PlugInFilter
         return analyzer.createTable();
     }
 
-    private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
+    private static final ResultsTable insertImageNameColumn(ResultsTable table, String imageName)
     {
-        GenericDialog gd = new GenericDialog("Region Features");
+        ResultsTable res = new ResultsTable();
         
-        // a collection of check boxes to choose features
-        Collection<Class<? extends Feature>> features = initialChoice.features;
-        gd.addCheckbox("Area", features.contains(Area.class));
-        gd.addCheckbox("Perimeter", features.contains(Perimeter.class));
-        gd.addCheckbox("Circularity", features.contains(Circularity.class));
-        gd.addCheckbox("Euler_Number", features.contains(EulerNumber.class));
-        gd.addCheckbox("Bounding_Box", features.contains(Bounds.class));
-        gd.addCheckbox("Centroid", features.contains(Centroid.class));
-        gd.addCheckbox("Equivalent_Ellipse", features.contains(EquivalentEllipse.class));
-        gd.addCheckbox("Ellipse_Elongation", features.contains(EllipseElongation.class));
-        gd.addCheckbox("Convexity", features.contains(Convexity.class));
-        gd.addCheckbox("Max._Feret Diameter", features.contains(MaxFeretDiameter.class));
-        gd.addCheckbox("Oriented_Box", features.contains(OrientedBoundingBox.class));
-        gd.addCheckbox("Oriented_Box_Elong.", features.contains(OrientedBoxElongation.class));
-        gd.addCheckbox("Geodesic_Diameter", features.contains(GeodesicDiameter.class));
-        gd.addCheckbox("Tortuosity", features.contains(Tortuosity.class));
-        gd.addCheckbox("Max._Inscribed_Disk", features.contains(LargestInscribedDisk.class));
-        gd.addCheckbox("Average_Thickness", features.contains(AverageThickness.class));
-        gd.addCheckbox("Geodesic_Elongation.", features.contains(GeodesicElongation.class));
-        gd.showDialog();
-
-        // If cancel was clicked, do nothing
-        if (gd.wasCanceled())
-        { return null; }
-
-        // Extract features to quantify from image
-        Options options = new Options();
-        features = options.features;
-        // if (gd.getNextBoolean()) features.add(Feature.PIXEL_COUNT);
-        if (gd.getNextBoolean()) features.add(Area.class);
-        if (gd.getNextBoolean()) features.add(Perimeter.class);
-        if (gd.getNextBoolean()) features.add(Circularity.class);
-        if (gd.getNextBoolean()) features.add(EulerNumber.class);
-        if (gd.getNextBoolean()) features.add(Bounds.class);
-        if (gd.getNextBoolean()) features.add(Centroid.class);
-        if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);
-        if (gd.getNextBoolean()) features.add(EllipseElongation.class);
-        if (gd.getNextBoolean()) features.add(Convexity.class);
-        if (gd.getNextBoolean()) features.add(MaxFeretDiameter.class);
-        if (gd.getNextBoolean()) features.add(OrientedBoundingBox.class);
-        if (gd.getNextBoolean()) features.add(OrientedBoxElongation.class);
-        if (gd.getNextBoolean()) features.add(GeodesicDiameter.class);
-        if (gd.getNextBoolean()) features.add(Tortuosity.class);
-        if (gd.getNextBoolean()) features.add(LargestInscribedDisk.class);
-        if (gd.getNextBoolean()) features.add(AverageThickness.class);
-        if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
-
-        return options;
+        for (int iRow = 0; iRow < table.getCounter(); iRow++)
+        {
+            // start new row
+            res.incrementCounter();
+            
+            // add row meta-data
+            res.addLabel(table.getLabel(iRow));
+            res.setValue("Image", iRow, imageName);
+            
+            // copy all column values
+            for (String colName : table.getHeadings())
+            {
+                if ("Label".equalsIgnoreCase(colName)) continue;
+                res.setValue(colName, iRow, table.getValue(colName, iRow));
+            }
+        }
+        
+        return res;
     }
     
     static class Options
@@ -269,6 +307,12 @@ public class RegionMorphologyPlugin implements PlugInFilter
          * The list of features to compute.
          */
         ArrayList<Class<? extends Feature>> features = new ArrayList<>();
+        
+        /**
+         * Can be useful when concatenating results obtained on different images
+         * into a single table.
+         */
+        boolean includeImageName = false;
         
         /**
          * Creates a new Region Feature Analyzer for the specified image.
