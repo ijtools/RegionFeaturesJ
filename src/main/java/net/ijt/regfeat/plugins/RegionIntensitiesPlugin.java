@@ -31,8 +31,8 @@ import net.ijt.regfeat.intensity.MinIntensity;
  * <li>the image containing the intensities.</li>
  * </ul>
  * 
- * @see RegionFeaturesPlugin
- * @see RegionFeatures3DPlugin
+ * @see RegionMorphologyPlugin
+ * @see RegionMorphology3DPlugin
  */
 public class RegionIntensitiesPlugin implements PlugInFilter
 {
