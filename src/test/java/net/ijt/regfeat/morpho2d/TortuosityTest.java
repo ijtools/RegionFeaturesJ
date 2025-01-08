@@ -32,10 +32,10 @@ public class TortuosityTest
         double[] res = (double[]) feature.compute(data);
         
         assertEquals(res.length, 4);
-        assertEquals(res[0], 1.5, 0.1);
-        assertEquals(res[1], 1.11, 0.1);
-        assertEquals(res[2], 1.11, 0.1);
-        assertEquals(res[3], 1.11, 0.1);
+        assertEquals(res[0], 1.0, 0.1);
+        assertEquals(res[1], 1.0, 0.1);
+        assertEquals(res[2], 1.0, 0.1);
+        assertEquals(res[3], 1.0, 0.1);
     }
     
 

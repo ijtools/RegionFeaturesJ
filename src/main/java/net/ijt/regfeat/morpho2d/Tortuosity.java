@@ -40,7 +40,7 @@ public class Tortuosity extends SingleValueFeature
         {
             double gd = geodDiams[i];
             double fd = feretDiams[i].diameter();
-            res[i] = gd / fd;;
+            res[i] = gd / fd;
         }
         return res;
     }
