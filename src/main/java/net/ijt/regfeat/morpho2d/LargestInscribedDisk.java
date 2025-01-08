@@ -18,10 +18,10 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Circle2D;
-import inra.ijpb.label.LabelValues;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.morpho2d.core.DistanceMapMaximaPosition;
 import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
 
 /**
@@ -32,25 +32,20 @@ public class LargestInscribedDisk extends AlgoStub implements RegionFeature
     @Override
     public Circle2D[] compute(RegionFeatures data)
     {
-        ImageProcessor labelMap = data.labelMap.getProcessor();
+        // retrieve meta data
+        int nLabels = data.labels.length;
         Calibration calib = data.labelMap.getCalibration();
         
-        // compute max label within image
-        int nLabels = data.labels.length;
-        
-        // first distance propagation to find an arbitrary center
-        fireStatusChanged(this, "Compute distance map");
+        // retrieve required features
+        data.ensureRequiredFeaturesAreComputed(this);
         ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap_Chamfer_ChessKnight_Float.class)).getProcessor();
+        Point[] maximaPositions = (Point[]) data.results.get(DistanceMapMaximaPosition.class);
         
-        // Extract position of maxima
-        fireStatusChanged(this, "Find inscribed disks center");
-        Point[] posCenter = LabelValues.findPositionOfMaxValues(distanceMap, labelMap, data.labels);
-
-        // Create array of circles
+        // Create array of calibrated circles
         Circle2D[] circles = new Circle2D[nLabels];
         for (int i = 0; i < nLabels; i++) 
         {
-            Point center = posCenter[i];
+            Point center = maximaPositions[i];
             double xc = center.x * calib.pixelWidth + calib.xOrigin;
             double yc = center.y * calib.pixelHeight + calib.yOrigin;
             double radius = distanceMap.getf(center.x, center.y) * calib.pixelWidth;
@@ -141,6 +136,6 @@ public class LargestInscribedDisk extends AlgoStub implements RegionFeature
     @Override
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
-        return Arrays.asList(DistanceMap_Chamfer_ChessKnight_Float.class);
+        return Arrays.asList(DistanceMap_Chamfer_ChessKnight_Float.class, DistanceMapMaximaPosition.class);
     }
 }
