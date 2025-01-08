@@ -4,7 +4,10 @@
 package net.ijt.regfeat.morpho2d;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.geom.Point2D;
+import java.util.Arrays;
+import java.util.Collection;
 
 import ij.ImagePlus;
 import ij.gui.OvalRoi;
@@ -13,23 +16,48 @@ import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
+import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Circle2D;
-import inra.ijpb.measure.region2d.LargestInscribedCircle;
+import inra.ijpb.label.LabelValues;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
 
 /**
  * Computes the largest inscribed disk within regions of a label map.
  */
-public class LargestInscribedDisk implements RegionFeature
+public class LargestInscribedDisk extends AlgoStub implements RegionFeature
 {
     @Override
-    public Circle2D[] compute(RegionFeatures results)
+    public Circle2D[] compute(RegionFeatures data)
     {
-        ImageProcessor labelMap = results.labelMap.getProcessor();
-        Calibration calib = results.labelMap.getCalibration();
-        return LargestInscribedCircle.largestInscribedCircles(labelMap, results.labels, calib);
+        ImageProcessor labelMap = data.labelMap.getProcessor();
+        Calibration calib = data.labelMap.getCalibration();
+        
+        // compute max label within image
+        int nLabels = data.labels.length;
+        
+        // first distance propagation to find an arbitrary center
+        fireStatusChanged(this, "Compute distance map");
+        ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap_Chamfer_ChessKnight_Float.class)).getProcessor();
+        
+        // Extract position of maxima
+        fireStatusChanged(this, "Find inscribed disks center");
+        Point[] posCenter = LabelValues.findPositionOfMaxValues(distanceMap, labelMap, data.labels);
+
+        // Create array of circles
+        Circle2D[] circles = new Circle2D[nLabels];
+        for (int i = 0; i < nLabels; i++) 
+        {
+            Point center = posCenter[i];
+            double xc = center.x * calib.pixelWidth + calib.xOrigin;
+            double yc = center.y * calib.pixelHeight + calib.yOrigin;
+            double radius = distanceMap.getf(center.x, center.y) * calib.pixelWidth;
+            circles[i] = new Circle2D(new Point2D.Double(xc, yc), radius);
+        }
+
+        return circles;
     }
     
     @Override
@@ -108,5 +136,11 @@ public class LargestInscribedDisk implements RegionFeature
         double yc = (center.getY() - calib.yOrigin) / calib.pixelHeight;
         double radius = circle.getRadius() / calib.pixelWidth;
         return new Circle2D(new Point2D.Double(xc, yc), radius);
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>> requiredFeatures()
+    {
+        return Arrays.asList(DistanceMap_Chamfer_ChessKnight_Float.class);
     }
 }
