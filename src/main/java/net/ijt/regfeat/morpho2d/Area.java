@@ -6,7 +6,8 @@ package net.ijt.regfeat.morpho2d;
 import java.util.Arrays;
 import java.util.Collection;
 
-import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
+import ij.measure.Calibration;
+import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
@@ -30,14 +31,16 @@ public class Area extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        IntrinsicVolumes2D.Result[] res = (IntrinsicVolumes2D.Result[]) data.results.get(IntrinsicVolumes.class);
+        int[] counts = (int[]) data.results.get(ElementCount.class);
         
-        double[] areas = new double[res.length];
-        for (int i = 0; i < res.length; i++)
-        {
-            areas[i] = res[i].area;
-        }
-        return areas;
+        // volume of unit voxel
+        Calibration calib = data.labelMap.getCalibration();
+        double pixelArea = calib.pixelWidth * calib.pixelHeight;
+        
+        // compute volume from voxel count
+        return Arrays.stream(counts)
+                .mapToDouble(count -> count * pixelArea)
+                .toArray();
     }
     
     @Override
