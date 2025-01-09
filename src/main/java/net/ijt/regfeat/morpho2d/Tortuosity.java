@@ -6,7 +6,6 @@ package net.ijt.regfeat.morpho2d;
 import java.util.Arrays;
 import java.util.Collection;
 
-import inra.ijpb.geometry.PointPair2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
@@ -31,7 +30,7 @@ public class Tortuosity extends SingleValueFeature
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
         double[] geodDiams = (double[]) data.results.get(GeodesicDiameter.class);
-        PointPair2D[] feretDiams = (PointPair2D[]) data.results.get(MaxFeretDiameter.class);
+        double[] feretDiams = (double[]) data.results.get(MaxFeretDiameter.class);
         
         // iterate over labels to compute new feature
         int[] labels = data.labels;
@@ -39,7 +38,7 @@ public class Tortuosity extends SingleValueFeature
         for (int i = 0; i < labels.length; i++)
         {
             double gd = geodDiams[i];
-            double fd = feretDiams[i].diameter();
+            double fd = feretDiams[i];
             res[i] = gd / fd;
         }
         return res;

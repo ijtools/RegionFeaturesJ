@@ -3,7 +3,7 @@
  */
 package net.ijt.regfeat.morpho2d;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -11,7 +11,6 @@ import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
-import inra.ijpb.geometry.PointPair2D;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -30,13 +29,13 @@ public class MaxFeretDiameterTest
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
    
         MaxFeretDiameter feature = new MaxFeretDiameter();
-        PointPair2D[] res = (PointPair2D[]) feature.compute(data);
+        double[] diameters = (double[]) feature.compute(data);
         
-        assertEquals(res.length, 4);
-        assertEquals(res[0].diameter(), 1.0, 0.01);
-        assertEquals(res[1].diameter(), 4.0, 0.01);
-        assertEquals(res[2].diameter(), 4.0, 0.01);
-        assertEquals(res[3].diameter(), 5.0, 0.1);
+        assertEquals(diameters.length, 4);
+        assertEquals(diameters[0], 1.0, 0.01);
+        assertEquals(diameters[1], 4.0, 0.01);
+        assertEquals(diameters[2], 4.0, 0.01);
+        assertEquals(diameters[3], 5.0, 0.1);
     }
     
     /**
