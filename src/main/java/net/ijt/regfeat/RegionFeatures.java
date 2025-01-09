@@ -72,7 +72,7 @@ public class RegionFeatures extends AlgoStub
     
     public Color[] labelColors;
     
-    public boolean displayUnitsInTable = true;
+    public boolean displayUnitsInTable = false;
     
     
     // ==================================================

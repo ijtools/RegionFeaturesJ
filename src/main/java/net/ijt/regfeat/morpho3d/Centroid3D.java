@@ -89,6 +89,17 @@ public class Centroid3D implements RegionFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] {"Centroid_X", "Centroid_Y", "Centroid_Z"};
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            for (int c : new int[] {0, 1, 2})
+            {
+                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
+            }
+        }
+
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Point3D[])
         {
@@ -96,9 +107,9 @@ public class Centroid3D implements RegionFeature
             for (int r = 0; r < array.length; r++)
             {
                 Point3D point = array[r];
-                table.setValue("Centroid_X", r, point.getX());
-                table.setValue("Centroid_Y", r, point.getY());
-                table.setValue("Centroid_Z", r, point.getZ());
+                table.setValue(colNames[0], r, point.getX());
+                table.setValue(colNames[1], r, point.getY());
+                table.setValue(colNames[2], r, point.getZ());
             }
         }
         else

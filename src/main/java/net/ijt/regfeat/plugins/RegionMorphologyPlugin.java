@@ -153,12 +153,13 @@ public class RegionMorphologyPlugin implements PlugInFilter
                     features.contains(GeodesicElongation.class),
             };
             gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
+            
             gd.addMessage("");
             gd.addCheckbox("Display_Units", initialChoice.displayUnits);
             gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
+            
+            // Display dialog and wait for user validation
             gd.showDialog();
-    
-            // If cancel was clicked, do nothing
             if (gd.wasCanceled())
             { return null; }
     
@@ -332,6 +333,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
         {
             RegionFeatures analyzer = RegionFeatures.initialize(imagePlus);
             features.stream().forEachOrdered(feature -> analyzer.add(feature));
+            analyzer.displayUnitsInTable(this.displayUnits);
             return analyzer;
         }
     }

@@ -6,6 +6,7 @@ package net.ijt.regfeat.morpho3d;
 import java.util.Arrays;
 import java.util.Collection;
 
+import ij.measure.Calibration;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
@@ -31,6 +32,14 @@ public class SurfaceArea extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
+        
+        // optionally update the feature name to take into account the unit
+        if (data.displayUnitsInTable)
+        {
+            Calibration calib = data.labelMap.getCalibration();
+            setName(String.format("Surface_Area_[%s^2]", calib.getUnit()));
+        }
+        
         return (double[]) data.results.get(SurfaceArea_Crofton_D13.class);
     }
     

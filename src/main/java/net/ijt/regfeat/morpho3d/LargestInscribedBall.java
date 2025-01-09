@@ -26,6 +26,17 @@ public class LargestInscribedBall implements RegionFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] {"Inscribed_Ball_Center_X", "Inscribed_Ball_Center_Y", "Inscribed_Ball_Center_Z", "Inscribed_Ball_Radius"};
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            for (int c : new int[] {0, 1, 2, 3})
+            {
+                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
+            }
+        }
+        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Sphere[])
         {
@@ -33,13 +44,13 @@ public class LargestInscribedBall implements RegionFeature
             for (int r = 0; r < array.length; r++)
             {
                 Sphere ball = array[r];
-                // coordinates of circle center
-                table.setValue("Inscribed_Ball_Center_X", r, ball.center().getX());
-                table.setValue("Inscribed_Ball_Center_Y", r, ball.center().getY());
-                table.setValue("Inscribed_Ball_Center_Z", r, ball.center().getZ());
+                // coordinates of ball center
+                table.setValue(colNames[0], r, ball.center().getX());
+                table.setValue(colNames[1], r, ball.center().getY());
+                table.setValue(colNames[2], r, ball.center().getZ());
                 
-                // circle radius
-                table.setValue("Inscribed_Ball_Radius", r, ball.radius());
+                // ball radius
+                table.setValue(colNames[3], r, ball.radius());
             }
         }
         else

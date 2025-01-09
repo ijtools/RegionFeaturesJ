@@ -206,19 +206,28 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         
         // a collection of check boxes to choose features
         Collection<Class<? extends Feature>> features = initialChoice.features;
-        gd.addCheckbox("Voxel_Count", features.contains(ElementCount.class));
-        gd.addCheckbox("Volume", features.contains(Volume.class));
-        gd.addCheckbox("Surface Area", features.contains(SurfaceArea.class));
-        gd.addCheckbox("Mean_Breadth", features.contains(MeanBreadth.class));
-        gd.addCheckbox("Euler_Number", features.contains(EulerNumber.class));
-        gd.addCheckbox("Sphericity", features.contains(Sphericity.class));
-        gd.addCheckbox("Bounding_Box", features.contains(Bounds3D.class));
-        gd.addCheckbox("Centroid", features.contains(Centroid3D.class));
-        gd.addCheckbox("Equivalent_Ellipsoid", features.contains(EquivalentEllipsoid.class));
-        gd.addCheckbox("Ellipsoid_Elongations", features.contains(EllipsoidElongations.class));
-        gd.showDialog();
+        String[] featureNames = new String[] {
+                "Voxel_Count", "Volume",
+                "Surface_Area", "Mean_Breadth",
+                "Euler_Number", "Sphericity",
+                "Bounding_Box", "Centroid",
+                "Equivalent_Ellipsoid", "Ellipsoid_Elongations",
+        };
+        boolean[] states = new boolean[] {
+                features.contains(ElementCount.class), features.contains(Volume.class),
+                features.contains(SurfaceArea.class), features.contains(MeanBreadth.class),
+                features.contains(EulerNumber.class), features.contains(Sphericity.class),
+                features.contains(Bounds3D.class), features.contains(Centroid3D.class),
+                features.contains(EquivalentEllipsoid.class), features.contains(EllipsoidElongations.class),
+        };
+        gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
 
-        // If cancel was clicked, do nothing
+        gd.addMessage("");
+        gd.addCheckbox("Display_Units", initialChoice.displayUnits);
+        gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
+
+        // Display dialog and wait for user validation
+        gd.showDialog();
         if (gd.wasCanceled())
         { return null; }
 
@@ -236,6 +245,9 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(EquivalentEllipsoid.class);
         if (gd.getNextBoolean()) features.add(EllipsoidElongations.class);
 
+        options.displayUnits = gd.getNextBoolean();
+        options.includeImageName = gd.getNextBoolean();
+        
         return options;
     }
     
@@ -245,6 +257,17 @@ public class RegionMorphology3DPlugin implements PlugInFilter
          * The list of features to compute.
          */
         ArrayList<Class<? extends Feature>> features = new ArrayList<>();
+        
+        /**
+         * Display calibration unit within table column names, when appropriate.
+         */
+        boolean displayUnits = false;
+        
+        /**
+         * Can be useful when concatenating results obtained on different images
+         * into a single table.
+         */
+        boolean includeImageName = false;
         
         /**
          * Creates a new Region Feature Analyzer for the specified image.
@@ -257,6 +280,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         {
             RegionFeatures analyzer = RegionFeatures.initialize(imagePlus);
             features.stream().forEachOrdered(feature -> analyzer.add(feature));
+            analyzer.displayUnitsInTable(this.displayUnits);
             return analyzer;
         }
     }
