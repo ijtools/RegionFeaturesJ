@@ -58,6 +58,17 @@ public class LargestInscribedDisk extends AlgoStub implements RegionFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] {"Inscribed_Disk_Center_X", "Inscribed_Disk_Center_Y", "Inscribed_Disk_Radius"};
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            for (int c : new int[] {0, 1, 2})
+            {
+                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
+            }
+        }
+        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Circle2D[])
         {
@@ -66,11 +77,11 @@ public class LargestInscribedDisk extends AlgoStub implements RegionFeature
             {
                 Circle2D circle = array[r];
                 // coordinates of circle center
-                table.setValue("Inscribed_Disk_Center_X", r, circle.getCenter().getX());
-                table.setValue("Inscribed_Disk_Center_Y", r, circle.getCenter().getY());
+                table.setValue(colNames[0], r, circle.getCenter().getX());
+                table.setValue(colNames[1], r, circle.getCenter().getY());
                 
                 // circle radius
-                table.setValue("Inscribed_Disk_Radius", r, circle.getRadius());
+                table.setValue(colNames[2], r, circle.getRadius());
             }
         }
         else

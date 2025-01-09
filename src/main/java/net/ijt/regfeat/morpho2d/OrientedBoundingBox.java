@@ -46,6 +46,18 @@ public class OrientedBoundingBox implements RegionFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] { "Oriented_Box_Center_X", "Oriented_Box_Center_Y", "Oriented_Box_Length", "Oriented_Box_Width", "Oriented_Box_Orientation" };
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            for (int c : new int[] {0, 1, 2, 3})
+            {
+                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
+            }
+            colNames[4] = String.format("%s_[%s]", colNames[4], "degree");
+        }
+        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof OrientedBox2D[])
         {
@@ -54,11 +66,11 @@ public class OrientedBoundingBox implements RegionFeature
             {
                 OrientedBox2D obox = array[r];
                 Point2D center = obox.center();
-                table.setValue("Oriented_Box_Center_X",  r, center.getX());
-                table.setValue("Oriented_Box_Center_Y",  r, center.getY());
-                table.setValue("Oriented_Box_Length",    r, obox.length());
-                table.setValue("Oriented_Box_Width",     r, obox.width());
-                table.setValue("Oriented_Box_Orientation", r, obox.orientation());
+                table.setValue(colNames[0], r, center.getX());
+                table.setValue(colNames[1], r, center.getY());
+                table.setValue(colNames[2], r, obox.length());
+                table.setValue(colNames[3], r, obox.width());
+                table.setValue(colNames[4], r, obox.orientation());
             }
         }
         else

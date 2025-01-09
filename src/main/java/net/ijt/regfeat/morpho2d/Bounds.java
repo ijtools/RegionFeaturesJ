@@ -30,6 +30,17 @@ public class Bounds implements RegionFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] {"Bounds2D_XMin", "Bounds2D_XMax", "Bounds2D_YMin", "Bounds2D_YMax"};
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            for (int c : new int[] {0, 1, 2, 3})
+            {
+                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
+            }
+        }
+        
         Box2D[] boxes = (Box2D[]) data.results.get(this.getClass());
         
         for (int i = 0; i < boxes.length; i++)
@@ -38,10 +49,10 @@ public class Bounds implements RegionFeature
             Box2D box = boxes[i];
             
             // coordinates of centroid
-            table.setValue("Bounds2D_XMin", i, box.getXMin());
-            table.setValue("Bounds2D_XMax", i, box.getXMax());
-            table.setValue("Bounds2D_YMin", i, box.getYMin());
-            table.setValue("Bounds2D_YMax", i, box.getYMax());
+            table.setValue(colNames[0], i, box.getXMin());
+            table.setValue(colNames[1], i, box.getXMax());
+            table.setValue(colNames[2], i, box.getYMin());
+            table.setValue(colNames[3], i, box.getYMax());
         }
     }
     

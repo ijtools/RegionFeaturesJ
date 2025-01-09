@@ -17,16 +17,25 @@ import net.ijt.regfeat.RegionFeatures;
 public class Centroid implements RegionFeature
 {
     @Override
-    public Point2D[] compute(RegionFeatures results)
+    public Point2D[] compute(RegionFeatures data)
     {
-        ImageProcessor labelMap = results.labelMap.getProcessor();
-        Calibration calib = results.labelMap.getCalibration();
-        return inra.ijpb.measure.region2d.Centroid.centroids(labelMap, results.labels, calib);
+        ImageProcessor labelMap = data.labelMap.getProcessor();
+        Calibration calib = data.labelMap.getCalibration();
+        return inra.ijpb.measure.region2d.Centroid.centroids(labelMap, data.labels, calib);
     }
     
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] {"Centroid_X", "Centroid_Y"};
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            colNames[0] = String.format("Centroid_X_[%s]", calib.getUnit());
+            colNames[1] = String.format("Centroid_Y_[%s]", calib.getUnit());
+        }
+        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Point2D[])
         {
@@ -34,8 +43,8 @@ public class Centroid implements RegionFeature
             for (int r = 0; r < array.length; r++)
             {
                 Point2D point = array[r];
-                table.setValue("Centroid_X", r, point.getX());
-                table.setValue("Centroid_Y", r, point.getY());
+                table.setValue(colNames[0], r, point.getX());
+                table.setValue(colNames[1], r, point.getY());
             }
         }
         else

@@ -20,7 +20,7 @@ public abstract class SingleValueFeature implements RegionFeature
     /**
      * The name of the feature, used to populate the result table.
      */
-    String name;
+    protected String name;
     
     /**
      * Specifies the name of the feature.
@@ -31,6 +31,11 @@ public abstract class SingleValueFeature implements RegionFeature
     public SingleValueFeature(String name)
     {
         this.name = name;
+    }
+    
+    protected void setName(String newName)
+    {
+        this.name = newName;
     }
     
     /**

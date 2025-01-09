@@ -72,6 +72,8 @@ public class RegionFeatures extends AlgoStub
     
     public Color[] labelColors;
     
+    public boolean displayUnitsInTable = true;
+    
     
     // ==================================================
     // Constructors
@@ -202,6 +204,12 @@ public class RegionFeatures extends AlgoStub
             }
         }
         return table;
+    }
+    
+    public RegionFeatures displayUnitsInTable(boolean flag)
+    {
+        this.displayUnitsInTable = flag;
+        return this;
     }
     
     private static final ResultsTable initializeTable(int[] labels)

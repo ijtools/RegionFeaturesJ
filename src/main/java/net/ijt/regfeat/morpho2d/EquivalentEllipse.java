@@ -152,6 +152,18 @@ public class EquivalentEllipse implements RegionFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
+        String[] colNames = new String[] {"Ellipse_Center_X", "Ellipse_Center_Y", "Ellipse_Radius_1", "Ellipse_Radius_2", "Ellipse_Orientation"};
+        if (data.displayUnitsInTable)
+        {
+            // update the name to take into account the unit
+            Calibration calib = data.labelMap.getCalibration();
+            for (int c : new int[] {0, 1, 2, 3})
+            {
+                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
+            }
+            colNames[4] = String.format("%s_[%s]", colNames[4], "degree");
+        }
+        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Ellipse[])
         {
@@ -163,15 +175,15 @@ public class EquivalentEllipse implements RegionFeature
                 
                 // coordinates of centroid
                 Point2D center = ellipse.center();
-                table.setValue("Ellipse_Center_X", r, center.getX());
-                table.setValue("Ellipse_Center_Y", r, center.getY());
+                table.setValue(colNames[0], r, center.getX());
+                table.setValue(colNames[1], r, center.getY());
                 
                 // ellipse size
-                table.setValue("Ellipse_Radius_1", r, ellipse.radius1());
-                table.setValue("Ellipse_Radius_2", r, ellipse.radius2());
+                table.setValue(colNames[2], r, ellipse.radius1());
+                table.setValue(colNames[3], r, ellipse.radius2());
         
                 // ellipse orientation (degrees)
-                table.setValue("Ellipse_Orientation", r, ellipse.orientation());
+                table.setValue(colNames[4], r, ellipse.orientation());
             }
         }
         else

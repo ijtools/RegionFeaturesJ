@@ -154,6 +154,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
             };
             gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
             gd.addMessage("");
+            gd.addCheckbox("Display_Units", initialChoice.displayUnits);
             gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
             gd.showDialog();
     
@@ -183,6 +184,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
             if (gd.getNextBoolean()) features.add(AverageThickness.class);
             if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
             
+            options.displayUnits = gd.getNextBoolean();
             options.includeImageName = gd.getNextBoolean();
     
             return options;
@@ -307,6 +309,11 @@ public class RegionMorphologyPlugin implements PlugInFilter
          * The list of features to compute.
          */
         ArrayList<Class<? extends Feature>> features = new ArrayList<>();
+        
+        /**
+         * Display calibration unit within table column names, when appropriate.
+         */
+        boolean displayUnits = false;
         
         /**
          * Can be useful when concatenating results obtained on different images

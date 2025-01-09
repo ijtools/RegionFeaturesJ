@@ -36,6 +36,12 @@ public class Area extends SingleValueFeature
         Calibration calib = data.labelMap.getCalibration();
         double pixelArea = calib.pixelWidth * calib.pixelHeight;
         
+        // optionally update the feature name to take into account the unit
+        if (data.displayUnitsInTable)
+        {
+            setName(String.format("Area_[%s^2]", calib.getUnit()));
+        }
+        
         // compute volume from voxel count
         return Arrays.stream(counts)
                 .mapToDouble(count -> count * pixelArea)

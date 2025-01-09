@@ -33,6 +33,13 @@ public class GeodesicDiameter extends SingleValueFeature
         data.ensureRequiredFeaturesAreComputed(this);
         Result[] results = (Result[]) data.results.get(GeodesicDiameterData.class);
         
+        // optionally update the feature name to take into account the unit
+        if (data.displayUnitsInTable)
+        {
+            Calibration calib = data.labelMap.getCalibration();
+            setName(String.format("Geodesic_Diameter_[%s]", calib.getUnit()));
+        }
+        
         // iterate over labels, and re-calibrate the geodesic diameter
         Calibration calib = data.labelMap.getCalibration();
         return Arrays.stream(results)
