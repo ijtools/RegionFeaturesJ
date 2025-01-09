@@ -11,7 +11,6 @@ import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
-import net.ijt.regfeat.morpho2d.core.IntrinsicVolumes;
 
 /**
  * A feature that computes the area of 2D regions.
@@ -46,6 +45,6 @@ public class Area extends SingleValueFeature
     @Override
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
-        return Arrays.asList(IntrinsicVolumes.class);
+        return Arrays.asList(ElementCount.class);
     }
 }
