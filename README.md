@@ -1,10 +1,18 @@
 ## RegionFeaturesJ
 
-RegionFeaturesJ is an ImageJ plugin for computing features for regions stored in a label map.
-The plugin currently mostly considers morphological features for planar label maps: 
-area, perimeter, equivalent ellipses, Feret Diameter...
+RegionFeaturesJ is an ImageJ library for computing features for regions stored in a label map.
+The library currently contains three plugins, for computing different kind of features:
 
-Features can be added programmatically, and the resulting values can be concaneated into a ResultsTable.
+* 2D morphological features (area, perimeter, equivalent ellipses, Feret Diameter...)
+* 3D morphological features (volume, surface area, equivalent ellipsoid...)
+* intensity features (mean, median, min, max, standard deviation...)
+
+Different options are provided, to include the name of the original image within the table, 
+or to include measurement units into results table.
+
+The library also makes it possible to manage features directly via the "RegionFeatures" class. 
+Features can be added programmatically, and the resulting values are be concatenated into the
+ResultsTable in the order specified by addition order.
 It is also possible to add its own feature(s), and include them into the resulting table.
 
 ### Installation
@@ -13,9 +21,13 @@ Simply put the `RegionFeaturesJ.jar` into the plugins directory of the current I
 
 ### GUI Use
 
-Once ImageJ is restarted, it provides a new `RegionFeaturesJ` plugin within the Plugins->IJTools->Analysis menu.
+Once ImageJ is restarted, the different plugins are available in the following menus:
 
-The behavior of the dialog is similar to that of the "Analyze Regions" Plugin in MorphoLibJ. 
+* Plugins -> IJ Tools -> Analyze -> Region Morphology
+* Plugins -> IJ Tools -> Analyze -> Region Morphology (3D)
+* Plugins -> IJ Tools -> Analyze -> Region Intensity Features
+
+The behavior of the dialogs are similar to that of the "Analyze Regions (2D/3D)" Plugins in MorphoLibJ. 
 Results are displayed in a ResultsTable.
 
 ### Programmatic use
