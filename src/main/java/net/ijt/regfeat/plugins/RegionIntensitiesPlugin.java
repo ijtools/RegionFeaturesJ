@@ -12,6 +12,7 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.intensity.CenterOfMass;
 import net.ijt.regfeat.intensity.IntensityKurtosis;
 import net.ijt.regfeat.intensity.IntensitySkewness;
 import net.ijt.regfeat.intensity.IntensityStandardDeviation;
@@ -109,7 +110,12 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         gd.addChoice("Intensity Image", names, names[inputIndex]);
         gd.addChoice("Label Map", names, names[labelsIndex]);
         gd.addMessage("Measurements:");
-        String[] labels = new String[] { "Mean", "Median", "Minimum", "Maximum", "Variance", "Standard Deviation", "Skewness", "Kurtosis" };
+        String[] labels = new String[] { 
+                "Mean", "Median", 
+                "Minimum", "Maximum", 
+                "Variance", "Standard_Deviation", 
+                "Skewness", "Kurtosis", 
+                "Center_Of_Mass"};
         boolean[] states = new boolean[] { 
                 features.contains(MeanIntensity.class),
                 features.contains(MedianIntensity.class),
@@ -119,8 +125,9 @@ public class RegionIntensitiesPlugin implements PlugInFilter
                 features.contains(IntensityStandardDeviation.class),
                 features.contains(IntensitySkewness.class),
                 features.contains(IntensityKurtosis.class),
+                features.contains(CenterOfMass.class),
         };
-        gd.addCheckboxGroup(4, 2, labels, states);
+        gd.addCheckboxGroup(5, 2, labels, states);
         
         // create the dialog, with operator options
         gd.showDialog();
@@ -157,7 +164,7 @@ public class RegionIntensitiesPlugin implements PlugInFilter
             return;
         }
 
-        // retrieve measure options, and keep them for later use
+        // retrieve measure options
         RegionFeatures features = RegionFeatures.initialize(labelMap);
         features.addImageData("intensity", inputImage);
         if (gd.getNextBoolean()) features.add(MeanIntensity.class);
@@ -168,10 +175,11 @@ public class RegionIntensitiesPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(IntensityStandardDeviation.class);
         if (gd.getNextBoolean()) features.add(IntensitySkewness.class);
         if (gd.getNextBoolean()) features.add(IntensityKurtosis.class);
+        if (gd.getNextBoolean()) features.add(CenterOfMass.class);
         
         
         // Call the main processing method
-        // DefaultAlgoListener.monitor(morphoFeatures);
+        // DefaultAlgoListener.monitor(features);
         features.computeAll();
         ResultsTable table = features.createTable();
 
