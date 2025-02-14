@@ -7,8 +7,10 @@ The library currently contains three plugins, for computing different kind of fe
 * 3D morphological features (volume, surface area, equivalent ellipsoid...)
 * intensity features (mean, median, min, max, standard deviation...)
 
+![The RegionFeaturesJ plugin used to compute morphometric features of regions within a 2D label map](doc/images/RegionFeaturesJ_screenshot.png)
+
 Different options are provided, to include the name of the original image within the table, 
-or to include measurement units into results table.
+or to include measurement units within names of table columns.
 
 The library also makes it possible to manage features directly via the "RegionFeatures" class. 
 Features can be added programmatically, and the resulting values are be concatenated into the
@@ -23,9 +25,9 @@ Simply put the `RegionFeaturesJ.jar` into the plugins directory of the current I
 
 Once ImageJ is restarted, the different plugins are available in the following menus:
 
-* Plugins -> IJ Tools -> Analyze -> Region Morphology
-* Plugins -> IJ Tools -> Analyze -> Region Morphology (3D)
-* Plugins -> IJ Tools -> Analyze -> Region Intensity Features
+* Plugins -> IJ Tools -> RegionFeaturesJ -> Region Morphology
+* Plugins -> IJ Tools -> RegionFeaturesJ -> Region Morphology (3D)
+* Plugins -> IJ Tools -> RegionFeaturesJ -> Region Intensity Features
 
 The behavior of the dialogs are similar to that of the "Analyze Regions (2D/3D)" Plugins in MorphoLibJ. 
 Results are displayed in a ResultsTable.
@@ -88,7 +90,6 @@ Note that the results Table is populated only with features that are specified b
 
 ### Planned extension
 
-* Add possibility to use other images than the label map
-* add a method in the Feature class that will display the results on a specifed ImagePlus (as an overlay, for example)
+* Display the results on a specifed ImagePlus (as an overlay, for example)
 * add topological features (number of neighbor regions, distance to closest neighbor...)
-* add 3D morphometric features
+* add graphical user interface to manage user-defined features
