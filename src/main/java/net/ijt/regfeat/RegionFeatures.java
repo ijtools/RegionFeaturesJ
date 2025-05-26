@@ -205,9 +205,9 @@ public class RegionFeatures extends AlgoStub
             }
             
             Feature feature = getFeature(featureClass);
-            if (feature instanceof RegionFeature)
+            if (feature instanceof RegionTabularFeature)
             {
-                ((RegionFeature) feature).updateTable(table, this);
+                ((RegionTabularFeature) feature).updateTable(table, this);
             }
         }
         return table;

@@ -10,13 +10,13 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
  */
-public class CenterOfMass implements RegionFeature
+public class CenterOfMass implements RegionTabularFeature
 {
     @Override
     public double[][] compute(RegionFeatures data)

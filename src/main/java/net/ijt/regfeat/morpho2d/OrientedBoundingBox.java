@@ -18,14 +18,14 @@ import inra.ijpb.geometry.OrientedBox2D;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.measure.region2d.OrientedBoundingBox2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
  * 
  */
-public class OrientedBoundingBox implements RegionFeature
+public class OrientedBoundingBox implements RegionTabularFeature
 {
     @Override
     public OrientedBox2D[] compute(RegionFeatures data)

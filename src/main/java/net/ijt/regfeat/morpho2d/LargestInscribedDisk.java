@@ -19,7 +19,7 @@ import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Circle2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.DistanceMapMaximaPosition;
 import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
@@ -27,7 +27,7 @@ import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
 /**
  * Computes the largest inscribed disk within regions of a label map.
  */
-public class LargestInscribedDisk extends AlgoStub implements RegionFeature
+public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeature
 {
     @Override
     public Circle2D[] compute(RegionFeatures data)

@@ -19,14 +19,14 @@ import inra.ijpb.binary.geodesic.GeodesicDistanceTransformFloat;
 import inra.ijpb.label.LabelValues;
 import inra.ijpb.label.LabelValues.PositionValuePair;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
 
 /**
  * Data to compute geodesic diameter. Stores the results in pixel coordinates.
  */
-public class GeodesicDiameterData extends AlgoStub implements RegionFeature
+public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeature
 {
     @Override
     public Result[] compute(RegionFeatures data)

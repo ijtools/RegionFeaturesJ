@@ -8,13 +8,13 @@ import java.awt.geom.Point2D;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes centroid of each regions within the label map.
  */
-public class Centroid implements RegionFeature
+public class Centroid implements RegionTabularFeature
 {
     @Override
     public Point2D[] compute(RegionFeatures data)

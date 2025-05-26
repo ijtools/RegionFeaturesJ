@@ -13,13 +13,13 @@ import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.label.LabelValues;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * 
  */
-public class DistanceMapMaximaPosition extends AlgoStub implements RegionFeature
+public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabularFeature
 {
     @Override
     public Point[] compute(RegionFeatures data)

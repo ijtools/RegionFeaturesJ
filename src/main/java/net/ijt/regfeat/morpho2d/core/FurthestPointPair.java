@@ -19,14 +19,14 @@ import inra.ijpb.geometry.FeretDiameters;
 import inra.ijpb.geometry.PointPair2D;
 import inra.ijpb.geometry.Polygon2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Utility feature for MaxFeretDiameter, that computes the pair of points within
  * the region that are the furthest to each other.
  */
-public class FurthestPointPair implements RegionFeature
+public class FurthestPointPair implements RegionTabularFeature
 {
     @Override
     public PointPair2D[] compute(RegionFeatures data)

@@ -7,7 +7,7 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Box3D;
 import inra.ijpb.measure.region3d.BoundingBox3D;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
  * for the <code>inra.ijpb.measure.region3d.BoundingBox3D</code> class from
  * MorphoLibJ.
  */
-public class Bounds3D implements RegionFeature
+public class Bounds3D implements RegionTabularFeature
 {
     @Override
     public Box3D[] compute(RegionFeatures data)

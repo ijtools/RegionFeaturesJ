@@ -10,7 +10,7 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Ellipsoid;
 import inra.ijpb.geometry.Point3D;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -22,7 +22,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see inra.ijpb.measure.region2d.EquivalentEllipse
  */
-public class EquivalentEllipsoid implements RegionFeature
+public class EquivalentEllipsoid implements RegionTabularFeature
 {
     @Override
     public Ellipsoid[] compute(RegionFeatures data)

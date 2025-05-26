@@ -13,14 +13,14 @@ import ij.process.ImageProcessor;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes an array of intensity values for each region. This is the base
  * feature for most other statistics.
  */
-public final class IntensityValues implements RegionFeature
+public final class IntensityValues implements RegionTabularFeature
 {
     @Override
     public double[][] compute(RegionFeatures data)

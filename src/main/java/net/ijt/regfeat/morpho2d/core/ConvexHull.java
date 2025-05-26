@@ -11,13 +11,13 @@ import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.geometry.Polygons2D;
 import inra.ijpb.measure.region2d.RegionBoundaries;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes the convex hull of each region in pixel coordinates.
  */
-public class ConvexHull implements RegionFeature
+public class ConvexHull implements RegionTabularFeature
 {
 
     @Override

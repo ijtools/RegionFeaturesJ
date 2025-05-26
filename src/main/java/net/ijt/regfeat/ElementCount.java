@@ -13,7 +13,7 @@ import inra.ijpb.label.LabelImages;
 /**
  * Counts the number of elements (pixels or voxels) that compose each region.
  */
-public class ElementCount implements RegionFeature
+public class ElementCount implements RegionTabularFeature
 {
     @Override
     public int[] compute(RegionFeatures data)

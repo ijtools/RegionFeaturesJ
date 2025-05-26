@@ -9,7 +9,7 @@ import java.util.Collection;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Ellipsoid;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -17,7 +17,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see EquivalentEllipse.
  */
-public class EllipsoidElongations implements RegionFeature
+public class EllipsoidElongations implements RegionTabularFeature
 {
     @Override
     public double[][] compute(RegionFeatures data)

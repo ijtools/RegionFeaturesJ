@@ -10,13 +10,13 @@ import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Point3D;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes centroid of each regions within the label map.
  */
-public class Centroid3D implements RegionFeature
+public class Centroid3D implements RegionTabularFeature
 {
     @Override
     public Point3D[] compute(RegionFeatures data)

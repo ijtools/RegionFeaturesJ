@@ -10,12 +10,12 @@ import ij.measure.ResultsTable;
  * a single scalar value for each region.
  * 
  * As the result is returned as a single value for each region, the result of
- * the <code>compute()</code> method can be returned as an array of double.
- * Furthermore, the <code>updateTable()</code> method can be implemented, by
+ * the {@code compute()} method can be returned as an array of double.
+ * Furthermore, the {@code updateTable()} method can be implemented, by
  * populating a column identified with the name of the feature. The name of the
  * feature is provided within the constructor.
  */
-public abstract class SingleValueFeature implements RegionFeature
+public abstract class SingleValueFeature implements RegionTabularFeature
 {
     /**
      * The name of the feature, used to populate the result table.
@@ -66,5 +66,4 @@ public abstract class SingleValueFeature implements RegionFeature
             throw new RuntimeException("Requires object argument to be an array of double");
         }
     }
-
 }

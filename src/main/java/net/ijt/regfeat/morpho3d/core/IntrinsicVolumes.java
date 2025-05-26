@@ -6,7 +6,7 @@ package net.ijt.regfeat.morpho3d.core;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region3d.IntrinsicVolumes3D;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho3d.Volume;
 
@@ -19,7 +19,7 @@ import net.ijt.regfeat.morpho3d.Volume;
  * 
  * @see Volume
  */
-public class IntrinsicVolumes implements RegionFeature
+public class IntrinsicVolumes implements RegionTabularFeature
 {
     @Override
     public IntrinsicVolumes3D.Result[] compute(RegionFeatures results)

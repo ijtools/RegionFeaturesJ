@@ -6,7 +6,7 @@ package net.ijt.regfeat.morpho2d.core;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.measure.region2d.IntrinsicVolumes2D;
-import net.ijt.regfeat.RegionFeature;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.Area;
 import net.ijt.regfeat.morpho2d.EulerNumber;
@@ -23,7 +23,7 @@ import net.ijt.regfeat.morpho2d.Perimeter;
  * @see Perimeter
  * @see EulerNumber
  */
-public class IntrinsicVolumes implements RegionFeature
+public class IntrinsicVolumes implements RegionTabularFeature
 {
     @Override
     public IntrinsicVolumes2D.Result[] compute(RegionFeatures results)
