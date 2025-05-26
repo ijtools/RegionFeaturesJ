@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import ij.ImagePlus;
-import ij.measure.ResultsTable;
 import inra.ijpb.label.RegionAdjacencyGraph.LabelPair;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
@@ -29,13 +28,6 @@ public class RegionAdjacencyGraph implements Feature
         ImagePlus labelMap = data.labelMap;
         return inra.ijpb.label.RegionAdjacencyGraph.computeAdjacencies(labelMap);
     }
-
-    @Override
-    public void updateTable(ResultsTable table, RegionFeatures data)
-    {
-        // nothing to do...
-    }
-
     
     @Override
     public Collection<Class<? extends Feature>>requiredFeatures()

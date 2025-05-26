@@ -16,7 +16,14 @@ import inra.ijpb.color.ColorMaps;
 import inra.ijpb.label.LabelImages;
 
 /**
- * The class containing results (and data?) for the analysis of regions within an image.
+ * The main class of the plugin, that gathers all the information necessary to
+ * analyze image as well as the results. The class contains:
+ * <ul>
+ * <li>a reference to the label map representing the regions to analyze</li>
+ * <li>the list of features to analyze</li>
+ * <li>for each feature, the result of computation</li>
+ * <li>general options for computing features and presenting the results</li>
+ * </ul>
  */
 public class RegionFeatures extends AlgoStub
 {
