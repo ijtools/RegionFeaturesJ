@@ -33,12 +33,6 @@ public class Volume extends SingleValueFeature
         Calibration calib = data.labelMap.getCalibration();
         double voxelVolume = calib.pixelWidth * calib.pixelHeight * calib.pixelDepth;
         
-        // optionally update the feature name to take into account the unit
-        if (data.displayUnitsInTable)
-        {
-            setName(String.format("Volume_[%s^3]", calib.getUnit()));
-        }
-        
         // compute volume from voxel count
         return Arrays.stream(counts)
                 .mapToDouble(count -> count * voxelVolume)
@@ -49,5 +43,11 @@ public class Volume extends SingleValueFeature
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(ElementCount.class);
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        return new String[] {data.labelMap.getCalibration().getUnit() + "^3"};
     }
 }

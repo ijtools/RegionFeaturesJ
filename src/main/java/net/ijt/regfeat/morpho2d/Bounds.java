@@ -21,6 +21,8 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Bounds implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] {"Bounds2D_XMin", "Bounds2D_XMax", "Bounds2D_YMin", "Bounds2D_YMax"};
+    
     @Override
     public Object compute(RegionFeatures data)
     {
@@ -30,19 +32,7 @@ public class Bounds implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {"Bounds2D_XMin", "Bounds2D_XMax", "Bounds2D_YMin", "Bounds2D_YMax"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c : new int[] {0, 1, 2, 3})
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-        }
-        
         Box2D[] boxes = (Box2D[]) data.results.get(this.getClass());
-        
         for (int i = 0; i < boxes.length; i++)
         {
             // current box
@@ -56,6 +46,13 @@ public class Bounds implements RegionTabularFeature
         }
     }
     
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String unit = data.labelMap.getCalibration().getUnit();
+        return new String[] {unit, unit, unit, unit};
+    }
+
     @Override
     public void overlayResult(ImagePlus image, RegionFeatures data)
     {

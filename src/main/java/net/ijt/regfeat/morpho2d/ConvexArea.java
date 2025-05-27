@@ -79,4 +79,10 @@ public class ConvexArea extends SingleValueFeature
     {
         return Arrays.asList(ConvexHull.class);
     }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        return new String[] {data.labelMap.getCalibration().getUnit() + "^2"};
+    }
 }

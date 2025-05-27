@@ -24,6 +24,11 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class EquivalentEllipsoid implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] {
+            "Ellipsoid_Center_X", "Ellipsoid_Center_Y", "Ellipsoid_Center_Z", 
+            "Ellipsoid_Radius_1", "Ellipsoid_Radius_2", "Ellipsoid_Radius_3",
+            "Ellipsoid_Phi", "Ellipsoid_Theta", "Ellipsoid_Psi"};
+    
     @Override
     public Ellipsoid[] compute(RegionFeatures data)
     {
@@ -38,23 +43,6 @@ public class EquivalentEllipsoid implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {
-                "Ellipsoid_Center_X", "Ellipsoid_Center_Y", "Ellipsoid_Center_Z", 
-                "Ellipsoid_Radius_1", "Ellipsoid_Radius_2", "Ellipsoid_Radius_3",
-                "Ellipsoid_Phi", "Ellipsoid_Theta", "Ellipsoid_Psi"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c = 0; c < 6; c++)
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-            colNames[6] = String.format("%s_[%s]", colNames[6], "degree");
-            colNames[7] = String.format("%s_[%s]", colNames[7], "degree");
-            colNames[8] = String.format("%s_[%s]", colNames[8], "degree");
-        }
-        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Ellipsoid[])
         {
@@ -85,5 +73,25 @@ public class EquivalentEllipsoid implements RegionTabularFeature
         {
             throw new RuntimeException("Requires object argument to be an array of Ellipsoid instances");
         }
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String[] unitNames = new String[colNames.length];
+        
+        // setup table info
+        Calibration calib = data.labelMap.getCalibration();
+        String unitName = calib.getUnit();
+        for (int c = 0; c < 6; c++)
+        {
+            unitNames[c] = unitName;
+        }
+        for (int c = 6; c < 9; c++)
+        {
+            unitNames[c] = "degree";
+        }
+        
+        return unitNames;
     }
 }

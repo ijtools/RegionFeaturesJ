@@ -3,12 +3,11 @@
  */
 package net.ijt.regfeat.morpho3d;
 
-import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Box3D;
 import inra.ijpb.measure.region3d.BoundingBox3D;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes the bounds of each 3D region within a label map. Mostly a wrapper
@@ -17,6 +16,11 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Bounds3D implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] {
+            "Bounds3D_XMin", "Bounds3D_XMax", 
+            "Bounds3D_YMin", "Bounds3D_YMax", 
+            "Bounds3D_ZMin", "Bounds3D_ZMax"};
+    
     @Override
     public Box3D[] compute(RegionFeatures data)
     {
@@ -26,22 +30,7 @@ public class Bounds3D implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {
-                "Bounds3D_XMin", "Bounds3D_XMax", 
-                "Bounds3D_YMin", "Bounds3D_YMax", 
-                "Bounds3D_ZMin", "Bounds3D_ZMax"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c = 0; c < 6; c++)
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-        }
-
         Box3D[] boxes = (Box3D[]) data.results.get(this.getClass());
-        
         for (int i = 0; i < boxes.length; i++)
         {
             // current box
@@ -56,4 +45,11 @@ public class Bounds3D implements RegionTabularFeature
             table.setValue(colNames[5], i, box.getZMax());
         }
     }
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String unit = data.labelMap.getCalibration().getUnit();
+        return new String[] {unit, unit, unit, unit, unit, unit};
+    }
+
 }

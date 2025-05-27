@@ -18,6 +18,8 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Centroid3D implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] {"Centroid_X", "Centroid_Y", "Centroid_Z"};
+    
     @Override
     public Point3D[] compute(RegionFeatures data)
     {
@@ -89,17 +91,6 @@ public class Centroid3D implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {"Centroid_X", "Centroid_Y", "Centroid_Z"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c : new int[] {0, 1, 2})
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-        }
-
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Point3D[])
         {
@@ -116,5 +107,12 @@ public class Centroid3D implements RegionTabularFeature
         {
             throw new RuntimeException("Requires object argument to be an array of Point3D");
         }
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String unit = data.labelMap.getCalibration().getUnit();
+        return new String[] {unit, unit, unit};
     }
 }

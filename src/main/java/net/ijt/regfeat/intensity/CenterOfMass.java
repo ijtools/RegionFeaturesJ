@@ -88,16 +88,6 @@ public class CenterOfMass implements RegionTabularFeature
     {
         int nd = data.labelMap.getImageStackSize() > 2 ? 3 : 2;
         String[] colNames = nd == 2 ? new String[] { "Center_Of_Mass_X", "Center_Of_Mass_Y" } : new String[] { "Center_Of_Mass_X", "Center_Of_Mass_Y" , "Center_Of_Mass_Z" };
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            String suffix = String.format("_[%s]", calib.getUnit());
-            for (int i = 0; i < nd; i++)
-            {
-                colNames[i] = colNames[i] + suffix;
-            }
-        }
         
         Object obj = data.results.get(this.getClass());
         if (obj instanceof double[][])
@@ -118,5 +108,18 @@ public class CenterOfMass implements RegionTabularFeature
         {
             throw new RuntimeException("Requires object argument to be a 2D array of double");
         }
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String unit = data.labelMap.getCalibration().getUnit();
+        int nd = data.labelMap.getImageStackSize() > 2 ? 3 : 2;
+        String[] names = new String[nd];
+        for (int d = 0; d < nd; d++)
+        {
+            names[d] = unit;
+        }
+        return names;
     }
 }

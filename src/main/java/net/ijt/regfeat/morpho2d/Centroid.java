@@ -16,6 +16,8 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Centroid implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] {"Centroid_X", "Centroid_Y"};
+    
     @Override
     public Point2D[] compute(RegionFeatures data)
     {
@@ -27,15 +29,6 @@ public class Centroid implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {"Centroid_X", "Centroid_Y"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            colNames[0] = String.format("Centroid_X_[%s]", calib.getUnit());
-            colNames[1] = String.format("Centroid_Y_[%s]", calib.getUnit());
-        }
-        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Point2D[])
         {
@@ -51,5 +44,12 @@ public class Centroid implements RegionTabularFeature
         {
             throw new RuntimeException("Requires object argument to be an array of Point2D");
         }
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String unit = data.labelMap.getCalibration().getUnit();
+        return new String[] {unit, unit};
     }
 }

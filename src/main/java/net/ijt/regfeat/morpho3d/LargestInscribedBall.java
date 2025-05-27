@@ -15,6 +15,8 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class LargestInscribedBall implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] {"Inscribed_Ball_Center_X", "Inscribed_Ball_Center_Y", "Inscribed_Ball_Center_Z", "Inscribed_Ball_Radius"};
+    
     @Override
     public Sphere[] compute(RegionFeatures results)
     {
@@ -26,17 +28,6 @@ public class LargestInscribedBall implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {"Inscribed_Ball_Center_X", "Inscribed_Ball_Center_Y", "Inscribed_Ball_Center_Z", "Inscribed_Ball_Radius"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c : new int[] {0, 1, 2, 3})
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-        }
-        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Sphere[])
         {
@@ -58,4 +49,17 @@ public class LargestInscribedBall implements RegionTabularFeature
             throw new RuntimeException("Requires object argument to be an array of Sphere");
         }
     }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String[] unitNames = new String[colNames.length];
+        String unitName = data.labelMap.getCalibration().getUnit();
+        for (int c = 0; c < colNames.length; c++)
+        {
+            unitNames[c] = unitName;
+        }
+        return unitNames;
+    }
+    
 }

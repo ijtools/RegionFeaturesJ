@@ -15,7 +15,8 @@ import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
- * Computes the convex perimeter, or perimeter of the convex hull.
+ * Computes the perimeter of the convex hull of the region, also known as
+ * "convex perimeter".
  * 
  * The perimeter is obtained as the length of boundary of the convex hull, and
  * may be different from the perimeter of the image of the convex image.
@@ -66,5 +67,11 @@ public class ConvexPerimeter extends SingleValueFeature
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(ConvexHull.class);
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        return new String[] {data.labelMap.getCalibration().getUnit()};
     }
 }

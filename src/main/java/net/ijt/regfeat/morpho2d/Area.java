@@ -17,6 +17,7 @@ import net.ijt.regfeat.SingleValueFeature;
  * 
  * @see Circularity
  * @see ConvexArea
+ * @see ElementCount
  */
 public class Area extends SingleValueFeature
 {
@@ -32,17 +33,11 @@ public class Area extends SingleValueFeature
         data.ensureRequiredFeaturesAreComputed(this);
         int[] counts = (int[]) data.results.get(ElementCount.class);
         
-        // volume of unit voxel
+        // area of unit voxel
         Calibration calib = data.labelMap.getCalibration();
         double pixelArea = calib.pixelWidth * calib.pixelHeight;
         
-        // optionally update the feature name to take into account the unit
-        if (data.displayUnitsInTable)
-        {
-            setName(String.format("Area_[%s^2]", calib.getUnit()));
-        }
-        
-        // compute volume from voxel count
+        // compute area from pixel count
         return Arrays.stream(counts)
                 .mapToDouble(count -> count * pixelArea)
                 .toArray();
@@ -52,5 +47,11 @@ public class Area extends SingleValueFeature
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(ElementCount.class);
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        return new String[] {data.labelMap.getCalibration().getUnit() + "^2"};
     }
 }

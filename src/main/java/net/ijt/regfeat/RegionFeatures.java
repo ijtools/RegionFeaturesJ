@@ -191,12 +191,14 @@ public class RegionFeatures extends AlgoStub
     
     public ResultsTable createTable()
     {
-        this.fireStatusChanged(this, "RegionFeatures: create result table");
         // ensure everything is computed
+        this.fireStatusChanged(this, "RegionFeatures: compute all features");
         computeAll();
         
-        ResultsTable table = initializeTable(this.labels);
+        this.fireStatusChanged(this, "RegionFeatures: create result table");
+        ResultsTable fullTable = initializeRegionTable();
         
+        // update the global table with each feature
         for (Class<? extends Feature> featureClass : this.featureClasses)
         {
             if (!isComputed(featureClass))
@@ -207,10 +209,69 @@ public class RegionFeatures extends AlgoStub
             Feature feature = getFeature(featureClass);
             if (feature instanceof RegionTabularFeature)
             {
-                ((RegionTabularFeature) feature).updateTable(table, this);
+                ResultsTable table = ((RegionTabularFeature) feature).createTable(this);
+                String[] colNames = columnHeadings(table);
+                
+                // if necessary, update column names with unit name
+                if (displayUnitsInTable)
+                {
+                    String[] unitNames = ((RegionTabularFeature) feature).columnUnitNames(this);
+                    if (unitNames != null && unitNames.length > 0)
+                    {
+                        colNames = appendUnitNames(colNames, unitNames);
+                    }
+                }
+                
+                appendTable(fullTable, table, colNames);
             }
         }
-        return table;
+        return fullTable;
+    }
+    
+    /**
+     * Retrieve the headings of the columns in a String array, keeping only the
+     * regular columns (not the row label column).
+     * 
+     * @param table
+     *            the results table
+     * @return a string array containing the heading of each column
+     */
+    private static final String[] columnHeadings(ResultsTable table)
+    {
+        int nc = table.getLastColumn() + 1;
+        String[] colNames = new String[nc];
+        for (int c = 0; c < nc; c++)
+        {
+            colNames[c] = table.getColumnHeading(c);
+        }
+        return colNames;
+    }
+    
+    private String[] appendUnitNames(String[] colNames, String[] unitNames)
+    {
+        String[] res = new String[colNames.length];
+        for (int c = 0; c < colNames.length; c++)
+        {
+            String unitName = unitNames[c];
+            if (!unitName.isBlank())
+            {
+                res[c] = String.format("%s_(%s)", colNames[c], unitName);
+            }
+        }
+
+        return res;
+    }
+    
+    private static final void appendTable(ResultsTable table1, ResultsTable table2, String[] colNames)
+    {
+        for (int c = 0; c <= table2.getLastColumn(); c++)
+        {
+            String colName = colNames[c];
+            for (int r = 0; r < table1.getCounter(); r++)
+            {
+                table1.setValue(colName, r, table2.getValueAsDouble(c, r));
+            }
+        }
     }
     
     public RegionFeatures displayUnitsInTable(boolean flag)
@@ -219,14 +280,14 @@ public class RegionFeatures extends AlgoStub
         return this;
     }
     
-    private static final ResultsTable initializeTable(int[] labels)
+    public ResultsTable initializeRegionTable()
     {
         // Initialize label column in table
         ResultsTable table = new ResultsTable();
-        for (int i = 0; i < labels.length; i++)
+        for (int i = 0; i < this.labels.length; i++)
         {
             table.incrementCounter();
-            table.setLabel("" + labels[i], i);
+            table.setLabel("" + this.labels[i], i);
         }
         return table;
     }

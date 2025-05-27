@@ -27,6 +27,8 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  */
 public class OrientedBoundingBox implements RegionTabularFeature
 {
+    public static final String[] colNames = new String[] { "Oriented_Box_Center_X", "Oriented_Box_Center_Y", "Oriented_Box_Length", "Oriented_Box_Width", "Oriented_Box_Orientation" };
+
     @Override
     public OrientedBox2D[] compute(RegionFeatures data)
     {
@@ -46,18 +48,6 @@ public class OrientedBoundingBox implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] { "Oriented_Box_Center_X", "Oriented_Box_Center_Y", "Oriented_Box_Length", "Oriented_Box_Width", "Oriented_Box_Orientation" };
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c : new int[] {0, 1, 2, 3})
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-            colNames[4] = String.format("%s_[%s]", colNames[4], "degree");
-        }
-        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof OrientedBox2D[])
         {
@@ -79,6 +69,23 @@ public class OrientedBoundingBox implements RegionTabularFeature
         }
     }
 
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String[] unitNames = new String[colNames.length];
+        
+        // setup table info
+        Calibration calib = data.labelMap.getCalibration();
+        String unitName = calib.getUnit();
+        for (int c = 0; c < 4; c++)
+        {
+            unitNames[c] = unitName;
+        }
+        unitNames[4] = "degree";
+        
+        return unitNames;
+    }
+    
     public void overlayResult(RegionFeatures data, ImagePlus target)
     {
         // retrieve array of ellipses

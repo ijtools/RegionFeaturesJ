@@ -32,6 +32,18 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class EquivalentEllipse implements RegionTabularFeature
 {
+    /**
+     * The names of the columns, without unit name.
+     */
+    private static final String[] colNames = new String[] { "Ellipse_Center_X", "Ellipse_Center_Y", "Ellipse_Radius_1", "Ellipse_Radius_2", "Ellipse_Orientation" };
+
+    /**
+     * Empty constructor.
+     */
+    public EquivalentEllipse()
+    {
+    }
+    
     @Override
     public Ellipse[] compute(RegionFeatures data)
     {
@@ -152,18 +164,6 @@ public class EquivalentEllipse implements RegionTabularFeature
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
-        String[] colNames = new String[] {"Ellipse_Center_X", "Ellipse_Center_Y", "Ellipse_Radius_1", "Ellipse_Radius_2", "Ellipse_Orientation"};
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            Calibration calib = data.labelMap.getCalibration();
-            for (int c : new int[] {0, 1, 2, 3})
-            {
-                colNames[c] = String.format("%s_[%s]", colNames[c], calib.getUnit());
-            }
-            colNames[4] = String.format("%s_[%s]", colNames[4], "degree");
-        }
-        
         Object obj = data.results.get(this.getClass());
         if (obj instanceof Ellipse[])
         {
@@ -191,7 +191,24 @@ public class EquivalentEllipse implements RegionTabularFeature
             throw new RuntimeException("Requires object argument to be an array of Ellipse");
         }
     }
-
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        String[] unitNames = new String[colNames.length];
+        
+        // setup table info
+        Calibration calib = data.labelMap.getCalibration();
+        String unitName = calib.getUnit();
+        for (int c = 0; c < 4; c++)
+        {
+            unitNames[c] = unitName;
+        }
+        unitNames[4] = "degree";
+        
+        return unitNames;
+    }
+    
     public void overlayResult(RegionFeatures data, ImagePlus target)
     {
         // retrieve array of ellipses

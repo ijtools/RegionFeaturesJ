@@ -6,7 +6,6 @@ package net.ijt.regfeat.morpho3d;
 import java.util.Arrays;
 import java.util.Collection;
 
-import ij.measure.Calibration;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
@@ -33,13 +32,6 @@ public class MeanBreadth extends SingleValueFeature
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
         
-        // optionally update the feature name to take into account the unit
-        if (data.displayUnitsInTable)
-        {
-            Calibration calib = data.labelMap.getCalibration();
-            setName(String.format("Mean_Breadth_[%s]", calib.getUnit()));
-        }
-        
         return (double[]) data.results.get(MeanBreadth_Crofton_D13.class);
     }
     
@@ -47,5 +39,10 @@ public class MeanBreadth extends SingleValueFeature
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Arrays.asList(MeanBreadth_Crofton_D13.class);
+    }
+    
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        return new String[] {data.labelMap.getCalibration().getUnit()};
     }
 }

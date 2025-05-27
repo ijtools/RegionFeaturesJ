@@ -29,16 +29,16 @@ public class AverageThickness extends SingleValueFeature
         int[] labels = data.labels;
         Calibration calib = data.labelMap.getCalibration();
         
-        if (data.displayUnitsInTable)
-        {
-            // update the name to take into account the unit
-            setName(String.format("Average_Thickness_[%s]", calib.getUnit()));
-        }
-        
         // retrieve the "avgThickness" field from the array of Result
         inra.ijpb.measure.region2d.AverageThickness algo = new inra.ijpb.measure.region2d.AverageThickness();
         return Arrays.stream(algo.analyzeRegions(labelMap, labels, calib))
                 .mapToDouble(res -> res.avgThickness)
                 .toArray();
+    }
+    
+    @Override
+    public String[] columnUnitNames(RegionFeatures data)
+    {
+        return new String[] {data.labelMap.getCalibration().getUnit()};
     }
 }
