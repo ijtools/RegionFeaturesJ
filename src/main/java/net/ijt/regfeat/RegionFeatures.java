@@ -28,6 +28,18 @@ import inra.ijpb.label.LabelImages;
 public class RegionFeatures extends AlgoStub
 {
     // ==================================================
+    // Enumerations
+    
+    public enum UnitDisplay
+    {
+        NONE,
+        COLUMN_NAMES,
+        NEW_COLUMNS,
+        NEW_TABLE
+    }
+    
+    
+    // ==================================================
     // Static methods
     
     public static final RegionFeatures initialize(ImagePlus imagePlus)
@@ -79,7 +91,7 @@ public class RegionFeatures extends AlgoStub
     
     public Color[] labelColors;
     
-    public boolean displayUnitsInTable = false;
+    public UnitDisplay unitDisplay = UnitDisplay.NONE;
     
     
     // ==================================================
@@ -189,14 +201,33 @@ public class RegionFeatures extends AlgoStub
         return this;
     }
     
+    /**
+     * Creates a new results table from the different features contained within
+     * the class.
+     * 
+     * @return a new ResultsTable containing a summary of the computed features.
+     */
     public ResultsTable createTable()
+    {
+        return createTables()[0];
+    }
+    
+    /**
+     * Returns an array containing two ResultsTable: one with the feature
+     * results, another one containing the unit associated to each column in the
+     * first table.
+     * 
+     * @return an array of two ResultsTable.
+     */
+    public ResultsTable[] createTables()
     {
         // ensure everything is computed
         this.fireStatusChanged(this, "RegionFeatures: compute all features");
         computeAll();
         
-        this.fireStatusChanged(this, "RegionFeatures: create result table");
+        this.fireStatusChanged(this, "RegionFeatures: create result tables");
         ResultsTable fullTable = initializeRegionTable();
+        ResultsTable columnUnitsTable = new ResultsTable();
         
         // update the global table with each feature
         for (Class<? extends Feature> featureClass : this.featureClasses)
@@ -209,25 +240,134 @@ public class RegionFeatures extends AlgoStub
             Feature feature = getFeature(featureClass);
             if (feature instanceof RegionTabularFeature)
             {
+                // create table associated to feature
                 ResultsTable table = ((RegionTabularFeature) feature).createTable(this);
+                
+                // also retrieve information about columns 
                 String[] colNames = columnHeadings(table);
+                String[] unitNames = ((RegionTabularFeature) feature).columnUnitNames(this);
                 
-                // if necessary, update column names with unit name
-                if (displayUnitsInTable)
+                // switch processing depending on the strategy for managing unit names
+                switch(unitDisplay)
                 {
-                    String[] unitNames = ((RegionTabularFeature) feature).columnUnitNames(this);
-                    if (unitNames != null && unitNames.length > 0)
-                    {
+                    case NONE:
+                        // simply append columns to the full table
+                        appendColumns(fullTable, table);
+                        break;
+                    case COLUMN_NAMES:
+                        // update columns names before appending to the full tables
                         colNames = appendUnitNames(colNames, unitNames);
-                    }
+                        for (int c = 0; c < colNames.length; c++)
+                        {
+                            appendColumn(fullTable, colNames[c], table.getColumnAsDoubles(c));
+                        }
+                        break;
+                    case NEW_COLUMNS:
+                        // append columns and new columns containing unit names
+                        if (unitNames != null && unitNames.length > 0)
+                        {
+                            addColumnsAndUnits(fullTable, table, unitNames);
+                            continue;
+                        }
+                        else
+                        {
+                            appendColumns(fullTable, table);
+                        }
+                        break;
+                    case NEW_TABLE:
+                        // append full table, and update the columnUnits table
+                        appendColumns(fullTable, table);
+                        updateColumnUnitsTable(columnUnitsTable, colNames, unitNames);
+                        break;
+
+                    default:
+                        throw new RuntimeException("Unknown strategy for managing units");
                 }
-                
-                appendTable(fullTable, table, colNames);
             }
         }
-        return fullTable;
+        
+        return new ResultsTable[] {fullTable, columnUnitsTable};
     }
     
+    private String[] appendUnitNames(String[] colNames, String[] unitNames)
+    {
+        // initialize with same column names
+        String[] res = new String[colNames.length];
+        System.arraycopy(colNames, 0, res, 0, colNames.length);
+
+        if (unitNames != null && unitNames.length > 0)
+        {
+            for (int c = 0; c < colNames.length; c++)
+            {
+                String unitName = unitNames[c];
+                if (!unitName.isBlank())
+                {
+                    res[c] = String.format("%s_(%s)", colNames[c], unitName);
+                }
+            }
+        }
+        
+        return res;
+    }
+    
+    private ResultsTable addColumnsAndUnits(ResultsTable res, ResultsTable table, String[] unitNames)
+    {
+        String[] colNames = columnHeadings(table);
+        for (int c = 0; c < colNames.length; c++)
+        {
+            String colName = colNames[c];
+            appendColumn(res, colName, table.getColumnAsDoubles(c));
+            
+            // add a new column containing unit name
+            String unitColName = colName + "_unit";
+            for (int r = 0; r < table.getCounter(); r++)
+            {
+                res.setValue(unitColName, r, unitNames[c]);
+            }
+        }
+
+        return res;
+    }
+    
+    private static final void appendColumns(ResultsTable table1, ResultsTable table2)
+    {
+        String[] colNames = columnHeadings(table2);
+        for (int c = 0; c <= table2.getLastColumn(); c++)
+        {
+            String colName = colNames[c];
+            for (int r = 0; r < table1.getCounter(); r++)
+            {
+                table1.setValue(colName, r, table2.getValueAsDouble(c, r));
+            }
+        }
+    }
+    
+    private static final void appendColumn(ResultsTable table, String colName, double[] values)
+    {
+        if (values.length != table.getCounter())
+        {
+            throw new RuntimeException("value array must have as many elements as number of rows in ResultsTable");
+        }
+        for (int r = 0; r < table.getCounter(); r++)
+        {
+            table.setValue(colName, r, values[r]);
+        }
+    }
+
+    private static final void updateColumnUnitsTable(ResultsTable columnUnitsTable, String[] colNames, String[] unitNames)
+    {
+        for (int c = 0; c < colNames.length; c++)
+        {
+            columnUnitsTable.incrementCounter();
+            columnUnitsTable.addValue("Column", colNames[c]);
+            columnUnitsTable.addValue("Unit", "");
+            if (unitNames != null && unitNames.length > 0)
+            {
+                columnUnitsTable.addValue("Unit", unitNames[c]);
+            }
+        }
+    }
+
     /**
      * Retrieve the headings of the columns in a String array, keeping only the
      * regular columns (not the row label column).
@@ -246,37 +386,16 @@ public class RegionFeatures extends AlgoStub
         }
         return colNames;
     }
-    
-    private String[] appendUnitNames(String[] colNames, String[] unitNames)
-    {
-        String[] res = new String[colNames.length];
-        for (int c = 0; c < colNames.length; c++)
-        {
-            String unitName = unitNames[c];
-            if (!unitName.isBlank())
-            {
-                res[c] = String.format("%s_(%s)", colNames[c], unitName);
-            }
-        }
 
-        return res;
-    }
-    
-    private static final void appendTable(ResultsTable table1, ResultsTable table2, String[] colNames)
+    public RegionFeatures unitDisplay(UnitDisplay unitDisplay)
     {
-        for (int c = 0; c <= table2.getLastColumn(); c++)
-        {
-            String colName = colNames[c];
-            for (int r = 0; r < table1.getCounter(); r++)
-            {
-                table1.setValue(colName, r, table2.getValueAsDouble(c, r));
-            }
-        }
+        this.unitDisplay = unitDisplay;
+        return this;
     }
     
     public RegionFeatures displayUnitsInTable(boolean flag)
     {
-        this.displayUnitsInTable = flag;
+        this.unitDisplay = flag ? UnitDisplay.COLUMN_NAMES : UnitDisplay.NONE;
         return this;
     }
     
