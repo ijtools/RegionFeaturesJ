@@ -18,6 +18,7 @@ import inra.ijpb.algo.DefaultAlgoListener;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionFeatures.UnitDisplay;
 import net.ijt.regfeat.morpho2d.Area;
 import net.ijt.regfeat.morpho2d.AverageThickness;
 import net.ijt.regfeat.morpho2d.Bounds;
@@ -45,6 +46,9 @@ import net.ijt.regfeat.morpho2d.Tortuosity;
  */
 public class RegionMorphologyPlugin implements PlugInFilter
 {
+    public static final String[] unitDisplayLabels = new String[] { "None", "Column Names", "New Columns", "New Table" };
+    public static final UnitDisplay[] unitDisplayValues = new UnitDisplay[] { UnitDisplay.NONE, UnitDisplay.COLUMN_NAMES, UnitDisplay.NEW_COLUMNS, UnitDisplay.NEW_TABLE };
+    
     // ====================================================
     // Class variables
 
@@ -113,15 +117,22 @@ public class RegionMorphologyPlugin implements PlugInFilter
         // keep choices for next plugin call
         initialOptions = options;
         
-        ResultsTable table = analyze(imagePlus, options);
+        ResultsTable[] tables = analyze(imagePlus, options);
+        ResultsTable featuresTable = tables[0];
         if (options.includeImageName)
         {
-            table = insertImageNameColumn(table, imagePlus.getShortTitle());
+            featuresTable = insertImageNameColumn(featuresTable, imagePlus.getShortTitle());
         }
         
         // show result
         String tableName = imagePlus.getShortTitle() + "-Morphometry";
-        table.show(tableName);
+        featuresTable.show(tableName);
+        
+        if (options.unitDisplay == UnitDisplay.NEW_TABLE)
+        {
+            String unitsTableName = imagePlus.getShortTitle() + "-MorphometryUnits";
+            tables[1].show(unitsTableName);
+        }
     }
     
     private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
@@ -155,7 +166,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
             gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
             
             gd.addMessage("");
-            gd.addCheckbox("Display_Units", initialChoice.displayUnits);
+            gd.addChoice("Unit_Display", unitDisplayLabels, unitDisplayLabels[1]);
             gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
             
             // Display dialog and wait for user validation
@@ -185,13 +196,13 @@ public class RegionMorphologyPlugin implements PlugInFilter
             if (gd.getNextBoolean()) features.add(AverageThickness.class);
             if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
             
-            options.displayUnits = gd.getNextBoolean();
+            options.unitDisplay = unitDisplayValues[gd.getNextChoiceIndex()];
             options.includeImageName = gd.getNextBoolean();
     
             return options;
         }
 
-    private static final ResultsTable analyze(ImagePlus imagePlus, Options options)
+    private static final ResultsTable[] analyze(ImagePlus imagePlus, Options options)
     {
         // retrieve dimensions
         int nChannels = imagePlus.getNChannels();
@@ -205,6 +216,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
         
         ImageStack stack = imagePlus.getStack();
         ArrayList<ResultsTable> allTables = new ArrayList<ResultsTable>(nChannels * nFrames);
+        ResultsTable unitsTable = null;
 
         // iterate over slices 
         for (int iFrame = 0; iFrame < nFrames; iFrame++)
@@ -216,7 +228,9 @@ public class RegionMorphologyPlugin implements PlugInFilter
                 ImagePlus sliceImage = new ImagePlus(imagePlus.getTitle(), array);
                 sliceImage.copyScale(imagePlus);
 
-                allTables.add(analyzeSingleSlice(sliceImage, options));
+                ResultsTable[] tables = analyzeSingleSlice(sliceImage, options);
+                allTables.add(tables[0]);
+                unitsTable = tables[1];
             }
         }
 
@@ -224,6 +238,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
         Iterator<ResultsTable> iter = allTables.iterator();
         
         // create string patterns
+        // TODO: should also add iteration on slices within a 3D image
         String pattC = "_c%0" + Math.max((int) Math.ceil(Math.log10(nChannels-1)), 1) + "d";
         String pattT = "_t%0" + Math.max((int) Math.ceil(Math.log10(nFrames-1)), 1) + "d";
         StringBuilder sb = new StringBuilder();
@@ -267,17 +282,17 @@ public class RegionMorphologyPlugin implements PlugInFilter
             }
         }
         
-        return res;
+        return new ResultsTable[] {res, unitsTable};
     }
     
-    private static final ResultsTable analyzeSingleSlice(ImagePlus imagePlus, Options options)
+    private static final ResultsTable[] analyzeSingleSlice(ImagePlus imagePlus, Options options)
     {
         // create a Region feature analyzer from options
         RegionFeatures analyzer = options.createAnalyzer(imagePlus);
         
         // Call the main processing method
         DefaultAlgoListener.monitor(analyzer);
-        return analyzer.createTable();
+        return analyzer.createTables();
     }
 
     private static final ResultsTable insertImageNameColumn(ResultsTable table, String imageName)
@@ -316,6 +331,8 @@ public class RegionMorphologyPlugin implements PlugInFilter
          */
         boolean displayUnits = false;
         
+        UnitDisplay unitDisplay = UnitDisplay.COLUMN_NAMES; 
+        
         /**
          * Can be useful when concatenating results obtained on different images
          * into a single table.
@@ -333,7 +350,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
         {
             RegionFeatures analyzer = RegionFeatures.initialize(imagePlus);
             features.stream().forEachOrdered(feature -> analyzer.add(feature));
-            analyzer.displayUnitsInTable(this.displayUnits);
+            analyzer.unitDisplay = this.unitDisplay;
             return analyzer;
         }
     }
