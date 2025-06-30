@@ -33,10 +33,22 @@ public class CentroidTest
         
         Centroid feature = new Centroid();
         Point2D[] res = (Point2D[]) feature.compute(data);
-                
+
+        Point2D res0 = res[0];
+        assertEquals(res0.getX(), 1.5, 0.01);
+        assertEquals(res0.getY(), 1.5, 0.01);
+
+        Point2D res1 = res[1];
+        assertEquals(res1.getX(), 5.0, 0.01);
+        assertEquals(res1.getY(), 1.5, 0.01);
+
+        Point2D res2 = res[2];
+        assertEquals(res2.getX(), 1.5, 0.01);
+        assertEquals(res2.getY(), 5.0, 0.01);
+
         Point2D res3 = res[3];
-        assertEquals(res3.getX(), 4.5, 0.01);
-        assertEquals(res3.getY(), 4.5, 0.01);
+        assertEquals(res3.getX(), 5.0, 0.01);
+        assertEquals(res3.getY(), 5.0, 0.01);
     }
 
     /**

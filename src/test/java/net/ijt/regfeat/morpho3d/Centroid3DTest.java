@@ -33,14 +33,14 @@ public class Centroid3DTest
                 
         assertEquals(res.length, 8);
         Point3D[] exp = new Point3D[] {
-                new Point3D(1, 1, 1),
-                new Point3D(5, 1, 1),
-                new Point3D(1, 5, 1),
-                new Point3D(5, 5, 1),
-                new Point3D(1, 1, 5),
-                new Point3D(5, 1, 5),
-                new Point3D(1, 5, 5),
-                new Point3D(5, 5, 5),
+                new Point3D(1.5, 1.5, 1.5),
+                new Point3D(5.5, 1.5, 1.5),
+                new Point3D(1.5, 5.5, 1.5),
+                new Point3D(5.5, 5.5, 1.5),
+                new Point3D(1.5, 1.5, 5.5),
+                new Point3D(5.5, 1.5, 5.5),
+                new Point3D(1.5, 5.5, 5.5),
+                new Point3D(5.5, 5.5, 5.5),
         };
         for (int i = 0; i < 8; i++)
         {

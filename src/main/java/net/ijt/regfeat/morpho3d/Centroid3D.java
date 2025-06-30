@@ -78,11 +78,33 @@ public class Centroid3D implements RegionTabularFeature
                 }
             }
         }
-        // normalize by number of pixels in each region
+//        this.fireProgressChanged(this, 1, 1);
+
+        // normalize by number of voxels in each region
+        for (int i = 0; i < nLabels; i++)
+        {
+            if (counts[i] == 0) continue;
+
+            cx[i] /= counts[i];
+            cy[i] /= counts[i];
+            cz[i] /= counts[i];
+        }
+
+        // add coordinates of origin pixel (IJ coordinate system)
+        for (int i = 0; i < nLabels; i++)
+        {
+            if (counts[i] == 0) continue;
+
+            cx[i] += .5 * sx + ox;
+            cy[i] += .5 * sy + oy;
+            cz[i] += .5 * sz + oz;
+        }
+
+        // create array of Point3D
         Point3D[] points = new Point3D[nLabels];
         for (int i = 0; i < nLabels; i++)
         {
-            points[i] = new Point3D(cx[i] / counts[i] + ox, cy[i] / counts[i] + oy, cz[i] / counts[i] + oz);
+            points[i] = new Point3D(cx[i], cy[i], cz[i]);
         }
 
         return points;
