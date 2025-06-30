@@ -17,7 +17,9 @@ import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
+ * Computes the position of the maximum values of the distance map.
  * 
+ * @see DistanceMap
  */
 public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabularFeature
 {
@@ -30,7 +32,7 @@ public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabular
         
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap_Chamfer_ChessKnight_Float.class)).getProcessor();
+        ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap.class)).getProcessor();
         
         // Extract position of maxima
         return LabelValues.findPositionOfMaxValues(distanceMap, labelMap, labels);
@@ -60,6 +62,6 @@ public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabular
     @Override
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
-        return Arrays.asList(DistanceMap_Chamfer_ChessKnight_Float.class);
+        return Arrays.asList(DistanceMap.class);
     }
 }
