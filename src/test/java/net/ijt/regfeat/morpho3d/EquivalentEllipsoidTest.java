@@ -7,9 +7,11 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Ellipsoid;
+import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -21,7 +23,7 @@ public class EquivalentEllipsoidTest
      * Test method for {@link net.ijt.regfeat.morpho2d.EquivalentEllipse#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
-    public final void testCompute()
+    public final void testCompute_eightRegions()
     {
         ImagePlus labelMap = TestImages.createLabeMap_EightRegions_9x9x9();
         RegionFeatures data = RegionFeatures.initialize(labelMap);
@@ -36,6 +38,21 @@ public class EquivalentEllipsoidTest
         assertEquals(res[7].center().getX(), 5.5, 0.01);
         assertEquals(res[7].center().getY(), 5.5, 0.01);
         assertEquals(res[7].center().getZ(), 5.5, 0.01);
+    }
+    
+    /**
+     * Test method for {@link net.ijt.regfeat.morpho2d.EquivalentEllipse#compute(net.ijt.regfeat.RegionFeatures)}.
+     */
+    @Test
+    public final void testCompute_arabidopsis()
+    {
+        ImagePlus labelMap = IJ.openImage(getClass().getResource("/arabidopsis-embryo-regions.tif").getFile());
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
+        
+        EquivalentEllipsoid feature = new EquivalentEllipsoid();
+        Ellipsoid[] res = (Ellipsoid[]) feature.compute(data);
+        
+        assertEquals(29, res.length);
     }
     
     /**
