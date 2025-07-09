@@ -11,6 +11,9 @@ import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
+import inra.ijpb.algo.Algo;
+import inra.ijpb.algo.AlgoEvent;
+import inra.ijpb.algo.AlgoListener;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.color.ColorMaps;
 import inra.ijpb.label.LabelImages;
@@ -154,6 +157,25 @@ public class RegionFeatures extends AlgoStub
         
         // compute feature, and index into results
         this.fireStatusChanged(this, "Compute feature: " + featureClass.getSimpleName());
+        
+        // propagate algorithm event of feature to the RegionFeature listeners
+        if (feature instanceof Algo)
+        {
+            ((Algo) feature).addAlgoListener(new AlgoListener() {
+
+                @Override
+                public void algoProgressChanged(AlgoEvent evt)
+                {
+                    fireProgressChanged(evt);
+                }
+
+                @Override
+                public void algoStatusChanged(AlgoEvent evt)
+                {
+                    fireStatusChanged(evt);
+                }
+            });
+        }
         this.results.put(featureClass, feature.compute(this));
     }
     

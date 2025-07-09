@@ -14,11 +14,12 @@ import ij.gui.Overlay;
 import ij.gui.Roi;
 
 /**
- * Abstract class for a feature that can compute something on a label map.
+ * Abstract class for a feature that can compute "something" from a label map.
  * 
- * The result of the computation is provided by the <code>compute</code> method. 
+ * The result of the computation is provided by the <code>compute</code> method.
  * 
- * Results obtained by several features can be aggregated via the <code>overlayResults</code> method.
+ * Results obtained by several features can be aggregated via the
+ * <code>overlayResults</code> method.
  */
 public interface Feature
 {
@@ -67,8 +68,8 @@ public interface Feature
     
     /**
      * Computes the feature for each of the regions specified by labels in
-     * <code>labels</code>, based on the data stored in <code>results</code>.
-     * All required features must have been computed.
+     * <code>labels</code>, based on the data stored in the specified instance
+     * of {@code RegionFeatures}. All required features must have been computed.
      * 
      * The type of the result varies depending on the feature. In the case of a
      * {@code RegionFeature}, the result is an array with as many elements as
@@ -76,6 +77,7 @@ public interface Feature
      * result is an array of double values.
      * 
      * @see RegionFeatures#process(Feature)
+     * @see #requiredFeatures()
      * 
      * @param data
      *            a data structure containing data for computing this feature
