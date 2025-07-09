@@ -30,11 +30,18 @@ public class RegionFeatures extends AlgoStub
     // ==================================================
     // Enumerations
     
+    /**
+     * Specifies how to manage the display of unit names.
+     */
     public enum UnitDisplay
     {
+        /** Do not display unit names */
         NONE,
+        /** Append unit names to column names */
         COLUMN_NAMES,
+        /** Create new columns containing unit names */
         NEW_COLUMNS,
+        /** Create a new table with column names as rows, ands unit names in a column */
         NEW_TABLE
     }
     

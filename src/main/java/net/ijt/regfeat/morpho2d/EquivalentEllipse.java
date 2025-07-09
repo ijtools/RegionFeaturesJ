@@ -16,6 +16,7 @@ import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
+import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Ellipse;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
@@ -30,7 +31,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see inra.ijpb.measure.region2d.EquivalentEllipse
  */
-public class EquivalentEllipse implements RegionTabularFeature
+public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
 {
     /**
      * The names of the columns, without unit name.
@@ -79,7 +80,7 @@ public class EquivalentEllipse implements RegionTabularFeature
         double[] Iyy = new double[nLabels];
         double[] Ixy = new double[nLabels];
 
-//        fireStatusChanged(this, "Compute centroids");
+        fireStatusChanged(this, "Compute centroids");
         // compute centroid of each region
         for (int y = 0; y < sizeY; y++) 
         {
@@ -108,7 +109,7 @@ public class EquivalentEllipse implements RegionTabularFeature
         }
 
         // compute centered inertia matrix of each label
-//        fireStatusChanged(this, "Compute Inertia Matrices");
+        fireStatusChanged(this, "Compute Inertia Matrices");
         for (int y = 0; y < sizeY; y++) 
         {
             for (int x = 0; x < sizeX; x++)
@@ -138,7 +139,7 @@ public class EquivalentEllipse implements RegionTabularFeature
         Ellipse[] ellipses = new Ellipse[nLabels];
         
         // compute ellipse parameters for each region
-//        fireStatusChanged(this, "Compute Ellipses");
+        fireStatusChanged(this, "Compute Ellipses");
         final double sqrt2 = sqrt(2);
         for (int i = 0; i < nLabels; i++) 
         {

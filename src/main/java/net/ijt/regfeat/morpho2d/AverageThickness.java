@@ -39,6 +39,8 @@ public class AverageThickness extends SingleValueFeature
             throw new IllegalArgumentException("Requires input image to have square pixels (width = height)");
         }
         
+        data.ensureRequiredFeaturesAreComputed(this);
+       
         // Retrieve or compute the skeleton of each region
         ImageProcessor skeleton = ((ImagePlus) data.results.get(Skeleton.class)).getProcessor();
         

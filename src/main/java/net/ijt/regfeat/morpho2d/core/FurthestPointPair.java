@@ -15,6 +15,7 @@ import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
+import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.FeretDiameters;
 import inra.ijpb.geometry.PointPair2D;
 import inra.ijpb.geometry.Polygon2D;
@@ -26,7 +27,7 @@ import net.ijt.regfeat.RegionFeatures;
  * Utility feature for MaxFeretDiameter, that computes the pair of points within
  * the region that are the furthest to each other.
  */
-public class FurthestPointPair implements RegionTabularFeature
+public class FurthestPointPair extends AlgoStub implements RegionTabularFeature
 {
     @Override
     public PointPair2D[] compute(RegionFeatures data)
@@ -54,7 +55,7 @@ public class FurthestPointPair implements RegionTabularFeature
         // iterate over label
         for (int i = 0; i < nLabels; i++)
         {
-//            this.fireProgressChanged(this, i, nLabels);
+            this.fireProgressChanged(this, i, nLabels);
             
             // calibrate the convex hull
             Polygon2D hull = hulls[i];
