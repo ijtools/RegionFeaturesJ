@@ -24,6 +24,9 @@ import net.ijt.regfeat.morpho2d.core.Skeleton;
  */
 public class AverageThickness extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public AverageThickness()
     {
         super("Average_Thickness");

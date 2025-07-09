@@ -17,6 +17,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Volume extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Volume()
     {
         super("Volume");

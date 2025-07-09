@@ -19,6 +19,9 @@ import net.ijt.regfeat.morpho2d.core.FurthestPointPair;
  */
 public class MaxFeretDiameter extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MaxFeretDiameter()
     {
         super("Max_Feret_Diameter");

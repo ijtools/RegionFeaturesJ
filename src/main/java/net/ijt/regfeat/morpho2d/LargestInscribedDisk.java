@@ -29,7 +29,17 @@ import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
  */
 public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
     public static final String[] colNames = new String[] {"Inscribed_Disk_Center_X", "Inscribed_Disk_Center_Y", "Inscribed_Disk_Radius"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public LargestInscribedDisk()
+    {
+    }
     
     @Override
     public Circle2D[] compute(RegionFeatures data)

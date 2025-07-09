@@ -21,6 +21,9 @@ import net.ijt.regfeat.morpho2d.core.GeodesicDiameterData.Result;
  */
 public class GeodesicDiameter extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public GeodesicDiameter()
     {
         super("Geodesic_Diameter");

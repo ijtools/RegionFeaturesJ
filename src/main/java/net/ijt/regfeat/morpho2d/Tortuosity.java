@@ -19,6 +19,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Tortuosity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Tortuosity()
     {
         super("Tortuosity");

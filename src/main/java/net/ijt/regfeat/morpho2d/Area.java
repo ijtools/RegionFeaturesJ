@@ -21,6 +21,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Area extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Area()
     {
         super("Area");

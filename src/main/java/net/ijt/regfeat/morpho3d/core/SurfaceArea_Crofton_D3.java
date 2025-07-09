@@ -16,6 +16,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class SurfaceArea_Crofton_D3 extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public SurfaceArea_Crofton_D3()
     {
         super("SurfaceArea_Crofton_D3");

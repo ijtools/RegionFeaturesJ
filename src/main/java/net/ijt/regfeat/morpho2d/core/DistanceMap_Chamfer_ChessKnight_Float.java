@@ -20,6 +20,13 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class DistanceMap_Chamfer_ChessKnight_Float implements Feature
 {
+    /**
+     * Default empty constructor.
+     */
+    public DistanceMap_Chamfer_ChessKnight_Float()
+    {
+    }
+    
     @Override
     public ImagePlus compute(RegionFeatures data)
     {

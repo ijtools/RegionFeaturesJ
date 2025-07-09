@@ -13,9 +13,9 @@ import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
- * Elongation of Equivalent ellipse.
+ * Elongation of Equivalent ellipsoid.
  * 
- * @see EquivalentEllipse.
+ * @see net.ijt.regfeat.morpho3d.EquivalentEllipsoid
  */
 public class EllipsoidElongations implements RegionTabularFeature
 {

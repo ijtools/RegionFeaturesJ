@@ -20,6 +20,9 @@ import net.ijt.regfeat.morpho2d.core.Perimeter_Crofton_D4;
  */
 public class Perimeter extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Perimeter()
     {
         super("Perimeter");

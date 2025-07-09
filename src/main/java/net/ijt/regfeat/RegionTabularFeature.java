@@ -12,12 +12,13 @@ import ij.measure.ResultsTable;
 public interface RegionTabularFeature extends Feature
 {
     /**
-     * Creates a new table containing the numerical data representing this feature.
+     * Creates a new table containing the numerical data representing this
+     * feature.
      * 
-     * @param table
-     *            the results table to populate
      * @param data
      *            the class containing all the computed features.
+     * @return a new Results table containing concatenation of the measures for
+     *         all computed features
      */
     public default ResultsTable createTable(RegionFeatures data)
     {

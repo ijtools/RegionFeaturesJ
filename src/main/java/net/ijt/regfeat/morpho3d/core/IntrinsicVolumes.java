@@ -21,6 +21,18 @@ import net.ijt.regfeat.morpho3d.Volume;
  */
 public class IntrinsicVolumes implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
+    public static final String[] colNames = new String[] {"Volume", "Surface_Area", "Mean_Breadth", "Euler_Number"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public IntrinsicVolumes()
+    {
+    }
+    
     @Override
     public IntrinsicVolumes3D.Result[] compute(RegionFeatures results)
     {
@@ -39,10 +51,11 @@ public class IntrinsicVolumes implements RegionTabularFeature
             IntrinsicVolumes3D.Result[] array = (IntrinsicVolumes3D.Result[]) obj;
             for (int r = 0; r < array.length; r++)
             {
-                table.setValue("Volume", r, array[r].volume);
-                table.setValue("Surface_Area", r, array[r].surfaceArea);
-                table.setValue("Mean_Breadth", r, array[r].meanBreadth);
-                table.setValue("Euler Number", r, array[r].eulerNumber);
+                IntrinsicVolumes3D.Result res = array[r];
+                table.setValue(colNames[0], r, res.volume);
+                table.setValue(colNames[1], r, res.surfaceArea);
+                table.setValue(colNames[2], r, res.meanBreadth);
+                table.setValue(colNames[3], r, res.eulerNumber);
             }
         }
         else

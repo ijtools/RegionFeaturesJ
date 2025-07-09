@@ -17,6 +17,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class MeanIntensity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MeanIntensity()
     {
         super("Mean");

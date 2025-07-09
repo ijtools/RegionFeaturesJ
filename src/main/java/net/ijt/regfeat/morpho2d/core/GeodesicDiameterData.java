@@ -28,6 +28,13 @@ import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
  */
 public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeature
 {
+    /**
+     * Default empty constructor.
+     */
+    public GeodesicDiameterData()
+    {
+    }
+    
     @Override
     public Result[] compute(RegionFeatures data)
     {

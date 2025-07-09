@@ -17,6 +17,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class MaxIntensity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MaxIntensity()
     {
         super("Max");

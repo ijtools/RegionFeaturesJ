@@ -15,6 +15,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Perimeter_Crofton_D2 extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Perimeter_Crofton_D2()
     {
         super("Perimeter_Crofton_D2");

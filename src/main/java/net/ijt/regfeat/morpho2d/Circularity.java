@@ -19,6 +19,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Circularity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Circularity()
     {
         super("Circularity");

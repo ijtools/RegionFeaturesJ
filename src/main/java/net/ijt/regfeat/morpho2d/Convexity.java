@@ -18,6 +18,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Convexity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Convexity()
     {
         super("Convexity");

@@ -24,7 +24,17 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Bounds extends AlgoStub implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
     public static final String[] colNames = new String[] {"Bounds2D_XMin", "Bounds2D_XMax", "Bounds2D_YMin", "Bounds2D_YMax"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public Bounds()
+    {
+    }
     
     @Override
     public Box2D[] compute(RegionFeatures data)

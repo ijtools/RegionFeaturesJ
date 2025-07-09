@@ -20,7 +20,13 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class ConvexHull extends AlgoStub implements Feature
 {
-
+    /**
+     * Default empty constructor.
+     */
+    public ConvexHull()
+    {
+    }
+    
     @Override
     public Polygon2D[] compute(RegionFeatures data)
     {

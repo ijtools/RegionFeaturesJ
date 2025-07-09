@@ -16,6 +16,9 @@ import net.ijt.regfeat.morpho2d.EulerNumber;
  */
 public class EulerNumber_C8 extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public EulerNumber_C8()
     {
         super("Euler_Number_C8");

@@ -76,7 +76,7 @@ public interface Feature
      * the number of regions. In the case of a {@code SingleValueFeature}, the
      * result is an array of double values.
      * 
-     * @see RegionFeatures#process(Feature)
+     * @see net.ijt.regfeat.RegionFeatures#process(Class)
      * @see #requiredFeatures()
      * 
      * @param data

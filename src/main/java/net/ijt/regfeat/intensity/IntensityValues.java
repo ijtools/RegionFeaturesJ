@@ -22,6 +22,13 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public final class IntensityValues implements RegionTabularFeature
 {
+    /**
+     * Default empty constructor.
+     */
+    public IntensityValues()
+    {
+    }
+    
     @Override
     public double[][] compute(RegionFeatures data)
     {

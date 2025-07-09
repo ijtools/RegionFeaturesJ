@@ -14,7 +14,7 @@ import net.ijt.regfeat.SingleValueFeature;
 /**
  * Elongation of oriented bounding box.
  * 
- * @see OrientedBoundingBox.
+ * @see OrientedBoundingBox
  */
 public class OrientedBoxElongation extends SingleValueFeature
 {

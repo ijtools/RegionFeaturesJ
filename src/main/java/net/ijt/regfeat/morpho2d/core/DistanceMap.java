@@ -20,7 +20,14 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class DistanceMap implements Feature
 {
-    @Override
+    /**
+     * Default empty constructor.
+     */
+    public DistanceMap()
+    {
+    }
+    
+   @Override
     public ImagePlus compute(RegionFeatures data)
     {
         return (ImagePlus) data.results.get(DistanceMap_Chamfer_ChessKnight_Float.class);

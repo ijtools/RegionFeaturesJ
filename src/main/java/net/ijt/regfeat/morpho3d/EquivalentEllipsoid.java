@@ -24,10 +24,20 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class EquivalentEllipsoid implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
     public static final String[] colNames = new String[] {
             "Ellipsoid_Center_X", "Ellipsoid_Center_Y", "Ellipsoid_Center_Z", 
             "Ellipsoid_Radius_1", "Ellipsoid_Radius_2", "Ellipsoid_Radius_3",
             "Ellipsoid_Phi", "Ellipsoid_Theta", "Ellipsoid_Psi"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public EquivalentEllipsoid()
+    {
+    }
     
     @Override
     public Ellipsoid[] compute(RegionFeatures data)

@@ -25,6 +25,18 @@ import net.ijt.regfeat.morpho2d.Perimeter;
  */
 public class IntrinsicVolumes implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
+    public static final String[] colNames = new String[] {"Area", "Perimeter", "Euler_Number"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public IntrinsicVolumes()
+    {
+    }
+    
     @Override
     public IntrinsicVolumes2D.Result[] compute(RegionFeatures results)
     {
@@ -43,9 +55,9 @@ public class IntrinsicVolumes implements RegionTabularFeature
             IntrinsicVolumes2D.Result[] array = (IntrinsicVolumes2D.Result[]) obj;
             for (int r = 0; r < array.length; r++)
             {
-                table.setValue("Area", r, array[r].area);
-                table.setValue("Perimeter", r, array[r].perimeter);
-                table.setValue("Euler Number", r, array[r].eulerNumber);
+                table.setValue(colNames[0], r, array[r].area);
+                table.setValue(colNames[1], r, array[r].perimeter);
+                table.setValue(colNames[2], r, array[r].eulerNumber);
             }
         }
         else

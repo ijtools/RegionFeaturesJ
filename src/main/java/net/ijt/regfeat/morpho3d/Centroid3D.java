@@ -18,7 +18,17 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class Centroid3D implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
     public static final String[] colNames = new String[] {"Centroid_X", "Centroid_Y", "Centroid_Z"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public Centroid3D()
+    {
+    }
     
     @Override
     public Point3D[] compute(RegionFeatures data)

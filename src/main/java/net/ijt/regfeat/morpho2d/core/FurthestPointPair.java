@@ -29,6 +29,13 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class FurthestPointPair extends AlgoStub implements RegionTabularFeature
 {
+    /**
+     * Default empty constructor.
+     */
+    public FurthestPointPair()
+    {
+    }
+    
     @Override
     public PointPair2D[] compute(RegionFeatures data)
     {

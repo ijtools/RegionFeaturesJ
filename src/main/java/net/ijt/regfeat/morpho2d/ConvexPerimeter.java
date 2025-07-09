@@ -23,6 +23,9 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  */
 public class ConvexPerimeter extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public ConvexPerimeter()
     {
         super("Convex_Perimeter");

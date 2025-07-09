@@ -15,6 +15,9 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class LargestInscribedBall implements RegionTabularFeature
 {
+    /**
+     * The names of the columns of the resulting table.
+     */
     public static final String[] colNames = new String[] {"Inscribed_Ball_Center_X", "Inscribed_Ball_Center_Y", "Inscribed_Ball_Center_Z", "Inscribed_Ball_Radius"};
     
     @Override

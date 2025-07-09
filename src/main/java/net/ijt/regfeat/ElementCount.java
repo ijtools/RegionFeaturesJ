@@ -12,9 +12,19 @@ import inra.ijpb.label.LabelImages;
 
 /**
  * Counts the number of elements (pixels or voxels) that compose each region.
+ * 
+ * Note: this class does not implement SingleValueFeature, as the result is
+ * given as an array of int, rather than an array of double.
  */
 public class ElementCount implements RegionTabularFeature
 {
+    /**
+     * Default empty constructor.
+     */
+    public ElementCount()
+    {
+    }
+    
     @Override
     public int[] compute(RegionFeatures data)
     {
@@ -70,7 +80,7 @@ public class ElementCount implements RegionTabularFeature
         }
         else
         {
-            throw new RuntimeException("Requires object argument to be an array of ints");
+            throw new RuntimeException("Requires object argument to be an array of integer values");
         }
     }
 

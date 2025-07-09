@@ -19,6 +19,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class IntensityKurtosis extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public IntensityKurtosis()
     {
         super("Kurtosis");

@@ -16,6 +16,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class MedianIntensity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MedianIntensity()
     {
         super("Median");

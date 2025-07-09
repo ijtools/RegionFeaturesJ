@@ -12,11 +12,16 @@ import net.ijt.regfeat.SingleValueFeature;
 import net.ijt.regfeat.morpho3d.core.EulerNumber_C6;
 
 /**
- * Computes the Euler number of 2D regions. Uses the default C4 connectivity. In
- * practice, this feature is an alias for the EulerNumber_C4 feature.
+ * Computes the Euler number of 3D regions. Uses the default C6 connectivity. In
+ * practice, this feature is an alias for the EulerNumber_C6 feature.
+ * 
+ * @see  net.ijt.regfeat.morpho3d.core.EulerNumber_C6
  */
 public class EulerNumber extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public EulerNumber()
     {
         super("Euler_Number");

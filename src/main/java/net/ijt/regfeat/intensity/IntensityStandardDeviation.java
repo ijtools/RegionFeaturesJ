@@ -22,6 +22,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class IntensityStandardDeviation extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public IntensityStandardDeviation()
     {
         super("Standard_Deviation");

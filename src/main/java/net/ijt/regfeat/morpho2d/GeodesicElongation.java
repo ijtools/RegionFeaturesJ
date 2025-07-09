@@ -17,6 +17,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class GeodesicElongation extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public GeodesicElongation()
     {
         super("Geodesic_Elongation");

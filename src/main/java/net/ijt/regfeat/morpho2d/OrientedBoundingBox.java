@@ -23,7 +23,7 @@ import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
- * 
+ * The object-oriented bounding box of each region.
  */
 public class OrientedBoundingBox implements RegionTabularFeature
 {

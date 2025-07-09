@@ -20,6 +20,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class MeanBreadth_Crofton_D13 extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MeanBreadth_Crofton_D13()
     {
         super("MeanBreadth_Crofton_D13");

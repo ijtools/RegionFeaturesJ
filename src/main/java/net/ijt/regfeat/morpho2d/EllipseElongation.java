@@ -14,10 +14,13 @@ import net.ijt.regfeat.SingleValueFeature;
 /**
  * Elongation of Equivalent ellipse.
  * 
- * @see EquivalentEllipse.
+ * @see EquivalentEllipse
  */
 public class EllipseElongation extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public EllipseElongation()
     {
         super("Ellipse_Elongation");

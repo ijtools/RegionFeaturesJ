@@ -19,6 +19,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class IntensitySkewness extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public IntensitySkewness()
     {
         super("Skewness");

@@ -17,6 +17,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class MinIntensity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MinIntensity()
     {
         super("Min");

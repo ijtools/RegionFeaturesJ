@@ -20,6 +20,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class IntensityVariance extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public IntensityVariance()
     {
         super("Variance");

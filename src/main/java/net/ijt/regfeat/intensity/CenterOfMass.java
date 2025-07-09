@@ -14,10 +14,23 @@ import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
- * 
+ * Computes the center of mass of each region, as the centroid weighted by the
+ * local gray level.
  */
 public class CenterOfMass implements RegionTabularFeature
 {
+    /**
+     * Computes the center of mass of each region, as the centroid weighted by
+     * the local gray level. Requires the {@code RegionFeatures} argument to
+     * contain an image data with key "{@code intensity}".
+     * 
+     * @param data
+     *            the {@code RegionFeatures} instance containing data computed
+     *            on images
+     * @return a 2D array of double, containing for each region the 2 or 3
+     *         coordinates of the centroid weighted by gray values obtained from
+     *         the "intensity" image
+     */
     @Override
     public double[][] compute(RegionFeatures data)
     {

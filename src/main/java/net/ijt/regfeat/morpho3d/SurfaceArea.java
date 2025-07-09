@@ -21,6 +21,9 @@ import net.ijt.regfeat.morpho3d.core.SurfaceArea_Crofton_D13;
  */
 public class SurfaceArea extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public SurfaceArea()
     {
         super("Surface_Area");

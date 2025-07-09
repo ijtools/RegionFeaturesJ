@@ -21,6 +21,9 @@ import net.ijt.regfeat.morpho3d.core.MeanBreadth_Crofton_D13;
  */
 public class MeanBreadth extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public MeanBreadth()
     {
         super("Mean_Breadth");

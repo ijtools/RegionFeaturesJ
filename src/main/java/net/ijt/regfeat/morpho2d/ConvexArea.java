@@ -20,6 +20,9 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  */
 public class ConvexArea extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public ConvexArea()
     {
         super("Convex_Area");

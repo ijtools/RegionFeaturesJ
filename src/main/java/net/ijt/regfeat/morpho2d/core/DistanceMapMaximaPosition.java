@@ -23,6 +23,13 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabularFeature
 {
+    /**
+     * Default empty constructor.
+     */
+    public DistanceMapMaximaPosition()
+    {
+    }
+    
     @Override
     public Point[] compute(RegionFeatures data)
     {

@@ -19,6 +19,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class Sphericity extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public Sphericity()
     {
         super("Sphericity");
