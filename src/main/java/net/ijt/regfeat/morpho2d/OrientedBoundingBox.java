@@ -41,8 +41,13 @@ public class OrientedBoundingBox implements RegionTabularFeature
 
         // Compute the oriented box of each set of corner points
         return Arrays.stream(hulls)
-                .map(hull -> OrientedBoundingBox2D.orientedBoundingBox(hull.vertices(), calib))
+                .map(hull -> compute(hull, calib))
                 .toArray(OrientedBox2D[]::new);
+    }
+    
+    private static final OrientedBox2D compute(Polygon2D hull, Calibration calib)
+    {
+        return hull != null ? OrientedBoundingBox2D.orientedBoundingBox(hull.vertices(), calib) : null;
     }
 
     @Override
@@ -55,12 +60,23 @@ public class OrientedBoundingBox implements RegionTabularFeature
             for (int r = 0; r < array.length; r++)
             {
                 OrientedBox2D obox = array[r];
-                Point2D center = obox.center();
-                table.setValue(colNames[0], r, center.getX());
-                table.setValue(colNames[1], r, center.getY());
-                table.setValue(colNames[2], r, obox.length());
-                table.setValue(colNames[3], r, obox.width());
-                table.setValue(colNames[4], r, obox.orientation());
+                if (obox != null)
+                {
+                    Point2D center = obox.center();
+                    table.setValue(colNames[0], r, center.getX());
+                    table.setValue(colNames[1], r, center.getY());
+                    table.setValue(colNames[2], r, obox.length());
+                    table.setValue(colNames[3], r, obox.width());
+                    table.setValue(colNames[4], r, obox.orientation());
+                }
+                else
+                {
+                    // populate columns of non-existing regions with NaN
+                    for (String colName : colNames)
+                    {
+                        table.setValue(colName, r, Double.NaN);
+                    }
+                }
             }
         }
         else

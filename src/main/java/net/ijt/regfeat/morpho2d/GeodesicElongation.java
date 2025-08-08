@@ -38,9 +38,16 @@ public class GeodesicElongation extends SingleValueFeature
         double[] res = new double[labels.length];
         for (int i = 0; i < labels.length; i++)
         {
-            double gd = geodDiams[i];
-            double cd = circles[i].getRadius() * 2;
-            res[i] = gd / cd;
+            if (circles[i] != null)
+            {
+                double gd = geodDiams[i];
+                double cd = circles[i].getRadius() * 2;
+                res[i] = gd / cd;
+            }
+            else
+            {
+                res[i] = Double.NaN;
+            }
         }
         return res;
     }

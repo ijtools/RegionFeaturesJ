@@ -26,7 +26,7 @@ public class CentroidTest
      * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
-    public final void testCompute()
+    public final void test_compute()
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
@@ -47,6 +47,27 @@ public class CentroidTest
         assertEquals(res2.getY(), 5.0, 0.01);
 
         Point2D res3 = res[3];
+        assertEquals(res3.getX(), 5.0, 0.01);
+        assertEquals(res3.getY(), 5.0, 0.01);
+    }
+
+    /**
+     * Test method for {@link net.ijt.regfeat.morpho2d.Centroid#compute(net.ijt.regfeat.RegionFeatures)}.
+     */
+    @Test
+    public final void test_compute_missingLabel()
+    {
+        ImagePlus labelMap = createImagePlus();
+        RegionFeatures data = new RegionFeatures(labelMap, new int[] {3, 4, 9, 12});
+        
+        Centroid feature = new Centroid();
+        Point2D[] res = (Point2D[]) feature.compute(data);
+
+        Point2D res0 = res[0];
+        assertEquals(res0.getX(), 1.5, 0.01);
+        assertEquals(res0.getY(), 1.5, 0.01);
+
+        Point2D res3 = res[2];
         assertEquals(res3.getX(), 5.0, 0.01);
         assertEquals(res3.getY(), 5.0, 0.01);
     }

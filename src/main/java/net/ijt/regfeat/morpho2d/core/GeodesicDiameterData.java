@@ -70,8 +70,7 @@ public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeatu
             Point center = maximaPositions[i];
             if (center.x == -1)
             {
-                IJ.showMessage("Particle Not Found", 
-                        "Could not find maximum for region with label " + labels[i]);
+                IJ.log("GeodesicDiameter: Could not find maximum for region with label " + labels[i]);
                 continue;
             }
             marker.set(center.x, center.y, 255);
@@ -114,15 +113,15 @@ public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeatu
         {
             Result res = new Result();
                     
-            // Get the maximum distance within each label, 
-            // and add 1.0 to take into account pixel (side) thickness
-            res.diameter = secondGeodesicExtremities[i].getValue() + 1.0;
-
             // also keep references to characteristic points
             res.initialPoint = new Point(maximaPositions[i].x, maximaPositions[i].y); 
             res.firstExtremity = firstGeodesicExtremities[i];
             res.secondExtremity = secondGeodesicExtremities[i].getPosition();
             
+            // Get the maximum distance within each label, 
+            // and add 1.0 to take into account pixel (side) thickness
+            res.diameter = maximaPositions[i].x > -1 ? secondGeodesicExtremities[i].getValue() + 1.0 : Double.NaN;
+
             // store the result
             result[i] = res;
         }

@@ -108,7 +108,7 @@ public class AverageThickness extends SingleValueFeature
         double[] res = new double[nLabels];
         for (int i = 0; i < nLabels; i++)
         {
-            res[i] = (sums[i] / counts[i]) * 2 - 1;
+            res[i] = counts[i] > 0 ? (sums[i] / counts[i]) * 2 - 1 : Double.NaN;
         }
         return res;
     }

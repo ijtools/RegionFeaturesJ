@@ -35,7 +35,7 @@ public class MaxFeretDiameter extends SingleValueFeature
         PointPair2D[] pairs = (PointPair2D[]) data.results.get(FurthestPointPair.class);
         
         return Arrays.stream(pairs)
-                .mapToDouble(pair -> pair.diameter())
+                .mapToDouble(pair -> pair != null ? pair.diameter() : Double.NaN)
                 .toArray();
     }
 

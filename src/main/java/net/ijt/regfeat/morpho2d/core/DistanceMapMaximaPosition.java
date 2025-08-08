@@ -6,12 +6,13 @@ package net.ijt.regfeat.morpho2d.core;
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
-import inra.ijpb.label.LabelValues;
+import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
@@ -41,9 +42,55 @@ public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabular
         data.ensureRequiredFeaturesAreComputed(this);
         ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap.class)).getProcessor();
         
-        // Extract position of maxima
-        return LabelValues.findPositionOfMaxValues(distanceMap, labelMap, labels);
+//        // Extract position of maxima
+//        return LabelValues.findPositionOfMaxValues(distanceMap, labelMap, labels);
+        
+        // Note: the following can be replaced by MorphoLibJ code from version after 1.6.4
+        // Create associative map between each label and its index
+        Map<Integer,Integer> labelIndices = LabelImages.mapLabelIndices(labels);
+        
+        // Init Position and value of maximum for each label
+        int nLabels = labels.length;
+        Point[] posMax  = new Point[nLabels];
+        float[] maxValues = new float[nLabels];
+        for (int i = 0; i < nLabels; i++) 
+        {
+            maxValues[i] = Float.NEGATIVE_INFINITY;
+            posMax[i] = new Point(-1, -1);
+        }
+        
+        // iterate on image pixels
+        int width   = labelMap.getWidth();
+        int height  = labelMap.getHeight();
+        for (int y = 0; y < height; y++) 
+        {
+            for (int x = 0; x < width; x++) 
+            {
+                // retrieve current label
+                int label = (int) labelMap.getf(x, y);
+                
+                // do not process pixels that do not belong to any particle
+                if (label == 0)
+                    continue;
+                // do not process labels not in the list
+                if (!labelIndices.containsKey(label))
+                    continue;
+    
+                int index = labelIndices.get(label);
+                
+                // update values and positions
+                float value = distanceMap.getf(x, y);
+                if (value > maxValues[index]) 
+                {
+                    posMax[index].setLocation(x, y);
+                    maxValues[index] = value;
+                }
+            }
+        }
+                
+        return posMax;
     }
+    
     
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
@@ -55,9 +102,12 @@ public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabular
             for (int r = 0; r < array.length; r++)
             {
                 Point pos = array[r];
-                // coordinates of circle center
-                table.setValue("DistanceMap_Maxima_X", r, pos.x);
-                table.setValue("DistanceMap_Maxima_Y", r, pos.y);
+                if (pos != null)
+                {
+                    // coordinates of inscribed disk center
+                    table.setValue("DistanceMap_Maxima_X", r, pos.x);
+                    table.setValue("DistanceMap_Maxima_Y", r, pos.y);
+                }
             }
         }
         else

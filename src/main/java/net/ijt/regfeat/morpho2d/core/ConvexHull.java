@@ -5,6 +5,7 @@ package net.ijt.regfeat.morpho2d.core;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import ij.process.ImageProcessor;
@@ -30,19 +31,17 @@ public class ConvexHull extends AlgoStub implements Feature
     @Override
     public Polygon2D[] compute(RegionFeatures data)
     {
+        // retrieve data
         ImageProcessor image = data.labelMap.getProcessor();
         int[] labels = data.labels;
         
         // for each region, extract the points at the middle of the boundary edges
         ArrayList<Point2D>[] pointArrays = boundaryPixelsMiddleEdges(image, labels);
-
+        
         // compute convex hull of boundary points around each region
-        Polygon2D[] hulls = new Polygon2D[labels.length];
-        for (int i = 0; i < labels.length; i++)
-        {
-            // compute convex hull of boundary points around the binary particle
-            hulls[i] = Polygons2D.convexHull(pointArrays[i]);
-        }
+        Polygon2D[] hulls = Arrays.stream(pointArrays)
+            .map(array -> !array.isEmpty() ? Polygons2D.convexHull(array) : null)
+            .toArray(Polygon2D[]::new);
         
         return hulls;
     }

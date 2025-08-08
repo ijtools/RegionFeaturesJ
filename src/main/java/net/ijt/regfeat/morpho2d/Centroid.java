@@ -66,9 +66,12 @@ public class Centroid implements RegionTabularFeature
         {
             for (int x = 0; x < sizeX; x++)
             {
+                // retrieve current label
                 int label = (int) labelMap.getf(x, y);
-                if (label == 0)
-                    continue;
+                // do not process background pixels
+                if (label == 0) continue;
+                // do not process labels not in the list
+                if (!labelIndices.containsKey(label)) continue;
 
                 int index = labelIndices.get(label);
                 cx[index] += x * sx;
@@ -115,8 +118,11 @@ public class Centroid implements RegionTabularFeature
             for (int r = 0; r < array.length; r++)
             {
                 Point2D point = array[r];
-                table.setValue(colNames[0], r, point.getX());
-                table.setValue(colNames[1], r, point.getY());
+                if (point != null)
+                {
+                    table.setValue(colNames[0], r, point.getX());
+                    table.setValue(colNames[1], r, point.getY());
+                }
             }
         }
         else

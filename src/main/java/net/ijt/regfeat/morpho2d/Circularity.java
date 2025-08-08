@@ -42,8 +42,7 @@ public class Circularity extends SingleValueFeature
         {
             double a = areas[i];
             double p = perims[i];
-            double circ = 4 * Math.PI * a / (p * p);
-            res[i] = circ;
+            res[i] = a > 0 ? 4 * Math.PI * a / (p * p) : Double.NaN;
         }
         return res;
     }

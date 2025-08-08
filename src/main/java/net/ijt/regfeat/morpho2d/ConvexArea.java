@@ -50,28 +50,31 @@ public class ConvexArea extends SingleValueFeature
         {
             Polygon2D convexHull = hulls[i];
             
-            // determine bounds
-            Box2D box = convexHull.boundingBox();
-            int xmin = (int) box.getXMin();
-            int xmax = (int) box.getXMax();
-            int ymin = (int) box.getYMin();
-            int ymax = (int) box.getYMax();
-            
-            // counts the number of pixels with integer coordinates within the convex hull
-            double convexArea = 0;
-            for (int y = ymin; y < ymax; y++)
+            if (convexHull != null)
             {
-                for (int x = xmin; x < xmax; x++)
+                // determine bounds
+                Box2D box = convexHull.boundingBox();
+                int xmin = (int) box.getXMin();
+                int xmax = (int) box.getXMax();
+                int ymin = (int) box.getYMin();
+                int ymax = (int) box.getYMax();
+
+                // counts the number of pixels with integer coordinates within the convex hull
+                double convexArea = 0;
+                for (int y = ymin; y < ymax; y++)
                 {
-                    if (convexHull.contains(new Point2D.Double(x + 0.5, y + 0.5)))
+                    for (int x = xmin; x < xmax; x++)
                     {
-                        convexArea++;
+                        if (convexHull.contains(new Point2D.Double(x + 0.5, y + 0.5)))
+                        {
+                            convexArea++;
+                        }
                     }
                 }
+
+                // compute calibrated convex area
+                convexAreas[i] = convexArea * pixelArea;
             }
-            
-            // compute calibrated convex area
-            convexAreas[i] = convexArea * pixelArea;
         }
         
         return convexAreas;

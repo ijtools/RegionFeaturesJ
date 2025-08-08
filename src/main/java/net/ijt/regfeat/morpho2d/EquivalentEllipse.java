@@ -143,20 +143,23 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
         final double sqrt2 = sqrt(2);
         for (int i = 0; i < nLabels; i++) 
         {
-            double xx = Ixx[i];
-            double xy = Ixy[i];
-            double yy = Iyy[i];
+            if (counts[i] > 0)
+            {
+                double xx = Ixx[i];
+                double xy = Ixy[i];
+                double yy = Iyy[i];
 
-            // compute ellipse semi-axes lengths
-            double common = sqrt((xx - yy) * (xx - yy) + 4 * xy * xy);
-            double ra = sqrt2 * sqrt(xx + yy + common);
-            double rb = sqrt2 * sqrt(xx + yy - common);
+                // compute ellipse semi-axes lengths
+                double common = sqrt((xx - yy) * (xx - yy) + 4 * xy * xy);
+                double ra = sqrt2 * sqrt(xx + yy + common);
+                double rb = sqrt2 * sqrt(xx + yy - common);
 
-            // compute ellipse angle and convert into degrees
-            double theta = Math.toDegrees(Math.atan2(2 * xy, xx - yy) / 2);
+                // compute ellipse angle and convert into degrees
+                double theta = Math.toDegrees(Math.atan2(2 * xy, xx - yy) / 2);
 
-            Point2D center = new Point2D.Double(cx[i] + sx / 2 + ox, cy[i] + sy / 2 + oy);
-            ellipses[i] = new Ellipse(center, ra, rb, theta);
+                Point2D center = new Point2D.Double(cx[i] + sx / 2 + ox, cy[i] + sy / 2 + oy);
+                ellipses[i] = new Ellipse(center, ra, rb, theta);
+            }
         }
 
         return ellipses;
@@ -173,18 +176,28 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
             {
                 // current ellipse
                 Ellipse ellipse = array[r];
-                
-                // coordinates of centroid
-                Point2D center = ellipse.center();
-                table.setValue(colNames[0], r, center.getX());
-                table.setValue(colNames[1], r, center.getY());
-                
-                // ellipse size
-                table.setValue(colNames[2], r, ellipse.radius1());
-                table.setValue(colNames[3], r, ellipse.radius2());
-        
-                // ellipse orientation (degrees)
-                table.setValue(colNames[4], r, ellipse.orientation());
+                if (ellipse != null)
+                {
+                    // coordinates of centroid
+                    Point2D center = ellipse.center();
+                    table.setValue(colNames[0], r, center.getX());
+                    table.setValue(colNames[1], r, center.getY());
+
+                    // ellipse size
+                    table.setValue(colNames[2], r, ellipse.radius1());
+                    table.setValue(colNames[3], r, ellipse.radius2());
+
+                    // ellipse orientation (degrees)
+                    table.setValue(colNames[4], r, ellipse.orientation());
+                }
+                else
+                {
+                    // populate columns of non-existing regions with NaN
+                    for (String colName : colNames)
+                    {
+                        table.setValue(colName, r, Double.NaN);
+                    }
+                }
             }
         }
         else

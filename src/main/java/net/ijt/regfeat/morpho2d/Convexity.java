@@ -38,7 +38,7 @@ public class Convexity extends SingleValueFeature
         double[] convexities = new double[areas.length];
         for (int i = 0; i < areas.length; i++)
         {
-            convexities[i] = areas[i] / convexAreas[i];
+            convexities[i] = areas[i] > 0 ? areas[i] / convexAreas[i] : Double.NaN;
         }
         
         return convexities;

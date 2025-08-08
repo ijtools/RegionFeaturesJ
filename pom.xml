@@ -29,7 +29,7 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!-- Global settings for the project --> 
     <properties>
         <!-- Use a long-term support (LTS) version for source --> 
-        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.source>21</maven.compiler.source>
         <!-- Use 1.8 for target, to avoid compatibility issues--> 
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
@@ -41,7 +41,9 @@ http://maven.apache.org/xsd/maven-4.0.0.xsd">
         <dependency>
             <groupId>net.imagej</groupId>
             <artifactId>ij</artifactId>
-            <version>${imagej1.version}</version>
+            <!--  manually setup the version -->
+             <version>1.54m</version>
+            <!--  <version>${imagej1.version}</version> --> 
         </dependency>
         
         <!-- Add a dependency to JUnit for unit tests --> 

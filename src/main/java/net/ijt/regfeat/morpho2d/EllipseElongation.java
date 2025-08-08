@@ -35,10 +35,15 @@ public class EllipseElongation extends SingleValueFeature
         
         // iterate over labels to compute new feature
         return Arrays.stream(ellipses)
-            .mapToDouble(elli -> elli.radius1() / elli.radius2())
+            .mapToDouble(EllipseElongation::elongation)
             .toArray();
     }
-
+    
+    private static final double elongation(Ellipse elli)
+    {
+        return elli != null ? elli.radius1() / elli.radius2() : Double.NaN;
+    }
+    
     @Override
     public Collection<Class<? extends Feature>> requiredFeatures()
     {

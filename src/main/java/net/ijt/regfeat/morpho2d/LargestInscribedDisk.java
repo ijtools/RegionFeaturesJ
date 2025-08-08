@@ -57,11 +57,14 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
         Circle2D[] circles = new Circle2D[nLabels];
         for (int i = 0; i < nLabels; i++) 
         {
-            Point center = maximaPositions[i];
-            double xc = center.x * calib.pixelWidth + calib.xOrigin;
-            double yc = center.y * calib.pixelHeight + calib.yOrigin;
-            double radius = distanceMap.getf(center.x, center.y) * calib.pixelWidth;
-            circles[i] = new Circle2D(new Point2D.Double(xc, yc), radius);
+            if (maximaPositions[i] != null && maximaPositions[i].x > -1)
+            {
+                Point center = maximaPositions[i];
+                double xc = center.x * calib.pixelWidth + calib.xOrigin;
+                double yc = center.y * calib.pixelHeight + calib.yOrigin;
+                double radius = distanceMap.getf(center.x, center.y) * calib.pixelWidth;
+                circles[i] = new Circle2D(new Point2D.Double(xc, yc), radius);
+            }
         }
 
         return circles;
@@ -77,12 +80,23 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
             for (int r = 0; r < array.length; r++)
             {
                 Circle2D circle = array[r];
-                // coordinates of circle center
-                table.setValue(colNames[0], r, circle.getCenter().getX());
-                table.setValue(colNames[1], r, circle.getCenter().getY());
-                
-                // circle radius
-                table.setValue(colNames[2], r, circle.getRadius());
+                if (circle != null)
+                {
+                    // coordinates of circle center
+                    table.setValue(colNames[0], r, circle.getCenter().getX());
+                    table.setValue(colNames[1], r, circle.getCenter().getY());
+
+                    // circle radius
+                    table.setValue(colNames[2], r, circle.getRadius());
+                }
+                else
+                {
+                    // populate columns of non-existing regions with NaN
+                    for (String colName : colNames)
+                    {
+                        table.setValue(colName, r, Double.NaN);
+                    }
+                }
             }
         }
         else

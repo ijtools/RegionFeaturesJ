@@ -42,14 +42,9 @@ public class ConvexPerimeter extends SingleValueFeature
         Calibration calib = data.labelMap.getCalibration();
         
         // iterate over labels
-        double[] convexPerimeters = new double[hulls.length];
-        for (int i = 0; i < hulls.length; i++)
-        {
-            // compute calibrated convex perimeter
-            convexPerimeters[i] = perimeter(hulls[i]) * calib.pixelWidth;
-        }
-        
-        return convexPerimeters;
+        return Arrays.stream(hulls)
+                .mapToDouble(hull -> hull != null ? perimeter(hull) * calib.pixelWidth : Double.NaN)
+                .toArray();
     }
     
     private double perimeter(Polygon2D poly)

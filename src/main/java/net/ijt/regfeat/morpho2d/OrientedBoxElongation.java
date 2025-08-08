@@ -32,8 +32,13 @@ public class OrientedBoxElongation extends SingleValueFeature
         
         // iterate over labels to compute new feature
         return Arrays.stream(OrientedBoxs)
-            .mapToDouble(box -> box.length() / box.width())
+            .mapToDouble(OrientedBoxElongation::boxElongation)
             .toArray();
+    }
+    
+    private static final double boxElongation(OrientedBox2D box)
+    {
+        return box != null ? box.length() / box.width() : Double.NaN;
     }
     
     @Override

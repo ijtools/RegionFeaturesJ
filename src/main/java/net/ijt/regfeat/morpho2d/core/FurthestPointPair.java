@@ -64,17 +64,20 @@ public class FurthestPointPair extends AlgoStub implements RegionTabularFeature
         {
             this.fireProgressChanged(this, i, nLabels);
             
-            // calibrate the convex hull
             Polygon2D hull = hulls[i];
-            ArrayList<Point2D> corners = new ArrayList<Point2D>(hull.vertexNumber());
-            for (Point2D vertex : hull.vertices())
+            if (hull != null)
             {
-                vertex = new Point2D.Double(vertex.getX() * sx + ox, vertex.getY() * sy + oy);
-                corners.add(vertex);
-            }
+                // calibrate the convex hull
+                ArrayList<Point2D> corners = new ArrayList<Point2D>(hull.vertexNumber());
+                for (Point2D vertex : hull.vertices())
+                {
+                    vertex = new Point2D.Double(vertex.getX() * sx + ox, vertex.getY() * sy + oy);
+                    corners.add(vertex);
+                }
 
-            // compute Feret diameter of calibrated hull
-            labelMaxDiams[i] = FeretDiameters.maxFeretDiameter(corners);
+                // compute Feret diameter of calibrated hull
+                labelMaxDiams[i] = FeretDiameters.maxFeretDiameter(corners);
+            }
         }
         
         return labelMaxDiams;

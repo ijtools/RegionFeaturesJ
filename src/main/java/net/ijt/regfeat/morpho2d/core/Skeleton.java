@@ -29,11 +29,6 @@ public class Skeleton implements Feature
     @Override
     public ImagePlus compute(RegionFeatures data)
     {
-        if (data.labelMap.getStackSize() != 1)
-        {
-            throw new RuntimeException("Requires a 2D image as input");
-        }
-        
         // Compute skeleton of each region.
         ImageProcessor skeleton = BinaryImages.skeleton(data.labelMap.getProcessor());
 
