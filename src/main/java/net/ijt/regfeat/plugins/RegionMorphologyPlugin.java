@@ -218,31 +218,35 @@ public class RegionMorphologyPlugin implements PlugInFilter
     {
         // retrieve dimensions
         int nChannels = imagePlus.getNChannels();
+        int nSlices = imagePlus.getNSlices();
         int nFrames = imagePlus.getNFrames();
         
         // process simple case
-        if (nChannels * nFrames == 1)
+        if (nChannels * nSlices* nFrames == 1)
         {
             return analyzeSingleSlice(imagePlus, options);
         }
         
         ImageStack stack = imagePlus.getStack();
-        ArrayList<ResultsTable> allTables = new ArrayList<ResultsTable>(nChannels * nFrames);
+        ArrayList<ResultsTable> allTables = new ArrayList<ResultsTable>(nChannels * nSlices * nFrames);
         ResultsTable unitsTable = null;
 
         // iterate over slices 
         for (int iFrame = 0; iFrame < nFrames; iFrame++)
         {
-            for (int iChannel = 0; iChannel < nChannels; iChannel++)
+            for (int iSlice = 0; iSlice < nSlices; iSlice++)
             {
-                int index = imagePlus.getStackIndex(iChannel, 0, iFrame);
-                ImageProcessor array = stack.getProcessor(index);
-                ImagePlus sliceImage = new ImagePlus(imagePlus.getTitle(), array);
-                sliceImage.copyScale(imagePlus);
+                for (int iChannel = 0; iChannel < nChannels; iChannel++)
+                {
+                    int index = imagePlus.getStackIndex(iChannel, iSlice, iFrame);
+                    ImageProcessor array = stack.getProcessor(index);
+                    ImagePlus sliceImage = new ImagePlus(imagePlus.getTitle(), array);
+                    sliceImage.copyScale(imagePlus);
 
-                ResultsTable[] tables = analyzeSingleSlice(sliceImage, options);
-                allTables.add(tables[0]);
-                unitsTable = tables[1];
+                    ResultsTable[] tables = analyzeSingleSlice(sliceImage, options);
+                    allTables.add(tables[0]);
+                    unitsTable = tables[1];
+                }
             }
         }
 
@@ -250,8 +254,8 @@ public class RegionMorphologyPlugin implements PlugInFilter
         Iterator<ResultsTable> iter = allTables.iterator();
         
         // create string patterns
-        // TODO: should also add iteration on slices within a 3D image
         String pattC = "_c%0" + Math.max((int) Math.ceil(Math.log10(nChannels-1)), 1) + "d";
+        String pattZ = "_z%0" + Math.max((int) Math.ceil(Math.log10(nSlices-1)), 1) + "d";
         String pattT = "_t%0" + Math.max((int) Math.ceil(Math.log10(nFrames-1)), 1) + "d";
         StringBuilder sb = new StringBuilder();
         
@@ -260,35 +264,42 @@ public class RegionMorphologyPlugin implements PlugInFilter
         {
             String tStr = String.format(pattT, iFrame);
             
-            for (int iChannel = 0; iChannel < nChannels; iChannel++)
+            for (int iSlice = 0; iSlice< nSlices; iSlice++)
             {
-                String cStr = String.format(pattC, iChannel);
-                
-                ResultsTable tbl = iter.next();
-                for (int iRow = 0; iRow < tbl.getCounter(); iRow++)
+                String zStr = String.format(pattZ, iSlice);
+
+                for (int iChannel = 0; iChannel < nChannels; iChannel++)
                 {
-                    // start new row
-                    res.incrementCounter();
-                    
-                    String labelString = tbl.getLabel(iRow);
-                    
-                    // create label for the new row
-                    sb.setLength(0);
-                    sb.append("L" + labelString);
-                    if (nFrames > 1) sb.append(tStr);
-                    if (nChannels > 1) sb.append(cStr);
-                    res.addLabel(sb.toString());
-                    
-                    // add columns for meta-data
-                    res.addValue("Region", Integer.parseInt(labelString));
-                    if (nChannels > 1) res.addValue("Channel", iChannel);
-                    if (nFrames > 1) res.addValue("Frame", iFrame);
-                    
-                    // copy all column values
-                    for (String colName : tbl.getHeadings())
+                    String cStr = String.format(pattC, iChannel);
+
+                    ResultsTable tbl = iter.next();
+                    for (int iRow = 0; iRow < tbl.getCounter(); iRow++)
                     {
-                        if ("Label".equalsIgnoreCase(colName)) continue;
-                        res.addValue(colName, tbl.getValue(colName, iRow));
+                        // start new row
+                        res.incrementCounter();
+
+                        String labelString = tbl.getLabel(iRow);
+
+                        // create label for the new row
+                        sb.setLength(0);
+                        sb.append("L" + labelString);
+                        if (nFrames > 1) sb.append(tStr);
+                        if (nSlices > 1) sb.append(zStr);
+                        if (nChannels > 1) sb.append(cStr);
+                        res.addLabel(sb.toString());
+
+                        // add columns for meta-data
+                        res.addValue("Region", Integer.parseInt(labelString));
+                        if (nChannels > 1) res.addValue("Channel", iChannel);
+                        if (nSlices > 1) res.addValue("Slice", iSlice);
+                        if (nFrames > 1) res.addValue("Frame", iFrame);
+
+                        // copy all column values
+                        for (String colName : tbl.getHeadings())
+                        {
+                            if ("Label".equalsIgnoreCase(colName)) continue;
+                            res.addValue(colName, tbl.getValue(colName, iRow));
+                        }
                     }
                 }
             }
@@ -331,6 +342,11 @@ public class RegionMorphologyPlugin implements PlugInFilter
         return res;
     }
     
+    /**
+     * Inner utility class that contains all the information necessary to
+     * perform an analysis: list of features to compute, options for building
+     * results table...
+     */
     static class Options
     {
         /**
@@ -343,6 +359,10 @@ public class RegionMorphologyPlugin implements PlugInFilter
          */
         boolean displayUnits = false;
         
+        /**
+         * The strategy for displaying calibration units. Default is to append
+         * to column names.
+         */
         UnitDisplay unitDisplay = UnitDisplay.COLUMN_NAMES; 
         
         /**
