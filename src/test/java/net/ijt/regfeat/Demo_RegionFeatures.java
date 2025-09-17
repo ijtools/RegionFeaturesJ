@@ -17,7 +17,16 @@ import net.ijt.regfeat.morpho2d.Perimeter;
 public class Demo_RegionFeatures
 {
     /**
-     * @param args
+     * Default empty constructor.
+     */
+    private Demo_RegionFeatures()
+    {
+    }
+    
+    /**
+     * The main function.
+     * 
+     * @param args the optional arguments (not used).
      */
     public static void main(String[] args)
     {
