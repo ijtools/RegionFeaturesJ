@@ -46,7 +46,13 @@ import net.ijt.regfeat.morpho2d.Tortuosity;
  */
 public class RegionMorphologyPlugin implements PlugInFilter
 {
+    /**
+     * The labels for unit display options.
+     */
     public static final String[] unitDisplayLabels = new String[] { "None", "Column Names", "New Columns", "New Table" };
+    /**
+     * The values for unit display options.
+     */
     public static final UnitDisplay[] unitDisplayValues = new UnitDisplay[] { UnitDisplay.NONE, UnitDisplay.COLUMN_NAMES, UnitDisplay.NEW_COLUMNS, UnitDisplay.NEW_TABLE };
     
     // ====================================================
@@ -62,6 +68,12 @@ public class RegionMorphologyPlugin implements PlugInFilter
      */
     static Options initialOptions = null;
 
+    /**
+     * Default empty constructor.
+     */
+    public RegionMorphologyPlugin()
+    {
+    }
     
     // ====================================================
     // Implementation of Plugin and PluginFilter interface

@@ -51,7 +51,14 @@ public class RegionIntensitiesPlugin implements PlugInFilter
      */
     RegionFeatures features;
 
+    /**
+     * Default empty constructor.
+     */
+    public RegionIntensitiesPlugin()
+    {
+    }
     
+
     // ====================================================
     // Implementation of Plugin and PluginFilter interface
 

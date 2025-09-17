@@ -22,6 +22,13 @@ import net.ijt.regfeat.morpho2d.Centroid;
  */
 public class RegionAdjacencyGraph implements Feature
 {
+    /**
+     * Default empty constructor.
+     */
+    public RegionAdjacencyGraph()
+    {
+    }
+    
     @Override
     public Set<LabelPair> compute(RegionFeatures data)
     {

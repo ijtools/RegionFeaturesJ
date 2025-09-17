@@ -52,11 +52,32 @@ public class RegionFeatures extends AlgoStub
     // ==================================================
     // Static methods
     
+    
+    /**
+     * Creates a new instance of RegionFeatures initialized with the specified
+     * label maps, and using the labels that can be found within the label map.
+     * 
+     * @param imagePlus
+     *            the ImagePlus containing the label map
+     * @return a new instance of {@code RegionFeatures} initialized with the
+     *         specified label map.
+     */
     public static final RegionFeatures initialize(ImagePlus imagePlus)
     {
         return new RegionFeatures(imagePlus, LabelImages.findAllLabels(imagePlus));
     }
     
+    /**
+     * Creates a new instance of RegionFeatures initialized with the specified
+     * label maps, and using the list of labels specified by second argument.
+     * 
+     * @param imagePlus
+     *            the ImagePlus containing the label map
+     * @param labels
+     *            the list of labels of regions that will be analyzed
+     * @return a new instance of {@code RegionFeatures} initialized with the
+     *         specified label map and list of region labels.
+     */
     public static final RegionFeatures initialize(ImagePlus imagePlus, int[] labels)
     {
         return new RegionFeatures(imagePlus, labels);
@@ -99,14 +120,30 @@ public class RegionFeatures extends AlgoStub
      */
     public Map<Class<? extends Feature>, Object> results;
     
+    /**
+     * The color associated to each label, as an array with the same length as
+     * the {@code labels} member.
+     */
     public Color[] labelColors;
     
+    /**
+     * Specifies how to display calibration unit. Default is {@code NONE}.
+     */
     public UnitDisplay unitDisplay = UnitDisplay.NONE;
     
     
     // ==================================================
     // Constructors
     
+    /**
+     * Creates a new instance of RegionFeatures initialized with the specified
+     * label maps, and using the list of labels specified by second argument.
+     * 
+     * @param imagePlus
+     *            the ImagePlus containing the label map
+     * @param labels
+     *            the list of labels of regions that will be analyzed
+     */
     public RegionFeatures(ImagePlus imagePlus, int[] labels)
     {
         // store locally label map data
@@ -179,11 +216,29 @@ public class RegionFeatures extends AlgoStub
         this.results.put(featureClass, feature.compute(this));
     }
     
+    /**
+     * Checks whether the specified feature is computed.
+     * 
+     * @param featureClass
+     *            the class of the feature to check.
+     * @return true if the feature with the specified class has been computed.
+     */
     public boolean isComputed(Class<? extends Feature> featureClass)
     {
         return results.containsKey(featureClass);
     }
     
+    /**
+     * Retrieves or creates the instance of {@code Feature} associated to this
+     * analyzer, based on the class of the feature.
+     * 
+     * Uses lazy loading: the Feature instance is created only during the first
+     * request for the feature.
+     * 
+     * @param featureClass
+     *            the class of the feature to retrieve
+     * @return an instance of the specified class stored within this analyzer.
+     */
     public Feature getFeature(Class<? extends Feature> featureClass)
     {
         Feature feature = this.features.get(featureClass);
@@ -195,6 +250,13 @@ public class RegionFeatures extends AlgoStub
         return feature;
     }
     
+    /**
+     * Ensures that the specified feature has been computed (by calling the
+     * {@code process} method). If not, calls, the {@code process} method.
+     * 
+     * @param feature
+     *            the feature to check
+     */
     public void ensureRequiredFeaturesAreComputed(Feature feature)
     {
         feature.requiredFeatures().stream()
@@ -202,28 +264,69 @@ public class RegionFeatures extends AlgoStub
             .forEach(fc -> process(fc));
     }
 
+    /**
+     * Adds the feature to the list of features to compute.
+     * 
+     * @param featureClass
+     *            the class of the feature to compute.
+     * @return a reference to this {@code RegionFeatures}, for chaining
+     *         operations.
+     */
     public RegionFeatures add(Class<? extends Feature> featureClass)
     {
         this.featureClasses.add(featureClass);
         return this;
     }
     
+    /**
+     * Checks whether this class will process the specified feature.
+     * 
+     * @param featureClass
+     *            the feature to check
+     * @return true if this analyzer will process / compute the specified
+     *         feature.
+     */
     public boolean contains(Class<? extends Feature> featureClass)
     {
         return this.featureClasses.contains(featureClass);
     }
     
+    /**
+     * Adds an image data identified with a name.
+     * 
+     * @param dataName
+     *            the name of the data (e.g. "intensity", "colors",
+     *            "distanceMap"...)
+     * @param image
+     *            the image containing the data
+     * @return a reference to this {@code RegionFeatures}, for chaining
+     *         operations.
+     */
     public RegionFeatures addImageData(String dataName, ImagePlus image)
     {
         this.imageData.put(dataName, image);
         return this;
     }
     
+    /**
+     * Returns an image data identified with a name.
+     * 
+     * @param dataName
+     *            the name of the data (e.g. "intensity", "colors",
+     *            "distanceMap"...)
+     * @return the image containing the data
+     */
     public ImagePlus getImageData(String dataName)
     {
         return this.imageData.get(dataName);
     }
     
+    /**
+     * Computes all the features within this {@code RegionFeatures}.
+     * 
+     * @return a reference to this {@code RegionFeatures}, for chaining
+     *         operations.
+     */
     public RegionFeatures computeAll()
     {
         this.featureClasses.stream().forEach(this::process);
@@ -267,14 +370,14 @@ public class RegionFeatures extends AlgoStub
             }
             
             Feature feature = getFeature(featureClass);
-            if (feature instanceof RegionTabularFeature)
+            if (feature instanceof RegionTabularFeature tabularFeature)
             {
                 // create table associated to feature
-                ResultsTable table = ((RegionTabularFeature) feature).createTable(this);
+                ResultsTable table = tabularFeature.createTable(this);
                 
                 // also retrieve information about columns 
                 String[] colNames = columnHeadings(table);
-                String[] unitNames = ((RegionTabularFeature) feature).columnUnitNames(this);
+                String[] unitNames = tabularFeature.columnUnitNames(this);
                 
                 // switch processing depending on the strategy for managing unit names
                 switch(unitDisplay)
@@ -416,18 +519,40 @@ public class RegionFeatures extends AlgoStub
         return colNames;
     }
 
+    /**
+     * Selects the strategy for representing calibration units.
+     * 
+     * @param unitDisplay
+     *            the strategy for representing calibration units.
+     * @return a reference to this {@code RegionFeatures}, for chaining
+     *         operations.
+     */
     public RegionFeatures unitDisplay(UnitDisplay unitDisplay)
     {
         this.unitDisplay = unitDisplay;
         return this;
     }
     
+    /**
+     * Chooses whether calibration units should be displayed in results table.
+     * 
+     * @param flag
+     *            the boolean flag.
+     * @return a reference to this {@code RegionFeatures}, for chaining
+     *         operations.
+     */
     public RegionFeatures displayUnitsInTable(boolean flag)
     {
         this.unitDisplay = flag ? UnitDisplay.COLUMN_NAMES : UnitDisplay.NONE;
         return this;
     }
     
+    /**
+     * Creates a new ResultsTable for populating analysis results.
+     * 
+     * @return a new instance of ResultsTable with row labels corresponding to
+     *         region labels.
+     */
     public ResultsTable initializeRegionTable()
     {
         // Initialize label column in table
@@ -440,6 +565,9 @@ public class RegionFeatures extends AlgoStub
         return table;
     }
 
+    /**
+     * Utility methods that prints out the list of computed features.
+     */
     public void printComputedFeatures()
     {
         results.keySet().stream().forEach(c -> System.out.println(c.getSimpleName()));

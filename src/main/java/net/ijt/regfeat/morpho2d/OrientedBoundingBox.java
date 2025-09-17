@@ -27,8 +27,23 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
  */
 public class OrientedBoundingBox implements RegionTabularFeature
 {
-    public static final String[] colNames = new String[] { "Oriented_Box_Center_X", "Oriented_Box_Center_Y", "Oriented_Box_Length", "Oriented_Box_Width", "Oriented_Box_Orientation" };
+    /**
+     * The names of the columns of the resulting table.
+     */
+    public static final String[] colNames = new String[] { 
+            "Oriented_Box_Center_X", 
+            "Oriented_Box_Center_Y", 
+            "Oriented_Box_Length", 
+            "Oriented_Box_Width", 
+            "Oriented_Box_Orientation" };
 
+    /**
+     * Default empty constructor.
+     */
+    public OrientedBoundingBox()
+    {
+    }
+    
     @Override
     public OrientedBox2D[] compute(RegionFeatures data)
     {
@@ -54,12 +69,11 @@ public class OrientedBoundingBox implements RegionTabularFeature
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof OrientedBox2D[])
+        if (obj instanceof OrientedBox2D[] boxes)
         {
-            OrientedBox2D[] array = (OrientedBox2D[]) obj;
-            for (int r = 0; r < array.length; r++)
+            for (int r = 0; r < boxes.length; r++)
             {
-                OrientedBox2D obox = array[r];
+                OrientedBox2D obox = boxes[r];
                 if (obox != null)
                 {
                     Point2D center = obox.center();
@@ -102,6 +116,14 @@ public class OrientedBoundingBox implements RegionTabularFeature
         return unitNames;
     }
     
+    /**
+     * Displays results as overlay on the specified image.
+     * 
+     * @param data
+     *            the instance of {@code RegionFeatures} containing the data
+     * @param target
+     *            the {@code ImagePlus} whose overlay will be updated
+     */
     public void overlayResult(RegionFeatures data, ImagePlus target)
     {
         // retrieve array of ellipses

@@ -19,6 +19,13 @@ import net.ijt.regfeat.RegionFeatures;
  */
 public class EllipsoidElongations implements RegionTabularFeature
 {
+    /**
+     * Default empty constructor.
+     */
+    public EllipsoidElongations()
+    {
+    }
+    
     @Override
     public double[][] compute(RegionFeatures data)
     {

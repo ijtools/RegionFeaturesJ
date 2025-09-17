@@ -115,6 +115,19 @@ public interface Feature
         return Collections.emptyList();
     }
     
+    /**
+     * Utility method that updates the overlay by adding the specified ROI,
+     * using the specified display options.
+     * 
+     * @param overlay
+     *            the overlay to update.
+     * @param roi
+     *            the instance of ImageJ {@code Roi} to add to the overlay
+     * @param color
+     *            the color of overlay to add
+     * @param strokeWidth
+     *            the line width of the overlay to add
+     */
     public static void addRoiToOverlay(Overlay overlay, Roi roi, Color color, double strokeWidth)
     {
         roi.setStrokeColor(color);

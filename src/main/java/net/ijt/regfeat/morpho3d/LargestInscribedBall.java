@@ -18,7 +18,18 @@ public class LargestInscribedBall implements RegionTabularFeature
     /**
      * The names of the columns of the resulting table.
      */
-    public static final String[] colNames = new String[] {"Inscribed_Ball_Center_X", "Inscribed_Ball_Center_Y", "Inscribed_Ball_Center_Z", "Inscribed_Ball_Radius"};
+    public static final String[] colNames = new String[] {
+            "Inscribed_Ball_Center_X",
+            "Inscribed_Ball_Center_Y",
+            "Inscribed_Ball_Center_Z",
+            "Inscribed_Ball_Radius"};
+    
+    /**
+     * Default empty constructor.
+     */
+    public LargestInscribedBall()
+    {
+    }
     
     @Override
     public Sphere[] compute(RegionFeatures results)

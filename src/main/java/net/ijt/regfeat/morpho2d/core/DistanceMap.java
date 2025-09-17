@@ -15,7 +15,7 @@ import net.ijt.regfeat.RegionFeatures;
  * distance to the nearest pixel outside the region.
  * 
  * This class is an alias for the {@code DistanceMap_Chamfer_ChessKnight_Float}
- * class, that compmutes distance map using a chamfer mask with size 5-by-5, and
+ * class, that computes distance map using a chamfer mask with size 5-by-5, and
  * the system of weights (5, 7, 11).
  */
 public class DistanceMap implements Feature

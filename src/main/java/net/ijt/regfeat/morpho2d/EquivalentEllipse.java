@@ -169,9 +169,8 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Ellipse[])
+        if (obj instanceof Ellipse[] array)
         {
-            Ellipse[] array = (Ellipse[]) obj;
             for (int r = 0; r < array.length; r++)
             {
                 // current ellipse
@@ -223,6 +222,14 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
         return unitNames;
     }
     
+    /**
+     * Displays results as overlay on the specified image.
+     * 
+     * @param data
+     *            the instance of {@code RegionFeatures} containing the data
+     * @param target
+     *            the {@code ImagePlus} whose overlay will be updated
+     */
     public void overlayResult(RegionFeatures data, ImagePlus target)
     {
         // retrieve array of ellipses

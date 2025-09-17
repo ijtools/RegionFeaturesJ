@@ -112,12 +112,11 @@ public class Centroid implements RegionTabularFeature
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Point2D[])
+        if (obj instanceof Point2D[] points)
         {
-            Point2D[] array = (Point2D[]) obj;
-            for (int r = 0; r < array.length; r++)
+            for (int r = 0; r < points.length; r++)
             {
-                Point2D point = array[r];
+                Point2D point = points[r];
                 if (point != null)
                 {
                     table.setValue(colNames[0], r, point.getX());

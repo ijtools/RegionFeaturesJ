@@ -51,7 +51,14 @@ public class RegionMorphology3DPlugin implements PlugInFilter
      */
     static Options initialOptions = null;
 
+    /**
+     * Default empty constructor.
+     */
+    public RegionMorphology3DPlugin()
+    {
+    }
     
+
     // ====================================================
     // Implementation of Plugin and PluginFilter interface
 

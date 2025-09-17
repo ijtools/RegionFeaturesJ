@@ -74,9 +74,8 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Circle2D[])
+        if (obj instanceof Circle2D[] array)
         {
-            Circle2D[] array = (Circle2D[]) obj;
             for (int r = 0; r < array.length; r++)
             {
                 Circle2D circle = array[r];

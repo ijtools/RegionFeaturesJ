@@ -18,6 +18,9 @@ import net.ijt.regfeat.SingleValueFeature;
  */
 public class OrientedBoxElongation extends SingleValueFeature
 {
+    /**
+     * Default empty constructor.
+     */
     public OrientedBoxElongation()
     {
         super("Oriented_Box_Elongation");
@@ -28,10 +31,10 @@ public class OrientedBoxElongation extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        OrientedBox2D[] OrientedBoxs = (OrientedBox2D[]) data.results.get(OrientedBoundingBox.class);
+        OrientedBox2D[] boxes = (OrientedBox2D[]) data.results.get(OrientedBoundingBox.class);
         
         // iterate over labels to compute new feature
-        return Arrays.stream(OrientedBoxs)
+        return Arrays.stream(boxes)
             .mapToDouble(OrientedBoxElongation::boxElongation)
             .toArray();
     }

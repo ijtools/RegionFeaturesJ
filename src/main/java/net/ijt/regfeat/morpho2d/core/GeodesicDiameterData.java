@@ -134,9 +134,8 @@ public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeatu
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Result[])
+        if (obj instanceof Result[] array)
         {
-            Result[] array = (Result[]) obj;
             for (int r = 0; r < array.length; r++)
             {
                 // current diameter
@@ -203,6 +202,13 @@ public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeatu
          * The second geodesic extremity found by the algorithm.
          */
         public Point2D secondExtremity;
+        
+        /**
+         * Default empty constructor.
+         */
+        public Result()
+        {
+        }
 
         /**
          * Computes the result corresponding to the spatial calibration. The
