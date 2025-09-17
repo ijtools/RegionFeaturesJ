@@ -19,8 +19,8 @@ import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Circle2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.morpho2d.core.DistanceMapMaximaPosition;
 import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
 
@@ -74,8 +74,9 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Circle2D[] array)
+        if (obj instanceof Circle2D[])
         {
+            Circle2D[] array = (Circle2D[]) obj;
             for (int r = 0; r < array.length; r++)
             {
                 Circle2D circle = array[r];

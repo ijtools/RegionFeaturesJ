@@ -370,9 +370,10 @@ public class RegionFeatures extends AlgoStub
             }
             
             Feature feature = getFeature(featureClass);
-            if (feature instanceof RegionTabularFeature tabularFeature)
+            if (feature instanceof RegionTabularFeature)
             {
                 // create table associated to feature
+                RegionTabularFeature tabularFeature = (RegionTabularFeature) feature; 
                 ResultsTable table = tabularFeature.createTable(this);
                 
                 // also retrieve information about columns 
@@ -432,7 +433,7 @@ public class RegionFeatures extends AlgoStub
             for (int c = 0; c < colNames.length; c++)
             {
                 String unitName = unitNames[c];
-                if (!unitName.isBlank())
+                if (!isBlank(unitName))
                 {
                     res[c] = String.format("%s_(%s)", colNames[c], unitName);
                 }
@@ -440,6 +441,11 @@ public class RegionFeatures extends AlgoStub
         }
         
         return res;
+    }
+    
+    private static final boolean isBlank(String string)
+    {
+        return string == null || string.trim().isEmpty();
     }
     
     private ResultsTable addColumnsAndUnits(ResultsTable res, ResultsTable table, String[] unitNames)

@@ -70,8 +70,9 @@ public class ElementCount implements RegionTabularFeature
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof int[] counts)
+        if (obj instanceof int[])
         {
+            int[] counts = (int[]) obj;
             for (int r = 0; r < counts.length; r++)
             {
                 table.setValue("Count", r, counts[r]);

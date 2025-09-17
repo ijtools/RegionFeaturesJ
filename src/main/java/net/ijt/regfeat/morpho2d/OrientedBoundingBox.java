@@ -18,8 +18,8 @@ import inra.ijpb.geometry.OrientedBox2D;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.measure.region2d.OrientedBoundingBox2D;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
@@ -69,8 +69,9 @@ public class OrientedBoundingBox implements RegionTabularFeature
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof OrientedBox2D[] boxes)
+        if (obj instanceof OrientedBox2D[])
         {
+            OrientedBox2D[] boxes = (OrientedBox2D[]) obj;
             for (int r = 0; r < boxes.length; r++)
             {
                 OrientedBox2D obox = boxes[r];

@@ -134,8 +134,9 @@ public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeatu
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Result[] array)
+        if (obj instanceof Result[])
         {
+            Result[] array = (Result[]) obj;
             for (int r = 0; r < array.length; r++)
             {
                 // current diameter

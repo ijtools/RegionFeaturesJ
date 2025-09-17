@@ -169,8 +169,9 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
         Object obj = data.results.get(this.getClass());
-        if (obj instanceof Ellipse[] array)
+        if (obj instanceof Ellipse[])
         {
+            Ellipse[] array = (Ellipse[]) obj;
             for (int r = 0; r < array.length; r++)
             {
                 // current ellipse
