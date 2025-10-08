@@ -12,7 +12,6 @@ import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.geometry.Polygons2D;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -33,10 +32,9 @@ public class ConvexHull extends AlgoStub implements Feature
     {
         // retrieve data
         ImageProcessor image = data.labelMap.getProcessor();
-        int[] labels = data.labels;
         
         // for each region, extract the points at the middle of the boundary edges
-        ArrayList<Point2D>[] pointArrays = boundaryPixelsMiddleEdges(image, labels);
+        ArrayList<Point2D>[] pointArrays = boundaryPixelsMiddleEdges(image, data.labelIndices);
         
         // compute convex hull of boundary points around each region
         Polygon2D[] hulls = Arrays.stream(pointArrays)
@@ -69,14 +67,13 @@ public class ConvexHull extends AlgoStub implements Feature
      *            the array of region labels
      * @return an array of arrays of boundary points, one array for each label.
      */
-    private ArrayList<Point2D>[] boundaryPixelsMiddleEdges(ImageProcessor labelImage, int[] labels)
+    private ArrayList<Point2D>[] boundaryPixelsMiddleEdges(ImageProcessor labelImage, HashMap<Integer, Integer> labelIndices)
     {
         // size of image
         int sizeX = labelImage.getWidth();
         int sizeY = labelImage.getHeight();
         
-        int nLabels = labels.length;
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(labels);
+        int nLabels = labelIndices.size();
         
         // allocate data structure for storing results
         @SuppressWarnings("unchecked")
@@ -106,12 +103,13 @@ public class ConvexHull extends AlgoStub implements Feature
                 if (labelUp != label)
                 {
                     Point2D p = new Point2D.Double(x + 0.5, y);
-                    if (label != 0)
+                    if (labelIndices.containsKey(label))
                     {
+
                         int index = labelIndices.get(label);
                         pointArrays[index].add(p);
                     }
-                    if (labelUp != 0)
+                    if (labelIndices.containsKey(labelUp))
                     {
                         int index = labelIndices.get(labelUp);
                         pointArrays[index].add(p);
@@ -122,12 +120,12 @@ public class ConvexHull extends AlgoStub implements Feature
                 if (labelLeft != label)
                 {
                     Point2D p = new Point2D.Double(x, y + 0.5);
-                    if (label != 0)
+                    if (labelIndices.containsKey(label))
                     {
                         int index = labelIndices.get(label);
                         pointArrays[index].add(p);
                     }
-                    if (labelLeft != 0)
+                    if (labelIndices.containsKey(labelLeft))
                     {
                         int index = labelIndices.get(labelLeft);
                         pointArrays[index].add(p);

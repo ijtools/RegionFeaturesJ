@@ -4,7 +4,6 @@
 package net.ijt.regfeat.morpho2d;
 
 import java.awt.Color;
-import java.util.HashMap;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -14,10 +13,9 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Box2D;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes the bounds of each region within a label map.
@@ -59,9 +57,6 @@ public class Bounds extends AlgoStub implements RegionTabularFeature
             oy = calib.yOrigin;
         }
         
-        // create associative array to know index of each label
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(labels);
-
         // allocate memory for result
         int nLabels = labels.length;
         double[] xmin = new double[nLabels];
@@ -89,10 +84,10 @@ public class Bounds extends AlgoStub implements RegionTabularFeature
                     continue;
 
                 // do not process labels that are not in the input list 
-                if (!labelIndices.containsKey(label))
+                if (!data.labelIndices.containsKey(label))
                     continue;
                 
-                int index = labelIndices.get(label);
+                int index = data.labelIndices.get(label);
                 
                 xmin[index] = Math.min(xmin[index], x);
                 xmax[index] = Math.max(xmax[index], x);
@@ -112,88 +107,6 @@ public class Bounds extends AlgoStub implements RegionTabularFeature
         return boxes;
     }
     
-    /**
-     * Computes bounding box of each region in input label image.
-     * 
-     * @param image
-     *            the input image containing label of particles
-     * @param labels
-     *            the array of labels within the image
-     * @param calib
-     *            the calibration of the image
-     * @return an array of Box2D representing the calibrated coordinates of
-     *         the bounding box of each region
-     */
-    public Box2D[] analyzeRegions(ImageProcessor image, int[] labels, Calibration calib)
-    {
-        // size of image
-        int sizeX = image.getWidth();
-        int sizeY = image.getHeight();
-
-        // Extract spatial calibration
-        double sx = 1, sy = 1;
-        double ox = 0, oy = 0;
-        if (calib != null)
-        {
-            sx = calib.pixelWidth;
-            sy = calib.pixelHeight;
-            ox = calib.xOrigin;
-            oy = calib.yOrigin;
-        }
-        
-        // create associative array to know index of each label
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(labels);
-
-        // allocate memory for result
-        int nLabels = labels.length;
-        double[] xmin = new double[nLabels];
-        double[] xmax = new double[nLabels];
-        double[] ymin = new double[nLabels];
-        double[] ymax = new double[nLabels];
-        
-        // initialize to extreme values
-        for (int i = 0; i < nLabels; i++)
-        {
-            xmin[i] = Double.POSITIVE_INFINITY;
-            xmax[i] = Double.NEGATIVE_INFINITY;
-            ymin[i] = Double.POSITIVE_INFINITY;
-            ymax[i] = Double.NEGATIVE_INFINITY;
-        }
-
-        // compute extreme coordinates of each region
-        fireStatusChanged(this, "Compute bounds");
-        for (int y = 0; y < sizeY; y++) 
-        {
-            for (int x = 0; x < sizeX; x++)
-            {
-                int label = (int) image.getf(x, y);
-                if (label == 0)
-                    continue;
-
-                // do not process labels that are not in the input list 
-                if (!labelIndices.containsKey(label))
-                    continue;
-                
-                int index = labelIndices.get(label);
-                
-                xmin[index] = Math.min(xmin[index], x);
-                xmax[index] = Math.max(xmax[index], x);
-                ymin[index] = Math.min(ymin[index], y);
-                ymax[index] = Math.max(ymax[index], y);
-            }
-        }
-
-        // create bounding box instances
-        Box2D[] boxes = new Box2D[nLabels];
-        for (int i = 0; i < nLabels; i++)
-        {
-            boxes[i] = new Box2D(
-                    xmin[i] * sx + ox, (xmax[i] + 1) * sx + ox,
-                    ymin[i] * sy + oy, (ymax[i] + 1) * sy + oy);
-        }
-        return boxes;
-    }
-
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {

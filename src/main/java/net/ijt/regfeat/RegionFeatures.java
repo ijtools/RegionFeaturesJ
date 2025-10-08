@@ -89,13 +89,21 @@ public class RegionFeatures extends AlgoStub
     
     /**
      * The image containing the map of region label for each pixel / voxel.
+     * Created at initialization.
      */
-    public ImagePlus labelMap;
+    public final ImagePlus labelMap;
     
     /**
      * The labels of the regions to be analyzed.
+     * Created at initialization.
      */
-    public int[] labels;
+    public final int[] labels;
+    
+    /**
+     * Map a label to an index within the array of labels.
+     * Created at initialization.
+     */
+    public final HashMap<Integer, Integer> labelIndices;
     
     /**
      * The classes of the features that will be used to populate the data table.
@@ -123,6 +131,8 @@ public class RegionFeatures extends AlgoStub
     /**
      * The color associated to each label, as an array with the same length as
      * the {@code labels} member.
+     * 
+     * Created at initialization.
      */
     public Color[] labelColors;
     
@@ -155,8 +165,41 @@ public class RegionFeatures extends AlgoStub
         this.imageData = new HashMap<String, ImagePlus>();
         this.results = new HashMap<Class<? extends Feature>, Object>();
         
+        // create associative array to know index of each label
+        this.labelIndices = mapLabelIndices(labels);
+        
         // additional setup
         createLabelColors(this.labels.length);
+    }
+    
+    /**
+     * Creates an associative array to retrieve the index corresponding to each label.
+     * 
+     * The resulting map verifies the relation:
+     * <pre>
+     * {@code
+     * int[] labels = ...
+     * Map<Integer,Integer> labelIndices = RegionFeatures.mapLabelIndices(labels);
+     * int index = ...
+     * assert(index == labelIndices.get(labels[index]));
+     * }
+     * </pre>
+     * 
+     * @param labels
+     *            an array of integer labels
+     * @return a HashMap instance with each label as key, and the index of the
+     *         label in array as value.
+     */
+    private static final HashMap<Integer, Integer> mapLabelIndices(int[] labels)
+    {
+        int nLabels = labels.length;
+        HashMap<Integer, Integer> labelIndices = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nLabels; i++) 
+        {
+            labelIndices.put(labels[i], i);
+        }
+
+        return labelIndices;
     }
     
     private void createLabelColors(int nLabels)

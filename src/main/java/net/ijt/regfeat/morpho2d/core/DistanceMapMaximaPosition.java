@@ -6,16 +6,14 @@ package net.ijt.regfeat.morpho2d.core;
 import java.awt.Point;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes the position of the maximum values of the distance map.
@@ -42,12 +40,7 @@ public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabular
         data.ensureRequiredFeaturesAreComputed(this);
         ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap.class)).getProcessor();
         
-//        // Extract position of maxima
-//        return LabelValues.findPositionOfMaxValues(distanceMap, labelMap, labels);
-        
         // Note: the following can be replaced by MorphoLibJ code from version after 1.6.4
-        // Create associative map between each label and its index
-        Map<Integer,Integer> labelIndices = LabelImages.mapLabelIndices(labels);
         
         // Init Position and value of maximum for each label
         int nLabels = labels.length;
@@ -73,10 +66,10 @@ public class DistanceMapMaximaPosition extends AlgoStub implements RegionTabular
                 if (label == 0)
                     continue;
                 // do not process labels not in the list
-                if (!labelIndices.containsKey(label))
+                if (!data.labelIndices.containsKey(label))
                     continue;
     
-                int index = labelIndices.get(label);
+                int index = data.labelIndices.get(label);
                 
                 // update values and positions
                 float value = distanceMap.getf(x, y);

@@ -7,7 +7,6 @@ import static java.lang.Math.sqrt;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -18,7 +17,6 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Ellipse;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
@@ -68,9 +66,6 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
             oy = calib.yOrigin;
         }
         
-        // create associative array to know index of each label
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(labels);
-
         // allocate memory for result
         int nLabels = labels.length;
         int[] counts = new int[nLabels];
@@ -91,10 +86,10 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
                     continue;
 
                 // do not process labels that are not in the input list 
-                if (!labelIndices.containsKey(label))
+                if (!data.labelIndices.containsKey(label))
                     continue;
 
-                int index = labelIndices.get(label);
+                int index = data.labelIndices.get(label);
                 cx[index] += x * sx;
                 cy[index] += y * sy;
                 counts[index]++;
@@ -117,8 +112,11 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
                 int label = (int) labelMap.getf(x, y);
                 if (label == 0)
                     continue;
+                // do not process labels that are not in the input list 
+                if (!data.labelIndices.containsKey(label))
+                    continue;
 
-                int index = labelIndices.get(label);
+                int index = data.labelIndices.get(label);
                 double x2 = x * sx - cx[index];
                 double y2 = y * sy - cy[index];
                 Ixx[index] += x2 * x2;

@@ -4,11 +4,9 @@
 package net.ijt.regfeat.morpho2d;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import ij.measure.Calibration;
 import ij.process.ImageProcessor;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
@@ -39,9 +37,7 @@ public class Area extends SingleValueFeature
         data.ensureRequiredFeaturesAreComputed(this);
         
         ImageProcessor labelMap = data.labelMap.getProcessor();
-        // create map of labels to indices
-        Map<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(data.labels);
-
+        
         // area of unit voxel
         Calibration calib = data.labelMap.getCalibration();
         double pixelArea = calib.pixelWidth * calib.pixelHeight;
@@ -63,10 +59,10 @@ public class Area extends SingleValueFeature
 
                 // process only labels specified in data
                 if (label == 0) continue;
-                if (!labelIndices.containsKey(label)) continue;
+                if (!data.labelIndices.containsKey(label)) continue;
 
                 // update result
-                counts[labelIndices.get(label)]++;
+                counts[data.labelIndices.get(label)]++;
             }
         }
 

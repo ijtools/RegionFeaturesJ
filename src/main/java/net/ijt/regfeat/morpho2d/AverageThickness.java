@@ -11,7 +11,6 @@ import java.util.stream.DoubleStream;
 import ij.ImagePlus;
 import ij.measure.Calibration;
 import ij.process.ImageProcessor;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
@@ -51,7 +50,7 @@ public class AverageThickness extends SingleValueFeature
         ImageProcessor distanceMap = ((ImagePlus) data.results.get(DistanceMap.class)).getProcessor();
 
         // compute average thickness in pixel coordinates
-        double[] res = averageThickness(skeleton, distanceMap, data.labels);
+        double[] res = averageThickness(skeleton, distanceMap, data.labelIndices);
         
         // calibrate the array of thicknesses
         return DoubleStream.of(res)
@@ -71,19 +70,18 @@ public class AverageThickness extends SingleValueFeature
      * @return the average thickness of each region with a label within the
      *         {@code labels} array.
      */
-    private static final double[] averageThickness(ImageProcessor skeleton, ImageProcessor distanceMap, int[] labels)
+    private static final double[] averageThickness(ImageProcessor skeleton, ImageProcessor distanceMap, Map<Integer, Integer> labelIndices)
     {
         // retrieve image size
         int sizeX = skeleton.getWidth();
         int sizeY = skeleton.getHeight();
 
         // allocate memory for result values
-        int nLabels = labels.length;
+        int nLabels = labelIndices.size();
         double[] sums = new double[nLabels];
         int[] counts = new int[nLabels];
 
         // Iterate over skeleton pixels
-        Map<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(labels);
         for (int y = 0; y < sizeY; y++)
         {
             for (int x = 0; x < sizeX; x++)
@@ -95,6 +93,9 @@ public class AverageThickness extends SingleValueFeature
                     continue;
                 }
 
+                // do not process labels that are not in the input list 
+                if (!labelIndices.containsKey(label))
+                    continue;
                 int index = labelIndices.get(label);
                 
                 // update results for current region

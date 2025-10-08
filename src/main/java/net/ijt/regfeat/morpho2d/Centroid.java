@@ -9,7 +9,6 @@ import java.util.HashMap;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -51,8 +50,8 @@ public class Centroid implements RegionTabularFeature
             oy = calib.yOrigin;
         }
         
-        // create associative array to know index of each label
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(data.labels);
+        // retrieve associative array between label and its index
+        HashMap<Integer, Integer> labelIndices = data.labelIndices;
 
         // allocate memory for result
         int nLabels = data.labels.length;
