@@ -5,6 +5,7 @@ package net.ijt.regfeat.morpho3d.core;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import inra.ijpb.measure.region3d.IntrinsicVolumes3D;
 import net.ijt.regfeat.Feature;
@@ -32,14 +33,12 @@ public class EulerNumber_C6 extends SingleValueFeature
     {
         // retrieve required feature values
         data.ensureRequiredFeaturesAreComputed(this);
-        IntrinsicVolumes3D.Result[] res = (IntrinsicVolumes3D.Result[]) data.results.get(IntrinsicVolumes.class);
+        IntrinsicVolumes3D.Result[] results = (IntrinsicVolumes3D.Result[]) data.results.get(IntrinsicVolumes.class);
         
-        double[] eulers = new double[res.length];
-        for (int i = 0; i < res.length; i++)
-        {
-            eulers[i] = res[i].eulerNumber;
-        }
-        return eulers;
+        // convert Euler numbers into an array of double
+        return Stream.of(results)
+                .mapToDouble(res -> res.eulerNumber)
+                .toArray();
     }
     
     @Override

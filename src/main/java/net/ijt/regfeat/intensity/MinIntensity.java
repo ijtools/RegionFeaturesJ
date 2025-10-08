@@ -14,6 +14,9 @@ import net.ijt.regfeat.SingleValueFeature;
 
 /**
  * Compute the minimum intensity within each region. 
+ * 
+ * @see MaxIntensity
+ * @see MedianIntensity
  */
 public class MinIntensity extends SingleValueFeature
 {

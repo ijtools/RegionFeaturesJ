@@ -5,20 +5,22 @@ package net.ijt.regfeat.intensity;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes an array of intensity values for each region. This is the base
  * feature for most other statistics.
+ * 
+ * @see MeanIntensity
+ * @see MedianIntensity
+ * @see IntensityVariance
  */
 public final class IntensityValues implements RegionTabularFeature
 {
@@ -55,9 +57,6 @@ public final class IntensityValues implements RegionTabularFeature
         // initialize one counter for each array
         int[] counters = new int[nLabels];
         
-        // create associative hash table to know the index of each label
-        Map<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(data.labels);
-        
         // retrieve image size(s)
         int sizeX = data.labelMap.getWidth();
         int sizeY = data.labelMap.getHeight();
@@ -79,10 +78,10 @@ public final class IntensityValues implements RegionTabularFeature
                     
                     // check label need to be processed
                     if (label == 0) continue;
-                    if (!labelIndices.containsKey(label)) continue;
+                    if (!data.labelIndices.containsKey(label)) continue;
                     
                     // add current intensity value to the array associated to the current region
-                    int index = labelIndices.get(label);
+                    int index = data.labelIndices.get(label);
                     regionValues[index][counters[index]++] = (double) valueMap.getf(x, y);
                 }
             }

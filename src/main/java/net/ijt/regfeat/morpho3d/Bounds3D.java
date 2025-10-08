@@ -3,14 +3,11 @@
  */
 package net.ijt.regfeat.morpho3d;
 
-import java.util.HashMap;
-
 import ij.ImageStack;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Box3D;
-import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
 
@@ -65,9 +62,6 @@ public class Bounds3D extends AlgoStub implements RegionTabularFeature
             oz = calib.zOrigin;
         }
         
-        // create associative array to know index of each label
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(labels);
-
         // allocate memory for result
         int nLabels = labels.length;
         double[] xmin = new double[nLabels];
@@ -103,9 +97,9 @@ public class Bounds3D extends AlgoStub implements RegionTabularFeature
                         continue;
 
                     // do not process labels that are not in the input list 
-                    if (!labelIndices.containsKey(label))
+                    if (!data.labelIndices.containsKey(label))
                         continue;
-                    int index = labelIndices.get(label);
+                    int index = data.labelIndices.get(label);
 
                     xmin[index] = Math.min(xmin[index], x);
                     xmax[index] = Math.max(xmax[index], x + 1);

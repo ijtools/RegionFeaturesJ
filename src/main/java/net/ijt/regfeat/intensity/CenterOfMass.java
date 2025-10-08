@@ -3,15 +3,12 @@
  */
 package net.ijt.regfeat.intensity;
 
-import java.util.Map;
-
 import ij.ImagePlus;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
-import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes the center of mass of each region, as the centroid weighted by the
@@ -55,9 +52,6 @@ public class CenterOfMass implements RegionTabularFeature
         final int nSlices = data.labelMap.getImageStackSize();
         int nLabels = data.labels.length;
 
-        // create associative hash table to know the index of each label
-        Map<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(data.labels);
-        
         // initialize values
         double[] sumWX = new double[nLabels]; 
         double[] sumWY = new double[nLabels]; 
@@ -77,7 +71,11 @@ public class CenterOfMass implements RegionTabularFeature
                     int label = (int) labelsMapSlice.getf(x, y);
                     if (label == 0) continue;
 
-                    int index = labelIndices.get(label);
+                    // do not process labels that are not in the input list 
+                    if (!data.labelIndices.containsKey(label))
+                        continue;
+                    
+                    int index = data.labelIndices.get(label);
                     double weight = intensitySlice.getf(x, y);
 
                     sumWX[index] += x * weight;

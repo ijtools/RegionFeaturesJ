@@ -3,15 +3,12 @@
  */
 package net.ijt.regfeat.morpho3d;
 
-import java.util.HashMap;
-
 import ij.ImageStack;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
 import inra.ijpb.geometry.Point3D;
-import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes centroid of each regions within the label map.
@@ -54,9 +51,6 @@ public class Centroid3D implements RegionTabularFeature
             oz = calib.zOrigin;
         }
         
-        // create associative array to know index of each label
-        HashMap<Integer, Integer> labelIndices = LabelImages.mapLabelIndices(data.labels);
-
         // allocate memory for result
         int nLabels = data.labels.length;
         int[] counts = new int[nLabels];
@@ -77,10 +71,10 @@ public class Centroid3D implements RegionTabularFeature
                         continue;
 
                     // do not process labels that are not in the input list 
-                    if (!labelIndices.containsKey(label))
+                    if (!data.labelIndices.containsKey(label))
                         continue;
 
-                    int index = labelIndices.get(label);
+                    int index = data.labelIndices.get(label);
                     cx[index] += x * sx;
                     cy[index] += y * sy;
                     cz[index] += z * sz;

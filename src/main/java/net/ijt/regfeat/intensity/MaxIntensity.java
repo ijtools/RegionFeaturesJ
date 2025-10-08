@@ -13,7 +13,10 @@ import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.SingleValueFeature;
 
 /**
- * Compute the maximum intensity within each region. 
+ * Compute the maximum intensity within each region.
+ * 
+ * @see MinIntensity
+ * @see MedianIntensity
  */
 public class MaxIntensity extends SingleValueFeature
 {
