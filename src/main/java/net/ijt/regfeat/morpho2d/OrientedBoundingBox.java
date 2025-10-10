@@ -18,6 +18,7 @@ import inra.ijpb.geometry.OrientedBox2D;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.measure.region2d.OrientedBoundingBox2D;
 import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
@@ -25,7 +26,7 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
 /**
  * The object-oriented bounding box of each region.
  */
-public class OrientedBoundingBox implements RegionTabularFeature
+public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
 {
     /**
      * The names of the columns of the resulting table.
@@ -120,12 +121,13 @@ public class OrientedBoundingBox implements RegionTabularFeature
     /**
      * Displays results as overlay on the specified image.
      * 
-     * @param data
-     *            the instance of {@code RegionFeatures} containing the data
      * @param target
      *            the {@code ImagePlus} whose overlay will be updated
+     * @param data
+     *            the instance of {@code RegionFeatures} containing the data
      */
-    public void overlayResult(RegionFeatures data, ImagePlus target)
+    @Override
+    public void overlayResult(ImagePlus target, RegionFeatures data)
     {
         // retrieve array of ellipses
         Object obj = data.results.get(this.getClass());
@@ -150,7 +152,7 @@ public class OrientedBoundingBox implements RegionTabularFeature
 
             // add ROI to overlay
             Color color = data.labelColors[i];
-            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         target.setOverlay(overlay);

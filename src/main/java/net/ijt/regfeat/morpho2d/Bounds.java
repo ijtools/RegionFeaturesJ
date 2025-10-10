@@ -13,14 +13,14 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Box2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Computes the bounds of each region within a label map.
  */
-public class Bounds extends AlgoStub implements RegionTabularFeature
+public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFeature
 {
     /**
      * The names of the columns of the resulting table.
@@ -153,7 +153,7 @@ public class Bounds extends AlgoStub implements RegionTabularFeature
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         image.setOverlay(overlay);

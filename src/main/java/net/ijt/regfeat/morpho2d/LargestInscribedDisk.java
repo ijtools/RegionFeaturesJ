@@ -19,6 +19,7 @@ import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Circle2D;
 import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.morpho2d.core.DistanceMapMaximaPosition;
@@ -27,7 +28,7 @@ import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
 /**
  * Computes the largest inscribed disk within regions of a label map.
  */
-public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeature
+public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeature,OverlayFeature
 {
     /**
      * The names of the columns of the resulting table.
@@ -146,7 +147,7 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         image.setOverlay(overlay);

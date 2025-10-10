@@ -17,9 +17,9 @@ import ij.measure.ResultsTable;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Ellipse;
-import net.ijt.regfeat.Feature;
-import net.ijt.regfeat.RegionTabularFeature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionTabularFeature;
 
 /**
  * Compute equivalent ellipse of regions stored within label map.
@@ -29,7 +29,7 @@ import net.ijt.regfeat.RegionFeatures;
  * 
  * @see inra.ijpb.measure.region2d.EquivalentEllipse
  */
-public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
+public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature, OverlayFeature
 {
     /**
      * The names of the columns, without unit name.
@@ -255,7 +255,7 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
 
             // roi corresponding to ellipse
             Color color = data.labelColors[i];
-            Feature.addRoiToOverlay(overlay, createRoi(ellipse), color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, createRoi(ellipse), color, 1.5);
         }
         
         target.setOverlay(overlay);

@@ -13,7 +13,7 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.DefaultAlgoListener;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.Bounds;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
@@ -39,9 +39,9 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         private final String label;
 
         /** the class of the feature to compute */
-        private final Class<? extends Feature> featureClass;
+        private final Class<? extends OverlayFeature> featureClass;
 
-        private FeatureOption(String label, Class<? extends Feature> featureClass)
+        private FeatureOption(String label, Class<? extends OverlayFeature> featureClass)
         {
             this.label = label;
             this.featureClass = featureClass;
@@ -58,7 +58,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         /**
          * @return the featureClass corresponding to this enumeration item
          */
-        public Class<? extends Feature> getFeatureClass() 
+        public Class<? extends OverlayFeature> getFeatureClass() 
         {
             return featureClass;
         }
@@ -179,7 +179,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
 
         // retrieve class of feature
         String featureName = gd.getNextChoice();
-        Class<? extends Feature> featureClass = FeatureOption.fromLabel(featureName).getFeatureClass();
+        Class<? extends OverlayFeature> featureClass = FeatureOption.fromLabel(featureName).getFeatureClass();
         
         // Extract mask image
         int overlayImageIndex = gd.getNextChoiceIndex();
@@ -187,14 +187,15 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         
         // create a Region feature analyzer from options
         RegionFeatures analyzer = RegionFeatures.initialize(imagePlus);
-        analyzer.add(featureClass);
-        
-        // Call the main processing method
         DefaultAlgoListener.monitor(analyzer);
         
+        // Call the main processing method
+        analyzer.add(featureClass);
         analyzer.computeAll();
         
-        analyzer.getFeature(featureClass).overlayResult(imageToOverlay, analyzer);
+        OverlayFeature feature = (OverlayFeature) analyzer.getFeature(featureClass);
+//        IJ.log("feature:" + feature.toString());
+        feature.overlayResult(imageToOverlay, analyzer);
     }
     
  }

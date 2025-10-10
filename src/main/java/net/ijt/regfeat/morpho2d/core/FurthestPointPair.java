@@ -20,6 +20,7 @@ import inra.ijpb.geometry.FeretDiameters;
 import inra.ijpb.geometry.PointPair2D;
 import inra.ijpb.geometry.Polygon2D;
 import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
 
@@ -27,7 +28,7 @@ import net.ijt.regfeat.RegionFeatures;
  * Utility feature for MaxFeretDiameter, that computes the pair of points within
  * the region that are the furthest to each other.
  */
-public class FurthestPointPair extends AlgoStub implements RegionTabularFeature
+public class FurthestPointPair extends AlgoStub implements RegionTabularFeature, OverlayFeature
 {
     /**
      * Default empty constructor.
@@ -123,7 +124,7 @@ public class FurthestPointPair extends AlgoStub implements RegionTabularFeature
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            Feature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
         }
         
         image.setOverlay(overlay);

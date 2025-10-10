@@ -13,7 +13,7 @@ import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import inra.ijpb.geometry.Box2D;
 import inra.ijpb.label.LabelImages;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -77,7 +77,7 @@ public class BoundsTest
                 .computeAll();
         
         labelMap.show();
-        Feature feature = data.getFeature(Bounds.class);
+        OverlayFeature feature = (OverlayFeature) data.getFeature(Bounds.class);
         
         // check only that there is no bug
         feature.overlayResult(labelMap, data);

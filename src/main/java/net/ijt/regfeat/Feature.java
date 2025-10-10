@@ -3,23 +3,18 @@
  */
 package net.ijt.regfeat;
 
-import java.awt.Color;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Collections;
 
-import ij.ImagePlus;
-import ij.gui.Overlay;
-import ij.gui.Roi;
-
 /**
  * Abstract class for a feature that can compute "something" from a label map.
  * 
- * The result of the computation is provided by the <code>compute</code> method.
+ * The result of the computation is provided by the {@code compute} method.
  * 
- * Results obtained by several features can be aggregated via the
- * <code>overlayResults</code> method.
+ * @see RegionTabularFeature
+ * @see OverlayFeature
  */
 public interface Feature
 {
@@ -86,24 +81,6 @@ public interface Feature
     public abstract Object compute(RegionFeatures data);
     
     /**
-     * Overlay the result of feature computation on the specified image
-     * (optional operation). This method must be called after the features have
-     * been computed.
-     * 
-     * By default, this method does nothing. It is expected that mostly features
-     * computed on 2D regions can be displayed.
-     * 
-     * @param image
-     *            the instance of ImagePlus to display to result on.
-     * @param data
-     *            the data structure containing results of features computed on
-     *            regions
-     */
-    public default void overlayResult(ImagePlus image, RegionFeatures data)
-    {
-    }
-    
-    /**
      * Returns the list of features this feature depends on. The result is given
      * as a list of classes. Default behavior is to return an empty list (no
      * dependency).
@@ -113,25 +90,5 @@ public interface Feature
     public default Collection<Class<? extends Feature>> requiredFeatures()
     {
         return Collections.emptyList();
-    }
-    
-    /**
-     * Utility method that updates the overlay by adding the specified ROI,
-     * using the specified display options.
-     * 
-     * @param overlay
-     *            the overlay to update.
-     * @param roi
-     *            the instance of ImageJ {@code Roi} to add to the overlay
-     * @param color
-     *            the color of overlay to add
-     * @param strokeWidth
-     *            the line width of the overlay to add
-     */
-    public static void addRoiToOverlay(Overlay overlay, Roi roi, Color color, double strokeWidth)
-    {
-        roi.setStrokeColor(color);
-        roi.setStrokeWidth(strokeWidth);
-        overlay.add(roi);
     }
 }
