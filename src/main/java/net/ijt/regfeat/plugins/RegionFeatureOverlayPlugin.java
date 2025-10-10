@@ -169,20 +169,22 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         
         String[] featureNames = FeatureOption.getAllLabels();
         gd.addChoice("Feature:", featureNames, featureNames[0]);
-        
-        gd.addMessage("");
         gd.addChoice("Image To Overlay:", imageNames, imageNames[0]);
+        gd.addNumericField("Roi Width:", 1.5, 1);
         
         // Display dialog and wait for user validation
         gd.showDialog();
         if (gd.wasCanceled()) return;
 
-        // retrieve class of feature
+        // retrieve user choices
         String featureName = gd.getNextChoice();
+        int overlayImageIndex = gd.getNextChoiceIndex();
+        double width = gd.getNextNumber();
+        
+        // retrieve class of feature
         Class<? extends OverlayFeature> featureClass = FeatureOption.fromLabel(featureName).getFeatureClass();
         
         // Extract mask image
-        int overlayImageIndex = gd.getNextChoiceIndex();
         ImagePlus imageToOverlay = WindowManager.getImage(overlayImageIndex+1);
         
         // create a Region feature analyzer from options
@@ -194,8 +196,6 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         analyzer.computeAll();
         
         OverlayFeature feature = (OverlayFeature) analyzer.getFeature(featureClass);
-//        IJ.log("feature:" + feature.toString());
-        feature.overlayResult(imageToOverlay, analyzer);
+        feature.overlayResult(imageToOverlay, analyzer, width);
     }
-    
- }
+}

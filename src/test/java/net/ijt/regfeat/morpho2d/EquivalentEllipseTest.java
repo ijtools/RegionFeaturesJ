@@ -82,7 +82,7 @@ public class EquivalentEllipseTest
         data.process(EquivalentEllipse.class);
         
         EquivalentEllipse feature = new EquivalentEllipse();
-        feature.overlayResult(labelMap, data);
+        feature.overlayResult(labelMap, data, 1.5);
         labelMap.show();
 //        while(true);
     }

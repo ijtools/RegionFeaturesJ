@@ -127,7 +127,7 @@ public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
      *            the instance of {@code RegionFeatures} containing the data
      */
     @Override
-    public void overlayResult(ImagePlus target, RegionFeatures data)
+    public void overlayResult(ImagePlus target, RegionFeatures data, double strokeWidth)
     {
         // retrieve array of ellipses
         Object obj = data.results.get(this.getClass());
@@ -152,7 +152,7 @@ public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
 
             // add ROI to overlay
             Color color = data.labelColors[i];
-            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
         }
         
         target.setOverlay(overlay);

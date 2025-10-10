@@ -119,7 +119,7 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
     }
     
     @Override
-    public void overlayResult(ImagePlus image, RegionFeatures data)
+    public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth)
     {
         // retrieve the result of computation
         Circle2D[] circles = (Circle2D[]) data.results.get(this.getClass());
@@ -147,7 +147,7 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
         }
         
         image.setOverlay(overlay);

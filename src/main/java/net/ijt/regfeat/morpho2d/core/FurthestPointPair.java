@@ -104,7 +104,7 @@ public class FurthestPointPair extends AlgoStub implements RegionTabularFeature,
     }
 
     @Override
-    public void overlayResult(ImagePlus image, RegionFeatures data)
+    public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth)
     {
         // retrieve the result of computation
         PointPair2D[] diameters = (PointPair2D[]) data.results.get(this.getClass());
@@ -124,7 +124,7 @@ public class FurthestPointPair extends AlgoStub implements RegionTabularFeature,
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
         }
         
         image.setOverlay(overlay);

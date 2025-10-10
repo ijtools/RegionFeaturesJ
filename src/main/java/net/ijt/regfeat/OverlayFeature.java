@@ -4,8 +4,6 @@
 package net.ijt.regfeat;
 
 import java.awt.Color;
-import java.util.Collection;
-import java.util.Collections;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -46,7 +44,7 @@ public interface OverlayFeature extends Feature
      *            the data structure containing results of features computed on
      *            regions
      */
-    public void overlayResult(ImagePlus image, RegionFeatures data);
+    public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth);
     
     /**
      * Utility method that updates the overlay by adding the specified ROI,

@@ -80,7 +80,7 @@ public class BoundsTest
         OverlayFeature feature = (OverlayFeature) data.getFeature(Bounds.class);
         
         // check only that there is no bug
-        feature.overlayResult(labelMap, data);
+        feature.overlayResult(labelMap, data, 1.5);
     }
 
     private static final ImagePlus createImagePlus()

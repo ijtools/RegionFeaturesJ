@@ -132,7 +132,7 @@ public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFea
     }
 
     @Override
-    public void overlayResult(ImagePlus image, RegionFeatures data)
+    public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth)
     {
         // retrieve the result of computation
         Box2D[] boxes = (Box2D[]) data.results.get(this.getClass());
@@ -153,7 +153,7 @@ public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFea
             
             // add ROI to overlay
             Color color = data.labelColors[i];
-            OverlayFeature.addRoiToOverlay(overlay, roi, color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
         }
         
         image.setOverlay(overlay);

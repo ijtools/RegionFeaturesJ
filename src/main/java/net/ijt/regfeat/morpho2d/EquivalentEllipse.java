@@ -230,7 +230,7 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature,
      *            the {@code ImagePlus} whose overlay will be updated
      */
     @Override
-    public void overlayResult(ImagePlus target, RegionFeatures data)
+    public void overlayResult(ImagePlus target, RegionFeatures data, double strokeWidth)
     {
         // retrieve array of ellipses
         Object obj = data.results.get(this.getClass());
@@ -255,7 +255,7 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature,
 
             // roi corresponding to ellipse
             Color color = data.labelColors[i];
-            OverlayFeature.addRoiToOverlay(overlay, createRoi(ellipse), color, 1.5);
+            OverlayFeature.addRoiToOverlay(overlay, createRoi(ellipse), color, strokeWidth);
         }
         
         target.setOverlay(overlay);
