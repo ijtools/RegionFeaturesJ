@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.stream.Stream;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -19,11 +20,12 @@ import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.geometry.Polygons2D;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RoiFeature;
 
 /**
  * Computes the convex hull of each region in pixel coordinates.
  */
-public class ConvexHull extends AlgoStub implements OverlayFeature
+public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
 {
     /**
      * Default empty constructor.
@@ -167,6 +169,22 @@ public class ConvexHull extends AlgoStub implements OverlayFeature
         image.setOverlay(overlay);
     }
     
+    @Override
+    public Roi[] computeRois(RegionFeatures data)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof Polygon2D[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of Polygon2D");
+        }
+        
+        // convert each polygon into a ROI
+        return Stream.of((Polygon2D[]) obj)
+                .map(poly -> convertToRoi(poly))
+                .toArray(Roi[]::new);
+    }
+
     private Roi convertToRoi(Polygon2D poly)
     {
         int nv = poly.vertexNumber();

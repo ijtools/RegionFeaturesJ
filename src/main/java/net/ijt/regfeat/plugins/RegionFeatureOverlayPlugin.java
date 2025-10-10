@@ -38,7 +38,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
     enum FeatureOption
     {
         BOUNDING_BOX("Bounding Box", Bounds.class), 
-        ELLIPSE("Ellipse", EquivalentEllipse.class), 
+        ELLIPSE("Equivalent Ellipse", EquivalentEllipse.class), 
         ORIENTED_BOX("Oriented Bounding Box", OrientedBoundingBox.class),
         CONVEX_HULL("Convex Hull", ConvexHull.class), 
         FERET_DIAMETER("Feret Diameter", FurthestPointPair.class), 

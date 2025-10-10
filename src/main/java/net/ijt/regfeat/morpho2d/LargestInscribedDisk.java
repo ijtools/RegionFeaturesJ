@@ -8,10 +8,12 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import ij.ImagePlus;
 import ij.gui.OvalRoi;
 import ij.gui.Overlay;
+import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
@@ -22,13 +24,14 @@ import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
+import net.ijt.regfeat.RoiFeature;
 import net.ijt.regfeat.morpho2d.core.DistanceMapMaximaPosition;
 import net.ijt.regfeat.morpho2d.core.DistanceMap_Chamfer_ChessKnight_Float;
 
 /**
  * Computes the largest inscribed disk within regions of a label map.
  */
-public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeature, OverlayFeature
+public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeature, OverlayFeature, RoiFeature
 {
     /**
      * The names of the columns of the resulting table.
@@ -118,6 +121,47 @@ public class LargestInscribedDisk extends AlgoStub implements RegionTabularFeatu
         return unitNames;
     }
     
+    @Override
+    public Roi[] computeRois(RegionFeatures data)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof Circle2D[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of Circle2D");
+        }
+        
+        // convert each polygon into a ROI
+        return Stream.of((Circle2D[]) obj)
+                .map(poly -> convertToRoi(poly))
+                .toArray(Roi[]::new);
+    }
+
+    private Roi convertToRoi(Circle2D ellipse)
+    {
+        // retrieve data of circle
+        Point2D center = ellipse.getCenter();
+        double xc = center.getX();
+        double yc = center.getY();
+        double r = ellipse.getRadius();
+        
+        // allocate memory for result polygon
+        int nVertices = 100;
+        float[] xv = new float[nVertices];
+        float[] yv = new float[nVertices];
+        
+        // create vertices
+        for (int i = 0; i < nVertices; i++)
+        {
+            double t = i * Math.PI * 2.0 / nVertices;
+            xv[i] = (float) (xc + Math.cos(t) * r);
+            yv[i] = (float) (yc + Math.sin(t) * r);
+        }
+        
+        // create Polygon ROI
+        return new PolygonRoi(xv, yv, nVertices, Roi.POLYGON);
+    }
+
     @Override
     public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth)
     {
