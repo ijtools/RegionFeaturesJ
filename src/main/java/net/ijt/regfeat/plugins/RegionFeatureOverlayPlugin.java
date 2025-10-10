@@ -19,6 +19,7 @@ import net.ijt.regfeat.morpho2d.Bounds;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
 import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
 import net.ijt.regfeat.morpho2d.OrientedBoundingBox;
+import net.ijt.regfeat.morpho2d.core.ConvexHull;
 import net.ijt.regfeat.morpho2d.core.FurthestPointPair;
 
 /**
@@ -36,6 +37,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         BOUNDING_BOX("Bounding Box", Bounds.class), 
         ELLIPSE("Ellipse", EquivalentEllipse.class), 
         ORIENTED_BOX("Oriented Bounding Box", OrientedBoundingBox.class),
+        CONVEX_HULL("Convex Hull", ConvexHull.class), 
         FERET_DIAMETER("Feret Diameter", FurthestPointPair.class), 
         INSCRIBED_DISK("Inscribed Disk", LargestInscribedDisk.class);
         

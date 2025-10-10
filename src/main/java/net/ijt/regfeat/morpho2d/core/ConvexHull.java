@@ -3,22 +3,27 @@
  */
 package net.ijt.regfeat.morpho2d.core;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import ij.ImagePlus;
+import ij.gui.Overlay;
+import ij.gui.PolygonRoi;
+import ij.gui.Roi;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Polygon2D;
 import inra.ijpb.geometry.Polygons2D;
-import net.ijt.regfeat.Feature;
+import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Computes the convex hull of each region in pixel coordinates.
  */
-public class ConvexHull extends AlgoStub implements Feature
+public class ConvexHull extends AlgoStub implements OverlayFeature
 {
     /**
      * Default empty constructor.
@@ -138,5 +143,42 @@ public class ConvexHull extends AlgoStub implements Feature
         }
 
         return pointArrays;
+    }
+    
+    @Override
+    public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth)
+    {
+        // retrieve the result of computation
+        Polygon2D[] polygons = (Polygon2D[]) data.results.get(this.getClass());
+                
+        // create overlay
+        Overlay overlay = new Overlay();
+        
+        // add each box to the overlay
+        for (int i = 0; i < polygons.length; i++) 
+        {
+            Roi roi = convertToRoi(polygons[i]);
+            
+            // add ROI to overlay
+            Color color = data.labelColors[i];
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
+        }
+        
+        image.setOverlay(overlay);
+    }
+    
+    private Roi convertToRoi(Polygon2D poly)
+    {
+        int nv = poly.vertexNumber();
+        float[] xdata = new float[nv];
+        float[] ydata = new float[nv];
+        for (int i = 0; i < nv; i++)
+        {
+            Point2D p = poly.getVertex(i);
+            xdata[i] = (float) p.getX();
+            ydata[i] = (float) p.getY();
+        }
+        
+        return new PolygonRoi(xdata, ydata, nv, Roi.POLYGON);
     }
 }
