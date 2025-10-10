@@ -17,7 +17,9 @@ import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.morpho2d.Bounds;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
+import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
 import net.ijt.regfeat.morpho2d.OrientedBoundingBox;
+import net.ijt.regfeat.morpho2d.core.FurthestPointPair;
 
 /**
  * Compute a geometric feature from a label map image, and updates the overlay
@@ -33,7 +35,10 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
     {
         BOUNDING_BOX("Bounding Box", Bounds.class), 
         ELLIPSE("Ellipse", EquivalentEllipse.class), 
-        ORIENTED_BOX("Oriented Bounding Box", OrientedBoundingBox.class);
+        ORIENTED_BOX("Oriented Bounding Box", OrientedBoundingBox.class),
+        FERET_DIAMETER("Feret Diameter", FurthestPointPair.class), 
+        INSCRIBED_DISK("Inscribed Disk", LargestInscribedDisk.class);
+        
 
         /** The name of the feature, for GUI display */
         private final String label;
