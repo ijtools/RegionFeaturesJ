@@ -229,7 +229,8 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature
      * @param target
      *            the {@code ImagePlus} whose overlay will be updated
      */
-    public void overlayResult(RegionFeatures data, ImagePlus target)
+    @Override
+    public void overlayResult(ImagePlus target, RegionFeatures data)
     {
         // retrieve array of ellipses
         Object obj = data.results.get(this.getClass());
