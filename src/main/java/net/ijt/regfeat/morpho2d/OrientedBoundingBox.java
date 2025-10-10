@@ -5,8 +5,10 @@ package net.ijt.regfeat.morpho2d;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Stream;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -14,19 +16,21 @@ import ij.gui.PolygonRoi;
 import ij.gui.Roi;
 import ij.measure.Calibration;
 import ij.measure.ResultsTable;
+import inra.ijpb.geometry.AngleDiameterPair;
+import inra.ijpb.geometry.FeretDiameters;
 import inra.ijpb.geometry.OrientedBox2D;
 import inra.ijpb.geometry.Polygon2D;
-import inra.ijpb.measure.region2d.OrientedBoundingBox2D;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
+import net.ijt.regfeat.RoiFeature;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 
 /**
  * The object-oriented bounding box of each region.
  */
-public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
+public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature, RoiFeature
 {
     /**
      * The names of the columns of the resulting table.
@@ -61,11 +65,80 @@ public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
                 .toArray(OrientedBox2D[]::new);
     }
     
-    private static final OrientedBox2D compute(Polygon2D hull, Calibration calib)
+    private static final OrientedBox2D compute(Polygon2D convexHull, Calibration calib)
     {
-        return hull != null ? OrientedBoundingBox2D.orientedBoundingBox(hull.vertices(), calib) : null;
-    }
+        // avoid null references
+        if (convexHull == null) return null;
+        
+        // calibrate
+        Polygon2D calibratedHull = new Polygon2D(calibrate(convexHull.vertices(), calib));
+                
+        // compute convex hull centroid
+        Point2D center = calibratedHull.centroid();
+        double cx = center.getX();
+        double cy = center.getY();
+        
+        // coordinates of convex hull after spatial calibration and recentering
+        ArrayList<Point2D> centeredHull = new ArrayList<Point2D>(convexHull.vertexNumber());
+        for (Point2D p : calibratedHull)
+        {
+            double x = p.getX() - cx;
+            double y = p.getY() - cy;
+            centeredHull.add(new Point2D.Double(x, y));
+        }
 
+        AngleDiameterPair minFeret = FeretDiameters.minFeretDiameter(centeredHull);
+        
+        // orientation of the main axis
+        // pre-compute trigonometric functions
+        double cot = Math.cos(minFeret.angle);
+        double sit = Math.sin(minFeret.angle);
+
+        // compute elongation in direction of rectangle length and width
+        double xmin = Double.MAX_VALUE;
+        double ymin = Double.MAX_VALUE;
+        double xmax = Double.MIN_VALUE;
+        double ymax = Double.MIN_VALUE;
+        for (Point2D p : centeredHull)
+        {
+            // coordinates of current point
+            double x = p.getX(); 
+            double y = p.getY();
+            
+            // compute rotated coordinates
+            double x2 = x * cot + y * sit; 
+            double y2 = - x * sit + y * cot;
+            
+            // update bounding box
+            xmin = Math.min(xmin, x2);
+            ymin = Math.min(ymin, y2);
+            xmax = Math.max(xmax, x2);
+            ymax = Math.max(ymax, y2);
+        }
+        
+        // position of the center with respect to the centroid computed before
+        double dl = (xmax + xmin) / 2;
+        double dw = (ymax + ymin) / 2;
+
+        // change coordinates from rectangle to user-space
+        double dx  = dl * cot - dw * sit;
+        double dy  = dl * sit + dw * cot;
+
+        // coordinates of oriented box center
+        cx += dx;
+        cy += dy;
+
+        // size of the rectangle
+        double length = ymax - ymin;
+        double width  = xmax - xmin;
+        
+        // store angle in degrees, between 0 and 180
+        double angle = (Math.toDegrees(minFeret.angle) + 270) % 180;
+
+        // Store results in a new instance of OrientedBox2D
+        return new OrientedBox2D(cx, cy, length, width, angle);
+    }
+    
     @Override
     public void updateTable(ResultsTable table, RegionFeatures data)
     {
@@ -99,6 +172,23 @@ public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
         {
             throw new RuntimeException("Requires object argument to be an array of double");
         }
+    }
+    
+    private static final ArrayList<Point2D> calibrate(ArrayList<Point2D> points, Calibration calib)
+    {
+        if (!calib.scaled())
+        {
+            return points;
+        }
+        
+        ArrayList<Point2D> res = new ArrayList<Point2D>(points.size());
+        for (Point2D point : points)
+        {
+            double x = point.getX() * calib.pixelWidth + calib.xOrigin;
+            double y = point.getY() * calib.pixelHeight + calib.yOrigin;
+            res.add(new Point2D.Double(x, y));
+        }
+        return res;
     }
 
     @Override
@@ -201,6 +291,49 @@ public class OrientedBoundingBox implements RegionTabularFeature, OverlayFeature
         y = yc + dx * sit - dy * cot;
         xp[3] = (float) ((x - calib.xOrigin) / calib.pixelWidth);
         yp[3] = (float) ((y - calib.yOrigin) / calib.pixelHeight);
+        return new PolygonRoi(xp, yp, 4, Roi.POLYGON);
+    }
+    
+    @Override
+    public Roi[] computeRois(RegionFeatures data)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof OrientedBox2D[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of OrientedBox2D");
+        }
+        
+        // convert each ellipse into a ROI
+        return Stream.of((OrientedBox2D[]) obj)
+                .map(box -> createRoi(box))
+                .toArray(Roi[]::new);
+    }
+
+    private final static Roi createRoi(OrientedBox2D box)
+    {
+        Point2D center = box.center();
+        double xc = center.getX();
+        double yc = center.getY();
+        double dx = box.length() / 2;
+        double dy = box.width() / 2;
+        double theta = Math.toRadians(box.orientation());
+        double cot = Math.cos(theta);
+        double sit = Math.sin(theta);
+        
+        // coordinates of polygon ROI
+        float[] xp = new float[4];
+        float[] yp = new float[4];
+        
+        // iterate over vertices
+        xp[0] = (float) (xc + dx * cot - dy * sit);
+        yp[0] = (float) (yc + dx * sit + dy * cot);
+        xp[1] = (float) (xc - dx * cot - dy * sit);
+        yp[1] = (float) (yc - dx * sit + dy * cot);
+        xp[2] = (float) (xc - dx * cot + dy * sit);
+        yp[2] = (float) (yc - dx * sit - dy * cot);
+        xp[3] = (float) (xc + dx * cot + dy * sit);
+        yp[3] = (float) (yc + dx * sit - dy * cot);
         return new PolygonRoi(xp, yp, 4, Roi.POLYGON);
     }
     

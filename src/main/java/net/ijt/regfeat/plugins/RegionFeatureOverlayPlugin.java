@@ -9,12 +9,15 @@ import ij.IJ;
 import ij.ImagePlus;
 import ij.WindowManager;
 import ij.gui.GenericDialog;
+import ij.gui.Roi;
 import ij.plugin.filter.PlugInFilter;
+import ij.plugin.frame.RoiManager;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.DefaultAlgoListener;
 import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RoiFeature;
 import net.ijt.regfeat.morpho2d.Bounds;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
 import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
@@ -178,6 +181,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         gd.addChoice("Feature:", featureNames, featureNames[0]);
         gd.addChoice("Image To Overlay:", imageNames, imageNames[0]);
         gd.addNumericField("Roi Width:", 1.5, 1);
+        gd.addCheckbox("Export to RoiManager", false);
         
         // Display dialog and wait for user validation
         gd.showDialog();
@@ -187,6 +191,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         String featureName = gd.getNextChoice();
         int overlayImageIndex = gd.getNextChoiceIndex();
         double width = gd.getNextNumber();
+        boolean roiManager = gd.getNextBoolean();
         
         // retrieve class of feature
         Class<? extends OverlayFeature> featureClass = FeatureOption.fromLabel(featureName).getFeatureClass();
@@ -204,5 +209,31 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         
         OverlayFeature feature = (OverlayFeature) analyzer.getFeature(featureClass);
         feature.overlayResult(imageToOverlay, analyzer, width);
+        
+        if (roiManager)
+        {
+            if (!(feature instanceof RoiFeature)) return;
+            
+            Roi[] rois = ((RoiFeature) feature).computeRois(analyzer);
+                    
+            // retrieve RoiManager
+            RoiManager rm = RoiManager.getInstance();
+            if (rm == null)
+            {
+                rm = new RoiManager();
+            }
+            String pattern = "r%03d";
+            
+            // populate RoiManager with PolygonRoi
+            for (int i = 0; i < analyzer.labels.length; i++)
+            {
+                int label = analyzer.labels[i];
+                String name = String.format(pattern, label);
+
+                Roi roi = rois[i];
+                roi.setName(name);
+                rm.addRoi(roi);
+            }
+        }
     }
 }

@@ -4,6 +4,7 @@
 package net.ijt.regfeat.morpho2d;
 
 import java.awt.Color;
+import java.util.stream.Stream;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -16,11 +17,12 @@ import inra.ijpb.geometry.Box2D;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
+import net.ijt.regfeat.RoiFeature;
 
 /**
  * Computes the bounds of each region within a label map.
  */
-public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFeature
+public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFeature, RoiFeature
 {
     /**
      * The names of the columns of the resulting table.
@@ -179,6 +181,22 @@ public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFea
         return new Box2D(xmin, xmax, ymin, ymax);
     }
     
+    @Override
+    public Roi[] computeRois(RegionFeatures data)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof Box2D[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of Box2D");
+        }
+        
+        // convert each ellipse into a ROI
+        return Stream.of((Box2D[]) obj)
+                .map(ellipse -> createRoi(ellipse))
+                .toArray(Roi[]::new);
+    }
+
     private final static Roi createRoi(Box2D box)
     {
         // Coordinates of box, in pixel coordinates

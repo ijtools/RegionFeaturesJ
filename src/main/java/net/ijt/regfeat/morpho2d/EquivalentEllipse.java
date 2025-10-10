@@ -7,6 +7,7 @@ import static java.lang.Math.sqrt;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.util.stream.Stream;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
@@ -20,6 +21,7 @@ import inra.ijpb.geometry.Ellipse;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionTabularFeature;
+import net.ijt.regfeat.RoiFeature;
 
 /**
  * Compute equivalent ellipse of regions stored within label map.
@@ -29,7 +31,7 @@ import net.ijt.regfeat.RegionTabularFeature;
  * 
  * @see inra.ijpb.measure.region2d.EquivalentEllipse
  */
-public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature, OverlayFeature
+public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature, OverlayFeature, RoiFeature
 {
     /**
      * The names of the columns, without unit name.
@@ -281,6 +283,22 @@ public class EquivalentEllipse extends AlgoStub implements RegionTabularFeature,
         return new Ellipse(xc, yc, radius1, radius2, ellipse.orientation());
     }
     
+    @Override
+    public Roi[] computeRois(RegionFeatures data)
+    {
+        // retrieve array of ellipses
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof Ellipse[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of Ellipse");
+        }
+        
+        // convert each ellipse into a ROI
+        return Stream.of((Ellipse[]) obj)
+                .map(ellipse -> createRoi(ellipse))
+                .toArray(Roi[]::new);
+    }
+
     private final static Roi createRoi(Ellipse ellipse)
     {
         // Coordinates of ellipse, in pixel coordinates
