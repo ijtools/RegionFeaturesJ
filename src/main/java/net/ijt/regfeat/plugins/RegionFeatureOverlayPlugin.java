@@ -24,6 +24,7 @@ import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
 import net.ijt.regfeat.morpho2d.OrientedBoundingBox;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 import net.ijt.regfeat.morpho2d.core.FurthestPointPair;
+import net.ijt.regfeat.spatial.RegionAdjacencyGraph;
 
 /**
  * Compute a geometric feature from a label map image, and updates the overlay
@@ -42,7 +43,8 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         ORIENTED_BOX("Oriented Bounding Box", OrientedBoundingBox.class),
         CONVEX_HULL("Convex Hull", ConvexHull.class), 
         FERET_DIAMETER("Feret Diameter", FurthestPointPair.class), 
-        INSCRIBED_DISK("Inscribed Disk", LargestInscribedDisk.class);
+        INSCRIBED_DISK("Inscribed Disk", LargestInscribedDisk.class),
+        REGION_ADJACENCY_GRAPH("Region Adjacency Graph", RegionAdjacencyGraph.class);
         
 
         /** The name of the feature, for GUI display */
