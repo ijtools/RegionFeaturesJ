@@ -83,6 +83,26 @@ public class RegionFeatures extends AlgoStub
         return new RegionFeatures(imagePlus, labels);
     }
     
+    /**
+     * Retrieves the {@code RegionFeatures} object that was used to create the
+     * input table, or null if no such object exist.
+     * 
+     * @param table
+     *            a ResultsTable
+     * @return the {@code RegionFeatures} object that was used to create the
+     *         input table, or null if no such object exist.
+     */
+    public static final RegionFeatures resultsTableRegionFeatures(ResultsTable table)
+    {
+        return resultsTableFeaturesMap.get(table);
+    }
+    
+    /**
+     * Map results tables creates with the {@code createTAbles()} method with
+     * the {@code RegionFeatures} object used to create them.
+     */
+    private static Map<ResultsTable, RegionFeatures> resultsTableFeaturesMap = new HashMap<>();
+    
     
     // ==================================================
     // Class members
@@ -462,6 +482,7 @@ public class RegionFeatures extends AlgoStub
             }
         }
         
+        resultsTableFeaturesMap.put(fullTable, this);
         return new ResultsTable[] {fullTable, columnUnitsTable};
     }
     

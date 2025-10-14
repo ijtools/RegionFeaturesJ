@@ -12,7 +12,10 @@ import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import net.ijt.regfeat.morpho2d.Area;
+import net.ijt.regfeat.morpho2d.Bounds;
+import net.ijt.regfeat.morpho2d.Centroid;
 import net.ijt.regfeat.morpho2d.Circularity;
+import net.ijt.regfeat.morpho2d.EquivalentEllipse;
 import net.ijt.regfeat.morpho2d.Perimeter;
 
 /**
@@ -38,6 +41,41 @@ public class RegionFeaturesTest
         assertEquals(2, table.getLastColumn());
     }
 
+    /**
+     * Test method for {@link net.ijt.regfeat.RegionFeatures#resultsTableRegionFeatures(ij.measure.ResultsTable)}.
+     */
+    @Test
+    public final void testMapResultsTableToRegionFeatures()
+    {
+        ImagePlus labelMap = createImagePlus();
+        
+        // create a first analyzer
+        RegionFeatures features1 = RegionFeatures.initialize(labelMap)
+                .add(Circularity.class)
+                .add(Area.class)
+                .add(Perimeter.class);
+        ResultsTable table1 = features1.createTable();
+                
+        // create second analyzer
+        RegionFeatures features2 = RegionFeatures.initialize(labelMap)
+                .add(EquivalentEllipse.class)
+                .add(Bounds.class);
+        ResultsTable table2 = features2.createTable();
+
+        // and a third one, without table
+        RegionFeatures.initialize(labelMap)
+                .add(Centroid.class)
+                .add(Bounds.class);
+        
+        // check mapping
+        assertEquals(features1, RegionFeatures.resultsTableRegionFeatures(table1));
+        assertEquals(features2, RegionFeatures.resultsTableRegionFeatures(table2));
+        
+        // check also with arbitrary table
+        assertEquals(null, RegionFeatures.resultsTableRegionFeatures(new ResultsTable()));
+    }
+    
+    
     private static final ImagePlus createImagePlus()
     {
         ImageProcessor array = new ByteProcessor(8, 8);
