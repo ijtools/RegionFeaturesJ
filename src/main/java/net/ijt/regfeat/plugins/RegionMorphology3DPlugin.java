@@ -112,14 +112,25 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         // keep choices for next plugin call
         initialOptions = options;
         
-        ResultsTable table = analyze(imagePlus, options);
-
+        ResultsTable[] tables = analyze(imagePlus, options);
+        ResultsTable featuresTable = tables[0];
+        if (options.includeImageName)
+        {
+            featuresTable = RegionFeatures.insertImageNameColumn(featuresTable, imagePlus.getShortTitle());
+        }
+        
         // show result
         String tableName = imagePlus.getShortTitle() + "-Morphometry";
-        table.show(tableName);
+        featuresTable.show(tableName);
+        
+        if (options.unitDisplay == UnitDisplay.NEW_TABLE)
+        {
+            String unitsTableName = imagePlus.getShortTitle() + "-MorphometryUnits";
+            tables[1].show(unitsTableName);
+        }
     }
     
-    private static final ResultsTable analyze(ImagePlus imagePlus, Options options)
+    private static final ResultsTable[] analyze(ImagePlus imagePlus, Options options)
     {
         // retrieve dimensions
         int nChannels = imagePlus.getNChannels();
@@ -133,6 +144,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         
         ImageStack stack = imagePlus.getStack();
         ArrayList<ResultsTable> allTables = new ArrayList<ResultsTable>(nChannels * nFrames);
+        ResultsTable unitsTable = null;
 
         // iterate over slices 
         for (int iFrame = 0; iFrame < nFrames; iFrame++)
@@ -144,7 +156,9 @@ public class RegionMorphology3DPlugin implements PlugInFilter
                 ImagePlus sliceImage = new ImagePlus(imagePlus.getTitle(), array);
                 sliceImage.copyScale(imagePlus);
 
-                allTables.add(analyzeSingleSlice(sliceImage, options));
+                ResultsTable[] tables = analyzeSingleSlice(sliceImage, options);
+                allTables.add(tables[0]);
+                unitsTable = tables[1];
             }
         }
 
@@ -195,17 +209,17 @@ public class RegionMorphology3DPlugin implements PlugInFilter
             }
         }
         
-        return res;
+        return new ResultsTable[] {res, unitsTable};
     }
     
-    private static final ResultsTable analyzeSingleSlice(ImagePlus imagePlus, Options options)
+    private static final ResultsTable[] analyzeSingleSlice(ImagePlus imagePlus, Options options)
     {
         // create a Region feature analyzer from options
         RegionFeatures analyzer = options.createAnalyzer(imagePlus);
         
         // Call the main processing method
         DefaultAlgoListener.monitor(analyzer);
-        return analyzer.createTable();
+        return analyzer.createTables();
     }
 
     private static final Options chooseOptions(ImagePlus labelMap, Options initialChoice)
