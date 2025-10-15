@@ -103,7 +103,31 @@ public class RegionFeatures extends AlgoStub
      */
     private static Map<ResultsTable, RegionFeatures> resultsTableFeaturesMap = new HashMap<>();
     
+    public static final ResultsTable insertImageNameColumn(ResultsTable table, String imageName)
+    {
+        ResultsTable res = new ResultsTable();
+        
+        for (int iRow = 0; iRow < table.getCounter(); iRow++)
+        {
+            // start new row
+            res.incrementCounter();
+            
+            // add row meta-data
+            res.addLabel(table.getLabel(iRow));
+            res.setValue("Image", iRow, imageName);
+            
+            // copy all column values
+            for (String colName : table.getHeadings())
+            {
+                if ("Label".equalsIgnoreCase(colName)) continue;
+                res.setValue(colName, iRow, table.getValue(colName, iRow));
+            }
+        }
+        
+        return res;
+    }
     
+
     // ==================================================
     // Class members
     

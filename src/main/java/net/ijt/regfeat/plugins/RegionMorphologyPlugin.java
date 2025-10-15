@@ -133,7 +133,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
         ResultsTable featuresTable = tables[0];
         if (options.includeImageName)
         {
-            featuresTable = insertImageNameColumn(featuresTable, imagePlus.getShortTitle());
+            featuresTable = RegionFeatures.insertImageNameColumn(featuresTable, imagePlus.getShortTitle());
         }
         
         // show result
@@ -318,30 +318,6 @@ public class RegionMorphologyPlugin implements PlugInFilter
         return analyzer.createTables();
     }
 
-    private static final ResultsTable insertImageNameColumn(ResultsTable table, String imageName)
-    {
-        ResultsTable res = new ResultsTable();
-        
-        for (int iRow = 0; iRow < table.getCounter(); iRow++)
-        {
-            // start new row
-            res.incrementCounter();
-            
-            // add row meta-data
-            res.addLabel(table.getLabel(iRow));
-            res.setValue("Image", iRow, imageName);
-            
-            // copy all column values
-            for (String colName : table.getHeadings())
-            {
-                if ("Label".equalsIgnoreCase(colName)) continue;
-                res.setValue(colName, iRow, table.getValue(colName, iRow));
-            }
-        }
-        
-        return res;
-    }
-    
     /**
      * Inner utility class that contains all the information necessary to
      * perform an analysis: list of features to compute, options for building
@@ -353,11 +329,6 @@ public class RegionMorphologyPlugin implements PlugInFilter
          * The list of features to compute.
          */
         ArrayList<Class<? extends Feature>> features = new ArrayList<>();
-        
-        /**
-         * Display calibration unit within table column names, when appropriate.
-         */
-        boolean displayUnits = false;
         
         /**
          * The strategy for displaying calibration units. Default is to append
