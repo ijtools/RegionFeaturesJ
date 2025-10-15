@@ -114,7 +114,6 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
             }
             throw new IllegalArgumentException("Unable to parse FeatureOption with label: " + label);
         }
-
     }
     
     // ====================================================

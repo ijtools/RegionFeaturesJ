@@ -46,15 +46,6 @@ import net.ijt.regfeat.morpho2d.Tortuosity;
  */
 public class RegionMorphologyPlugin implements PlugInFilter
 {
-    /**
-     * The labels for unit display options.
-     */
-    public static final String[] unitDisplayLabels = new String[] { "None", "Column Names", "New Columns", "New Table" };
-    /**
-     * The values for unit display options.
-     */
-    public static final UnitDisplay[] unitDisplayValues = new UnitDisplay[] { UnitDisplay.NONE, UnitDisplay.COLUMN_NAMES, UnitDisplay.NEW_COLUMNS, UnitDisplay.NEW_TABLE };
-    
     // ====================================================
     // Class variables
 
@@ -178,6 +169,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
             gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
             
             gd.addMessage("");
+            String[] unitDisplayLabels = UnitDisplayOption.getAllLabels();
             gd.addChoice("Unit_Display", unitDisplayLabels, unitDisplayLabels[1]);
             gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
             
@@ -208,7 +200,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
             if (gd.getNextBoolean()) features.add(AverageThickness.class);
             if (gd.getNextBoolean()) features.add(GeodesicElongation.class);
             
-            options.unitDisplay = unitDisplayValues[gd.getNextChoiceIndex()];
+            options.unitDisplay = UnitDisplayOption.fromLabel(gd.getNextChoice()).getUnitDisplay();
             options.includeImageName = gd.getNextBoolean();
     
             return options;

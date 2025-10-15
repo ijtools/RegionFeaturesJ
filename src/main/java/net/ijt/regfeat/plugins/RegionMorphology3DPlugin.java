@@ -19,6 +19,7 @@ import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
+import net.ijt.regfeat.RegionFeatures.UnitDisplay;
 import net.ijt.regfeat.morpho3d.Bounds3D;
 import net.ijt.regfeat.morpho3d.Centroid3D;
 import net.ijt.regfeat.morpho3d.EllipsoidElongations;
@@ -230,7 +231,8 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
 
         gd.addMessage("");
-        gd.addCheckbox("Display_Units", initialChoice.displayUnits);
+        String[] unitDisplayLabels = UnitDisplayOption.getAllLabels();
+        gd.addChoice("Unit_Display", unitDisplayLabels, unitDisplayLabels[1]);
         gd.addCheckbox("Include_Image_Name", initialChoice.includeImageName);
 
         // Display dialog and wait for user validation
@@ -252,7 +254,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(EquivalentEllipsoid.class);
         if (gd.getNextBoolean()) features.add(EllipsoidElongations.class);
 
-        options.displayUnits = gd.getNextBoolean();
+        options.unitDisplay = UnitDisplayOption.fromLabel(gd.getNextChoice()).getUnitDisplay();
         options.includeImageName = gd.getNextBoolean();
         
         return options;
@@ -266,9 +268,10 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         ArrayList<Class<? extends Feature>> features = new ArrayList<>();
         
         /**
-         * Display calibration unit within table column names, when appropriate.
+         * The strategy for displaying calibration units. Default is to append
+         * to column names.
          */
-        boolean displayUnits = false;
+        UnitDisplay unitDisplay = UnitDisplay.COLUMN_NAMES;
         
         /**
          * Can be useful when concatenating results obtained on different images
@@ -287,7 +290,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         {
             RegionFeatures analyzer = RegionFeatures.initialize(imagePlus);
             features.stream().forEachOrdered(feature -> analyzer.add(feature));
-            analyzer.displayUnitsInTable(this.displayUnits);
+            analyzer.unitDisplay(this.unitDisplay);
             return analyzer;
         }
     }
