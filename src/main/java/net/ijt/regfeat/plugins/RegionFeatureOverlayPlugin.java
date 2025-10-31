@@ -22,6 +22,7 @@ import net.ijt.regfeat.morpho2d.Bounds;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
 import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
 import net.ijt.regfeat.morpho2d.OrientedBoundingBox;
+import net.ijt.regfeat.morpho2d.core.BoundaryEdgesMidPoints;
 import net.ijt.regfeat.morpho2d.core.ConvexHull;
 import net.ijt.regfeat.morpho2d.core.FurthestPointPair;
 import net.ijt.regfeat.spatial.RegionAdjacencyGraph;
@@ -44,6 +45,7 @@ public class RegionFeatureOverlayPlugin implements PlugInFilter
         CONVEX_HULL("Convex Hull", ConvexHull.class), 
         FERET_DIAMETER("Feret Diameter", FurthestPointPair.class), 
         INSCRIBED_DISK("Inscribed Disk", LargestInscribedDisk.class),
+        BOUNDARY_POINTS("Boundary Points", BoundaryEdgesMidPoints.class), 
         REGION_ADJACENCY_GRAPH("Region Adjacency Graph", RegionAdjacencyGraph.class);
         
 
