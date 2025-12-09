@@ -8,6 +8,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import ij.ImagePlus;
@@ -36,7 +38,7 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
     }
     
     @Override
-    public HashMap<Double, HashSet<Double>>[] compute(RegionFeatures data)
+    public TreeMap<Double, TreeSet<Double>>[] compute(RegionFeatures data)
     {
         // retrieve label mpa data
         ImageProcessor labelMap = data.labelMap.getProcessor();
@@ -52,10 +54,10 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
         // y-coordinate of the points as map key, and listing all the
         // x-coordinates within the row within an ArrayList
         @SuppressWarnings("unchecked")
-        HashMap<Double, HashSet<Double>>[] pointMaps = (HashMap<Double, HashSet<Double>>[]) new HashMap<?,?>[nLabels];
+        TreeMap<Double, TreeSet<Double>>[] pointMaps = (TreeMap<Double, TreeSet<Double>>[]) new TreeMap<?,?>[nLabels];
         for (int i = 0; i < nLabels; i++)
         {
-            pointMaps[i] = new HashMap<Double, HashSet<Double>>();
+            pointMaps[i] = new TreeMap<Double, TreeSet<Double>>();
         }
         
         // labels for current, up, and left pixels.
@@ -85,7 +87,7 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
                     if (labelIndices.containsKey(labelUp))
                     {
                         int index = labelIndices.get(labelUp);
-                        addPoint(pointMaps[index], x, y);
+                        addPoint(pointMaps[index], x + 0.5, y);
                     }
                 }
                 
@@ -112,12 +114,12 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
         return pointMaps;
     }
     
-    private static final void addPoint(HashMap<Double, HashSet<Double>> map, double x, double y)
+    private static final void addPoint(TreeMap<Double, TreeSet<Double>> map, double x, double y)
     {
-        HashSet<Double> set = map.get(y);
+        TreeSet<Double> set = map.get(y);
         if (set == null)
         {
-            set = new HashSet<Double>();
+            set = new TreeSet<Double>();
         }
         set.add(x);
         map.put(y, set);

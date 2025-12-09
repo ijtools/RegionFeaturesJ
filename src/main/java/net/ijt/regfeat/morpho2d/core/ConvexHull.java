@@ -7,17 +7,19 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import ij.ImagePlus;
 import ij.gui.Overlay;
 import ij.gui.PolygonRoi;
 import ij.gui.Roi;
-import ij.process.ImageProcessor;
 import inra.ijpb.algo.AlgoStub;
 import inra.ijpb.geometry.Polygon2D;
-import inra.ijpb.geometry.Polygons2D;
+import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.OverlayFeature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RoiFeature;
@@ -27,6 +29,105 @@ import net.ijt.regfeat.RoiFeature;
  */
 public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
 {
+    private static final double TWO_PI = 2 * Math.PI;
+    
+    private static final Polygon2D convexHullFromMap(TreeMap<Double, TreeSet<Double>> coordsData)
+    {
+        // Init iteration on points
+        double yMin = coordsData.firstKey();
+        double xMax = coordsData.firstEntry().getValue().last();
+        Point2D lowestPoint = new Point2D.Double(xMax, yMin);
+
+        // initialize an empty array of points for hull vertices
+        ArrayList<Point2D> vertices = new ArrayList<Point2D>();
+
+        // Init iteration on points
+        Point2D currentPoint = lowestPoint;
+        Point2D nextPoint = null;
+        double angle = 0;
+
+        // Iterate on point set to find point with smallest angle with respect
+        // to previous line
+        do 
+        {
+            vertices.add(currentPoint);
+            nextPoint = findNextPoint(currentPoint, angle, coordsData);
+            angle = computeAngle(currentPoint, nextPoint);
+            currentPoint = nextPoint;
+        }
+        while (currentPoint.getX() != lowestPoint.getX() || currentPoint.getY() != lowestPoint.getY());
+
+        // Create a polygon with points located on the convex hull
+        return new Polygon2D(vertices);
+    }
+    
+    private static final Point2D findNextPoint(Point2D basePoint, double startAngle, TreeMap<Double, TreeSet<Double>> coordsData)
+    {
+        double minAngle = Double.MAX_VALUE;
+        double minX  = Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double angle;
+        
+        for(Map.Entry<Double, TreeSet<Double>> entry : coordsData.entrySet())
+        {
+            double y = entry.getKey();
+            // consider only extreme x-coordinates on the current row
+            double[] xRange = new double[] {entry.getValue().getFirst(), entry.getValue().getLast()};
+            for (double x : xRange)
+            {
+                // Avoid to test same point
+                if (basePoint.getX() == x && basePoint.getY() == y) continue;
+                
+                // Compute angle between current direction and next point
+                angle = computeAngle(basePoint, x, y);
+                angle = diffAngle(startAngle, angle);
+                
+                // Keep current point if angle is minimal
+                if (angle < minAngle)
+                {
+                    minAngle = angle;
+                    minX = x;
+                    minY = y;
+                }
+                else if (angle == minAngle && basePoint.distance(x, y) > basePoint.distance(minX, minY))
+                {
+                    // if angle is the same, keep only the furthest point
+                    minAngle = angle;
+                    minX = x;
+                    minY = y;
+                }
+            }
+        }
+        
+        return new Point2D.Double(minX, minY);
+    }
+    
+    /**
+     * Computes the horizontal angle of the straight line going through two
+     * points.
+     * 
+     * @param p1
+     *            the first point
+     * @param p2
+     *            the second point
+     * @return the horizontal angle of the straight line going through the two
+     *         points, between 0 and 2*PI.
+     */
+    private static final double computeAngle(Point2D p1, Point2D p2)
+    {
+        return (Math.atan2(p2.getY() - p1.getY(), p2.getX() - p1.getX()) + TWO_PI) % TWO_PI;
+    }
+    
+    private static final double computeAngle(Point2D p1, double x2, double y2)
+    {
+        return (Math.atan2(y2 - p1.getY(), x2 - p1.getX()) + TWO_PI) % TWO_PI;
+    }
+    
+    private static final double diffAngle(double startAngle, double endAngle)
+    {
+        return (endAngle - startAngle + TWO_PI) % TWO_PI; 
+    }
+
     /**
      * Default empty constructor.
      */
@@ -37,114 +138,17 @@ public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
     @Override
     public Polygon2D[] compute(RegionFeatures data)
     {
-        // retrieve data
-        ImageProcessor image = data.labelMap.getProcessor();
-        
-        // for each region, extract the points at the middle of the boundary edges
-        ArrayList<Point2D>[] pointArrays = boundaryPixelsMiddleEdges(image, data.labelIndices);
-        
+        // retrieve required feature values
+        data.ensureRequiredFeaturesAreComputed(this);
+        @SuppressWarnings("unchecked")
+        TreeMap<Double, TreeSet<Double>>[] coordsData = (TreeMap<Double, TreeSet<Double>>[]) data.results.get(BoundaryEdgesMidPoints.class);
+
         // compute convex hull of boundary points around each region
-        Polygon2D[] hulls = Arrays.stream(pointArrays)
-            .map(array -> !array.isEmpty() ? Polygons2D.convexHull(array) : null)
-            .toArray(Polygon2D[]::new);
+        Polygon2D[] hulls = Arrays.stream(coordsData)
+                .map(m -> convexHullFromMap(m))
+                .toArray(Polygon2D[]::new);
         
         return hulls;
-    }
-    
-    /**
-     * Extracts boundary points from the different regions.
-     * 
-     * This method considers middle points of pixel edges, assuming a "diamond
-     * shape" for pixels. For a single pixel (x,y), ImageJ considers equivalent
-     * area to be [x,x+1[ x [y,y+1[, and pixel center at (x+0.5, y+0.5).
-     * 
-     * The boundaries extracted by this methods have following coordinates:
-     * <ul>
-     * <li><i>(x+0.5, y)</i>: top boundary</li>
-     * <li><i>(x , y+0.5)</i>: left boundary</li>
-     * <li><i>(x+1 , y+0.5)</i>: right boundary</li>
-     * <li><i>(x+0.5, y+1)</i>: bottom boundary</li>
-     * </ul>
-     * 
-     * @see inra.ijpb.measure.region2d.RegionBoundaries#boundaryPixelsMiddleEdges(ImageProcessor, int[])
-     * 
-     * @param labelImage
-     *            the image processor containing the region labels
-     * @param labels
-     *            the array of region labels
-     * @return an array of arrays of boundary points, one array for each label.
-     */
-    private ArrayList<Point2D>[] boundaryPixelsMiddleEdges(ImageProcessor labelImage, HashMap<Integer, Integer> labelIndices)
-    {
-        // size of image
-        int sizeX = labelImage.getWidth();
-        int sizeY = labelImage.getHeight();
-        
-        int nLabels = labelIndices.size();
-        
-        // allocate data structure for storing results
-        @SuppressWarnings("unchecked")
-        ArrayList<Point2D>[] pointArrays = (ArrayList<Point2D>[]) new ArrayList<?>[nLabels];
-        for (int i = 0; i < nLabels; i++)
-        {
-            pointArrays[i] = new ArrayList<Point2D>();
-        }
-        
-        // labels for current, up, and left pixels.
-        int label = 0;
-        int labelUp = 0;
-        int labelLeft = 0;
-        
-        // iterate on image pixel configurations
-        for (int y = 0; y < sizeY + 1; y++) 
-        {
-            this.fireProgressChanged(this, y, sizeY);
-            
-            for (int x = 0; x < sizeX + 1; x++) 
-            {
-                // update pixel values of configuration
-                label = x < sizeX & y < sizeY ? (int) labelImage.getf(x, y): 0;
-                labelUp = x < sizeX & y > 0 ? (int) labelImage.getf(x, y - 1): 0;
-
-                // check boundary with upper pixel
-                if (labelUp != label)
-                {
-                    Point2D p = new Point2D.Double(x + 0.5, y);
-                    if (labelIndices.containsKey(label))
-                    {
-
-                        int index = labelIndices.get(label);
-                        pointArrays[index].add(p);
-                    }
-                    if (labelIndices.containsKey(labelUp))
-                    {
-                        int index = labelIndices.get(labelUp);
-                        pointArrays[index].add(p);
-                    }
-                }
-                
-                // check boundary with left pixel
-                if (labelLeft != label)
-                {
-                    Point2D p = new Point2D.Double(x, y + 0.5);
-                    if (labelIndices.containsKey(label))
-                    {
-                        int index = labelIndices.get(label);
-                        pointArrays[index].add(p);
-                    }
-                    if (labelIndices.containsKey(labelLeft))
-                    {
-                        int index = labelIndices.get(labelLeft);
-                        pointArrays[index].add(p);
-                    }
-                }
-
-                // update values of left label for next iteration
-                labelLeft = label;
-            }
-        }
-
-        return pointArrays;
     }
     
     @Override
@@ -198,5 +202,11 @@ public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
         }
         
         return new PolygonRoi(xdata, ydata, nv, Roi.POLYGON);
+    }
+    
+    @Override
+    public Collection<Class<? extends Feature>> requiredFeatures()
+    {
+        return Arrays.asList(BoundaryEdgesMidPoints.class);
     }
 }
