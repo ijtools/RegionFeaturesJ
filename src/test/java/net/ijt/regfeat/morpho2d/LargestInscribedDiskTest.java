@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.measure.ResultsTable;
 import ij.process.ByteProcessor;
@@ -84,7 +85,7 @@ public class LargestInscribedDiskTest
      * Test method for {@link net.ijt.regfeat.morpho2d.LargestInscribedDisk#updateTable(ij.measure.ResultsTable, net.ijt.regfeat.RegionFeatures)}.
      */
     @Test
-    public final void testUpdateTable()
+    public final void test_updateTable()
     {
         ImagePlus labelMap = createImagePlus();
         RegionFeatures data = RegionFeatures.initialize(labelMap)
@@ -97,6 +98,19 @@ public class LargestInscribedDiskTest
         
         assertEquals(4, table.getCounter());
         assertEquals(2, table.getLastColumn());
+    }
+
+    @Test
+    public final void test_overlayResult()
+    {
+        ImagePlus labelMap = IJ.openImage(getClass().getResource("/grains-med-WTH-lbl.tif").getFile());
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
+        data.process(LargestInscribedDisk.class);
+        
+        LargestInscribedDisk feature = new LargestInscribedDisk();
+        feature.overlayResult(labelMap, data, 1.5);
+        labelMap.show();
+//        while(true);
     }
     
     private static final ImagePlus createImagePlus()

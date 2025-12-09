@@ -93,8 +93,11 @@ public class FurthestPointPair extends AlgoStub implements RegionTabularFeature,
             PointPair2D[] array = (PointPair2D[]) obj;
             for (int r = 0; r < array.length; r++)
             {
-                PointPair2D maxDiam = array[r];
-                table.setValue("Max_Feret_Diameter", r, maxDiam.diameter());
+                PointPair2D pair = array[r];
+                table.setValue("FurthestPointPair.P1.X", r, pair.p1.getX());
+                table.setValue("FurthestPointPair.P1.Y", r, pair.p1.getY());
+                table.setValue("FurthestPointPair.P2.X", r, pair.p2.getX());
+                table.setValue("FurthestPointPair.P2.Y", r, pair.p2.getY());
             }
         }
         else
