@@ -72,7 +72,7 @@ public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
         {
             double y = entry.getKey();
             // consider only extreme x-coordinates on the current row
-            double[] xRange = new double[] {entry.getValue().getFirst(), entry.getValue().getLast()};
+            double[] xRange = new double[] {entry.getValue().first(), entry.getValue().last()};
             for (double x : xRange)
             {
                 // Avoid to test same point
