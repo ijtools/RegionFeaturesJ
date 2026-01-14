@@ -25,6 +25,7 @@ import net.ijt.regfeat.morpho3d.Centroid3D;
 import net.ijt.regfeat.morpho3d.EllipsoidElongations;
 import net.ijt.regfeat.morpho3d.EquivalentEllipsoid;
 import net.ijt.regfeat.morpho3d.EulerNumber;
+import net.ijt.regfeat.morpho3d.LargestInscribedBall;
 import net.ijt.regfeat.morpho3d.MeanBreadth;
 import net.ijt.regfeat.morpho3d.Sphericity;
 import net.ijt.regfeat.morpho3d.SurfaceArea;
@@ -234,6 +235,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
                 "Euler_Number", "Sphericity",
                 "Bounding_Box", "Centroid",
                 "Equivalent_Ellipsoid", "Ellipsoid_Elongations",
+                "Inscribed_Ball"
         };
         boolean[] states = new boolean[] {
                 features.contains(ElementCount.class), features.contains(Volume.class),
@@ -241,6 +243,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
                 features.contains(EulerNumber.class), features.contains(Sphericity.class),
                 features.contains(Bounds3D.class), features.contains(Centroid3D.class),
                 features.contains(EquivalentEllipsoid.class), features.contains(EllipsoidElongations.class),
+                features.contains(LargestInscribedBall.class), 
         };
         gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
 
@@ -267,6 +270,7 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(Centroid3D.class);
         if (gd.getNextBoolean()) features.add(EquivalentEllipsoid.class);
         if (gd.getNextBoolean()) features.add(EllipsoidElongations.class);
+        if (gd.getNextBoolean()) features.add(LargestInscribedBall.class);
 
         options.unitDisplay = UnitDisplayOption.fromLabel(gd.getNextChoice()).getUnitDisplay();
         options.includeImageName = gd.getNextBoolean();
