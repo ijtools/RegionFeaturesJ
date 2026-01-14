@@ -40,7 +40,7 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
     @Override
     public TreeMap<Double, TreeSet<Double>>[] compute(RegionFeatures data)
     {
-        // retrieve label mpa data
+        // retrieve label map data
         ImageProcessor labelMap = data.labelMap.getProcessor();
         int sizeX = labelMap.getWidth();
         int sizeY = labelMap.getHeight();
