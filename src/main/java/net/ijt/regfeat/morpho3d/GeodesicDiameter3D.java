@@ -17,6 +17,9 @@ import net.ijt.regfeat.morpho3d.core.GeodesicDiameter3DData.Result;
 /**
  * Computes the 3D geodesic diameter of each region within a label map.
  * 
+ * The result is given in calibrated units, but computation is possible only for
+ * images with cubic voxels (the spacing between voxels along each dimension is
+ * the same).
  */
 public class GeodesicDiameter3D extends SingleValueFeature
 {
@@ -25,7 +28,7 @@ public class GeodesicDiameter3D extends SingleValueFeature
      */
     public GeodesicDiameter3D()
     {
-        super("Geodesic_Diameter_3D");
+        super("Geodesic_Diameter");
     }
 
     @Override

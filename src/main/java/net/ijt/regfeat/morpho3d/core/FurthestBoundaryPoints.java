@@ -22,6 +22,8 @@ import net.ijt.regfeat.morpho2d.core.ConvexHull;
 /**
  * Utility feature for MaxFeretDiameter3D, that computes the pair of region's
  * boundary points that are the furthest to each other.
+ * 
+ * The resulting points are in calibrated coordinates.
  */
 public class FurthestBoundaryPoints extends AlgoStub implements Feature
 {
