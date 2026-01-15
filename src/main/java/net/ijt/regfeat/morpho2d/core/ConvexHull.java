@@ -31,7 +31,7 @@ public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
 {
     private static final double TWO_PI = 2 * Math.PI;
     
-    private static final Polygon2D convexHullFromMap(TreeMap<Double, TreeSet<Double>> coordsData)
+    public static final Polygon2D convexHullFromMap(TreeMap<Double, TreeSet<Double>> coordsData)
     {
         // Init iteration on points
         double yMin = coordsData.firstKey();
