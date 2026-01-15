@@ -10,8 +10,10 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 
+import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ByteProcessor;
+import inra.ijpb.label.LabelImages;
 import net.ijt.regfeat.RegionFeatures;
 
 /**
@@ -74,6 +76,21 @@ public class BoundaryEdgesMidPointsTest
         assertEquals(2, res0.get(0.5).size());
         assertEquals(2, res0.get(1.5).size());
         assertEquals(2, res0.get(2.5).size());
+    }
+    
+    /**
+     * Test method for {@link net.ijt.regfeat.morpho2d.core.ConvexHull#overlayResult(ij.ImagePlus, net.ijt.regfeat.RegionFeatures, double)}.
+     */
+    @Test
+    public final void test_overlayResult()
+    {
+        ImagePlus labelMap = IJ.openImage(getClass().getResource("/grains-med-WTH-lbl.tif").getFile());
+        RegionFeatures data = new RegionFeatures(labelMap, LabelImages.findAllLabels(labelMap));
+        data.process(BoundaryEdgesMidPoints.class);
+        
+        BoundaryEdgesMidPoints feature = new BoundaryEdgesMidPoints();
+        feature.overlayResult(labelMap, data, 1.5);
+        labelMap.show();
     }
 
 }

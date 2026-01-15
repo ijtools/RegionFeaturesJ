@@ -7,7 +7,6 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Stream;
@@ -24,7 +23,7 @@ import net.ijt.regfeat.RoiFeature;
 
 /**
  * Returns the coordinates of the points located at the middle of boundary
- * edges. Points are stores in a nested Map data structure, in pixel
+ * edges. Points are stored in a nested Map data structure, in pixel
  * coordinates.
  */
 public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, RoiFeature
@@ -34,9 +33,72 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
      */
     public BoundaryEdgesMidPoints()
     {
-        
     }
     
+    @Override
+    public void overlayResult(ImagePlus target, RegionFeatures data, double strokeWidth)
+    {
+        // convert region feature to ROI
+        Roi[] rois = computeRois(data);
+                
+        // create overlay
+        Overlay overlay = new Overlay();
+        
+        // add each ellipse to the overlay
+        for (int i = 0; i < rois.length; i++) 
+        {
+            // convert region feature to ROI
+            Roi roi = rois[i];
+    
+            // roi corresponding to ellipse
+            Color color = data.labelColors[i];
+            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
+        }
+        
+        target.setOverlay(overlay);
+    }
+
+    @Override
+    public Roi[] computeRois(RegionFeatures data)
+    {
+        // retrieve array of maps
+        Object obj = data.results.get(this.getClass());
+        if (!(obj instanceof TreeMap[]))
+        {
+            throw new RuntimeException("Requires object argument to be an array of TreeMap");
+        }
+        
+        @SuppressWarnings("unchecked")
+        TreeMap<Double, TreeSet<Double>>[] coordsData = (TreeMap<Double, TreeSet<Double>>[]) obj;
+        
+        // convert each ellipse into a ROI
+        return Stream.of(coordsData)
+                .map(map -> createRoi(map))
+                .toArray(Roi[]::new);
+    }
+
+    private final static Roi createRoi(TreeMap<Double, TreeSet<Double>> map)
+    {
+        ArrayList<Point2D.Float> points = new ArrayList<Point2D.Float>();
+        for (double y : map.keySet())
+        {
+            for (double x : map.get(y))
+            {
+                points.add(new Point2D.Float((float) x, (float) y));
+            }
+        }
+        
+        int np = points.size();
+        float[] xdata = new float[np];
+        float[] ydata = new float[np];
+        for (int i = 0; i < np; i++)
+        {
+            xdata[i] = points.get(i).x;
+            ydata[i] = points.get(i).y;
+        }
+        return new PointRoi(xdata, ydata);
+    }
+
     @Override
     public TreeMap<Double, TreeSet<Double>>[] compute(RegionFeatures data)
     {
@@ -52,7 +114,7 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
         // allocate data structure for storing results
         // for each region, organize the boundary points within a map, using the
         // y-coordinate of the points as map key, and listing all the
-        // x-coordinates within the row within an ArrayList
+        // x-coordinates within the row within an TreeSet
         @SuppressWarnings("unchecked")
         TreeMap<Double, TreeSet<Double>>[] pointMaps = (TreeMap<Double, TreeSet<Double>>[]) new TreeMap<?,?>[nLabels];
         for (int i = 0; i < nLabels; i++)
@@ -70,11 +132,12 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
         {
             this.fireProgressChanged(this, y, sizeY);
             
+            labelLeft = 0;
             for (int x = 0; x < sizeX + 1; x++) 
             {
                 // update pixel values of configuration
-                label = x < sizeX & y < sizeY ? (int) labelMap.getf(x, y): 0;
-                labelUp = x < sizeX & y > 0 ? (int) labelMap.getf(x, y - 1): 0;
+                label = x < sizeX & y < sizeY ? (int) labelMap.getf(x, y) : 0;
+                labelUp = x < sizeX & y > 0 ? (int) labelMap.getf(x, y - 1) : 0;
 
                 // check boundary with upper pixel
                 if (labelUp != label)
@@ -123,73 +186,5 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
         }
         set.add(x);
         map.put(y, set);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Roi[] computeRois(RegionFeatures data)
-    {
-        // retrieve array of ellipses
-        Object obj = data.results.get(this.getClass());
-        if (!(obj instanceof HashMap[]))
-        {
-            throw new RuntimeException("Requires object argument to be an array of HashMap");
-        }
-        
-        // convert each ellipse into a ROI
-        return Stream.of((HashMap[]) obj)
-                .map(map -> createRoi((HashMap<Double, HashSet<Double>> ) map))
-                .toArray(Roi[]::new);
-    }
-
-    @Override
-    public void overlayResult(ImagePlus target, RegionFeatures data, double strokeWidth)
-    {
-        // retrieve array of ellipses
-        Object obj = data.results.get(this.getClass());
-        if (!(obj instanceof HashMap[]))
-        {
-            throw new RuntimeException("Requires object argument to be an array of Ellipse");
-        }
-        @SuppressWarnings("unchecked")
-        HashMap<Double, HashSet<Double>>[] maps = (HashMap<Double, HashSet<Double>>[]) obj;
-                
-        // create overlay
-        Overlay overlay = new Overlay();
-        
-        // add each ellipse to the overlay
-        for (int i = 0; i < maps.length; i++) 
-        {
-            // convert region feature to ROI
-            Roi roi = createRoi(maps[i]);
-
-            // roi corresponding to ellipse
-            Color color = data.labelColors[i];
-            OverlayFeature.addRoiToOverlay(overlay, roi, color, strokeWidth);
-        }
-        
-        target.setOverlay(overlay);
-    }
-
-    private final static Roi createRoi(HashMap<Double, HashSet<Double>> map)
-    {
-        ArrayList<Point2D.Float> points = new ArrayList<Point2D.Float>();
-        for (double y : map.keySet())
-        {
-            for (double x : map.get(y))
-            {
-                points.add(new Point2D.Float((float) x, (float) y));
-            }
-        }
-        
-        int np = points.size();
-        float[] xdata = new float[np];
-        float[] ydata = new float[np];
-        for (int i = 0; i < np; i++)
-        {
-            xdata[i] = points.get(i).x;
-            ydata[i] = points.get(i).y;
-        }
-        return new PointRoi(xdata, ydata);
     }
 }
