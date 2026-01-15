@@ -21,7 +21,6 @@ import inra.ijpb.label.LabelValues.PositionValuePair;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionTabularFeature;
 import net.ijt.regfeat.RegionFeatures;
-import net.ijt.regfeat.morpho2d.LargestInscribedDisk;
 
 /**
  * Data to compute geodesic diameter. Stores the results in pixel coordinates.
@@ -165,8 +164,9 @@ public class GeodesicDiameterData extends AlgoStub implements RegionTabularFeatu
     @Override
     public Collection<Class<? extends Feature>> requiredFeatures()
     {
-        return Arrays.asList(LargestInscribedDisk.class);
+        return Arrays.asList(DistanceMapMaximaPosition.class);
     }
+    
     
     // ==================================================
     // Inner class used for representing computation results
