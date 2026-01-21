@@ -16,6 +16,7 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import inra.ijpb.algo.DefaultAlgoListener;
 import inra.ijpb.label.LabelImages;
+import net.ijt.regfeat.ElementCount;
 import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionFeatures.UnitDisplay;
@@ -145,8 +146,9 @@ public class RegionMorphologyPlugin implements PlugInFilter
             // a collection of check boxes to choose features
             Collection<Class<? extends Feature>> features = initialChoice.features;
             String[] featureNames = new String[] {
+                    "Pixel Count", null, 
                     "Area", "Perimeter", 
-                    "Circularity", "Euler_Number",
+                    "Euler_Number", "Circularity",
                     "Bounding_Box", "Centroid",
                     "Equivalent_Ellipse", "Ellipse_Elongation",
                     "Convexity", "Max_Feret_Diameter",
@@ -156,6 +158,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
                     "Geodesic_Elongation",
             };
             boolean[] states = new boolean[] {
+                    features.contains(ElementCount.class), false,
                     features.contains(Area.class), features.contains(Perimeter.class),
                     features.contains(Circularity.class), features.contains(EulerNumber.class),
                     features.contains(Bounds.class), features.contains(Centroid.class),
@@ -181,11 +184,11 @@ public class RegionMorphologyPlugin implements PlugInFilter
             // Extract features to quantify from image
             Options options = new Options();
             features = options.features;
-            // if (gd.getNextBoolean()) features.add(Feature.PIXEL_COUNT);
+            if (gd.getNextBoolean()) features.add(ElementCount.class);
             if (gd.getNextBoolean()) features.add(Area.class);
             if (gd.getNextBoolean()) features.add(Perimeter.class);
-            if (gd.getNextBoolean()) features.add(Circularity.class);
             if (gd.getNextBoolean()) features.add(EulerNumber.class);
+            if (gd.getNextBoolean()) features.add(Circularity.class);
             if (gd.getNextBoolean()) features.add(Bounds.class);
             if (gd.getNextBoolean()) features.add(Centroid.class);
             if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);

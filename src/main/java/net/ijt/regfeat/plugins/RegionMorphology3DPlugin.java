@@ -236,22 +236,24 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         String[] featureNames = new String[] {
                 "Voxel_Count", null, 
                 "Volume", "Surface_Area", 
-                "Mean_Breadth", "Sphericity",
+                "Mean_Breadth", "Euler_Number",  
+                "Sphericity", null, 
                 "Bounding_Box", "Centroid",
                 "Equivalent_Ellipsoid", "Ellipsoid_Elongations",
-                "Inscribed_Ball", "Geodesic_Diameter",
-                "Max_Feret_Diameter", "Tortuosity", 
-                "Geodesic_Elongation", "Euler_Number", 
+                "Max_Feret_Diameter", "Inscribed_Ball", 
+                "Geodesic_Diameter", "Tortuosity", 
+                "Geodesic_Elongation",  
         };
         boolean[] states = new boolean[] {
                 features.contains(ElementCount.class), false, 
                 features.contains(Volume.class), features.contains(SurfaceArea.class), 
-                features.contains(MeanBreadth.class), features.contains(Sphericity.class),
+                features.contains(MeanBreadth.class), features.contains(EulerNumber.class),
+                features.contains(Sphericity.class), false, 
                 features.contains(Bounds3D.class), features.contains(Centroid3D.class),
                 features.contains(EquivalentEllipsoid.class), features.contains(EllipsoidElongations.class),
-                features.contains(LargestInscribedBall.class), features.contains(GeodesicDiameter3D.class),
-                features.contains(MaxFeretDiameter3D.class), features.contains(Tortuosity3D.class),
-                features.contains(GeodesicElongation3D.class), features.contains(EulerNumber.class), 
+                features.contains(MaxFeretDiameter3D.class), features.contains(LargestInscribedBall.class), 
+                features.contains(GeodesicDiameter3D.class), features.contains(Tortuosity3D.class),
+                features.contains(GeodesicElongation3D.class),  
         };
         gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
 
@@ -272,17 +274,17 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(Volume.class);
         if (gd.getNextBoolean()) features.add(SurfaceArea.class);
         if (gd.getNextBoolean()) features.add(MeanBreadth.class);
+        if (gd.getNextBoolean()) features.add(EulerNumber.class);
         if (gd.getNextBoolean()) features.add(Sphericity.class);
         if (gd.getNextBoolean()) features.add(Bounds3D.class);
         if (gd.getNextBoolean()) features.add(Centroid3D.class);
         if (gd.getNextBoolean()) features.add(EquivalentEllipsoid.class);
         if (gd.getNextBoolean()) features.add(EllipsoidElongations.class);
+        if (gd.getNextBoolean()) features.add(MaxFeretDiameter3D.class);
         if (gd.getNextBoolean()) features.add(LargestInscribedBall.class);
         if (gd.getNextBoolean()) features.add(GeodesicDiameter3D.class);
-        if (gd.getNextBoolean()) features.add(MaxFeretDiameter3D.class);
         if (gd.getNextBoolean()) features.add(Tortuosity3D.class);
         if (gd.getNextBoolean()) features.add(GeodesicElongation3D.class);
-        if (gd.getNextBoolean()) features.add(EulerNumber.class);
 
         options.unitDisplay = UnitDisplayOption.fromLabel(gd.getNextChoice()).getUnitDisplay();
         options.includeImageName = gd.getNextBoolean();
