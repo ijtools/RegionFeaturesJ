@@ -31,6 +31,14 @@ public class ConvexHull extends AlgoStub implements OverlayFeature, RoiFeature
 {
     private static final double TWO_PI = 2 * Math.PI;
     
+    /**
+     * Computes the convex hull corresponding to the coordinates data such as
+     * obtained from the {@code BoundaryEdgesMidPoints} class.
+     * 
+     * @param coordsData
+     *            the coordinates of boundary points for each region
+     * @return the corresponding convex hull
+     */
     public static final Polygon2D convexHullFromMap(TreeMap<Double, TreeSet<Double>> coordsData)
     {
         // Init iteration on points

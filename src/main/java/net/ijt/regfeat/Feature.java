@@ -13,7 +13,19 @@ import java.util.Collections;
  * 
  * The result of the computation is provided by the {@code compute} method.
  * 
+ * Several specialization interfaces allow to further describe the expected
+ * behavior of the feature:
+ * <ul>
+ * <li>the {@code RegionTabularFeature} expects that each region
+ * may be described by a series of numerical values, that can be used to
+ * populate a data table</li>
+ * <li>the {@code OverlayFeature} can be used to display result of computation
+ * onto another image (typically the grayscale or color image used to generate a
+ * label map)</li>
+ * </ul>
+ * 
  * @see RegionTabularFeature
+ * @see SingleValueFeature
  * @see OverlayFeature
  */
 public interface Feature

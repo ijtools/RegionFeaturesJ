@@ -43,6 +43,8 @@ public interface OverlayFeature extends Feature
      * @param data
      *            the data structure containing results of features computed on
      *            regions
+     * @param strokeWidth
+     *            the width of the stroke used to draw the overlays
      */
     public void overlayResult(ImagePlus image, RegionFeatures data, double strokeWidth);
     

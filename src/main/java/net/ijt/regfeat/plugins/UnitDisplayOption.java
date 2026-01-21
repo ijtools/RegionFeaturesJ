@@ -16,9 +16,16 @@ import net.ijt.regfeat.RegionFeatures.UnitDisplay;
  */
 public enum UnitDisplayOption
 {
-    NONE("None", UnitDisplay.NONE), 
-    COLUMN_NAMES("Column Names", UnitDisplay.COLUMN_NAMES), 
+    /** Do not display units. */
+    NONE("None", UnitDisplay.NONE),
+    /** Appends unit names to column names (when relevant). */
+    COLUMN_NAMES("Column Names", UnitDisplay.COLUMN_NAMES),
+    /** Creates new columns containing unit name of the preceding column. */
     NEW_COLUMNS("New Columns", UnitDisplay.NEW_COLUMNS),
+    /**
+     * Creates a new table mapping each feature within the result table to the
+     * unit name for the column.
+     */
     NEW_TABLE("New Table", UnitDisplay.NEW_TABLE);
 
     /** The name of the option, for GUI display */
@@ -34,14 +41,18 @@ public enum UnitDisplayOption
     }
     
     /**
+     * Returns the label associated to this enumeration item.
+     * 
      * @return the label associated to this enumeration item
      */
-    public String getLabel() 
+    public String getLabel()
     {
         return label;
     }
 
     /**
+     * Returns the UnitDisplay instance corresponding to this enumeration item.
+     * 
      * @return the UnitDisplay instance corresponding to this enumeration item
      */
     public UnitDisplay getUnitDisplay() 
@@ -58,6 +69,8 @@ public enum UnitDisplayOption
     }
     
     /**
+     * Returns the array of labels for the items within this enumeration.
+     * 
      * @return the array of labels for the items within this enumeration
      */
     public static String[] getAllLabels()

@@ -103,6 +103,16 @@ public class RegionFeatures extends AlgoStub
      */
     private static Map<ResultsTable, RegionFeatures> resultsTableFeaturesMap = new HashMap<>();
     
+    /**
+     * Creates a new ResultsTable containing an additional column filled with
+     * the name of the image.
+     * 
+     * @param table
+     *            the base table.
+     * @param imageName
+     *            the name of the image (used to populate the new column)
+     * @return a new Table with an additional column.
+     */
     public static final ResultsTable insertImageNameColumn(ResultsTable table, String imageName)
     {
         ResultsTable res = new ResultsTable();

@@ -130,21 +130,18 @@ public class GeodesicDiameter3DData extends AlgoStub implements AlgoListener, Re
         double w0 = chamferMask.getNormalizationWeight();
         for (int i = 0; i < nLabels; i++)
         {
-            Result res = new Result();
-
             // Get the maximum distance within each label
-            double diam = secondGeodesicExtremities[i].getValue();
-            // normalize by first weight of chamfer mask
-            // and add 1.0 to take into account voxel thickness
-            res.diameter = diam / w0 + 1.0;
-
-            // also keep references to characteristic points
-            res.initialPoint = maximaPositions[i];
-            res.firstExtremity = firstGeodesicExtremities[i];
-            res.secondExtremity = secondGeodesicExtremities[i].getPosition();
+            // normalized by first weight of chamfer mask, 
+            // and adding 1.0 to take into account voxel thickness
+            double diameter = secondGeodesicExtremities[i].getValue() / w0 + 1.0;
 
             // store the result
-            result[i] = res;
+            result[i] = new Result(
+                    diameter, 
+                    maximaPositions[i],
+                    firstGeodesicExtremities[i],
+                    secondGeodesicExtremities[i].getPosition()
+                    );
         }
 
         //      // calibrate the results
@@ -238,14 +235,34 @@ public class GeodesicDiameter3DData extends AlgoStub implements AlgoListener, Re
     // Inner class used for representing computation results
     
     /**
-     * Inner class used for representing results of 3D geodesic diameters
-     * computations. Each instance corresponds to a single region / particle.
-     * 
-     * @author dlegland
-     *
+     * Inner class used for representing results of computation of 3D geodesic
+     * diameters. Each instance corresponds to a single region.
      */
     public class Result
     {
+        /**
+         * Initialization constructor.
+         * 
+         * @param diameter
+         *            the geodesic diameter of the region
+         * @param initialPoint
+         *            the coordinates of the voxel used to initialize
+         *            propagation
+         * @param firstExtremity
+         *            the coordinates of the voxel identified as first geodesic
+         *            extremity
+         * @param secondExtremity
+         *            the coordinates of the voxel identified as second geodesic
+         *            extremity
+         */
+        public Result(double diameter, Cursor3D initialPoint, Cursor3D firstExtremity, Cursor3D secondExtremity)
+        {
+            this.diameter = diameter;
+            this.initialPoint = initialPoint;
+            this.firstExtremity = firstExtremity;
+            this.secondExtremity = secondExtremity;
+        }
+        
         /** The geodesic diameter of the region */
         public double diameter;
 
