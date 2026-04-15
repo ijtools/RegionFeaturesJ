@@ -26,7 +26,12 @@ import net.ijt.regfeat.RegionFeatures;
 
 /**
  * Utility feature for MaxFeretDiameter, that computes the pair of points within
- * the region that are the furthest to each other.
+ * the region that are the farthest to each other.
+ * 
+ * Distances are computed between vertices of the convex hull. Results are given
+ * in calibrated coordinates.
+ * 
+ * @see ConvexHull
  */
 public class FurthestPointPair extends AlgoStub implements RegionTabularFeature, OverlayFeature
 {

@@ -144,16 +144,6 @@ public class GeodesicDiameter3DData extends AlgoStub implements AlgoListener, Re
                     );
         }
 
-        //      // calibrate the results
-        //      if (calib.scaled())
-        //      {
-        //          this.fireStatusChanged(this, "Re-calibrating results");
-        //          for (int i = 0; i < nLabels; i++)
-        //          {
-        //              result[i] = result[i].recalibrate(calib);
-        //          }
-        //      }
-
         // returns the results
         return result;
     }
