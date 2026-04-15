@@ -362,7 +362,9 @@ public class RegionFeatures extends AlgoStub
     }
 
     /**
-     * Adds the feature to the list of features to compute.
+     * Adds the feature identified by its class to the list of features to
+     * compute. Each feature can be contained only once: adding the same feature
+     * class twice has no effect.
      * 
      * @param featureClass
      *            the class of the feature to compute.
@@ -371,7 +373,26 @@ public class RegionFeatures extends AlgoStub
      */
     public RegionFeatures add(Class<? extends Feature> featureClass)
     {
-        this.featureClasses.add(featureClass);
+        if (!this.featureClasses.contains(featureClass))
+        {
+            this.featureClasses.add(featureClass);
+        }
+        return this;
+    }
+    
+    /**
+     * Adds the feature to the list of features to compute.
+     * 
+     * @param feature
+     *            the feature to compute.
+     * @return a reference to this {@code RegionFeatures}, for chaining
+     *         operations.
+     */
+    public RegionFeatures add(Feature feature)
+    {
+        Class<? extends Feature> fClass = feature.getClass();
+        add(fClass);
+        this.features.put(fClass, feature);
         return this;
     }
     
