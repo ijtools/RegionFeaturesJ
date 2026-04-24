@@ -27,6 +27,7 @@ import net.ijt.regfeat.morpho2d.Centroid;
 import net.ijt.regfeat.morpho2d.Circularity;
 import net.ijt.regfeat.morpho2d.Convexity;
 import net.ijt.regfeat.morpho2d.EllipseElongation;
+import net.ijt.regfeat.morpho2d.EquivalentDiameter;
 import net.ijt.regfeat.morpho2d.EquivalentEllipse;
 import net.ijt.regfeat.morpho2d.EulerNumber;
 import net.ijt.regfeat.morpho2d.GeodesicDiameter;
@@ -148,7 +149,8 @@ public class RegionMorphologyPlugin implements PlugInFilter
             String[] featureNames = new String[] {
                     "Pixel Count", null, 
                     "Area", "Perimeter", 
-                    "Euler_Number", "Circularity",
+                    "Equivalent_Diameter", "Circularity",
+                    "Euler_Number", null,
                     "Bounding_Box", "Centroid",
                     "Equivalent_Ellipse", "Ellipse_Elongation",
                     "Convexity", "Max_Feret_Diameter",
@@ -160,7 +162,8 @@ public class RegionMorphologyPlugin implements PlugInFilter
             boolean[] states = new boolean[] {
                     features.contains(ElementCount.class), false,
                     features.contains(Area.class), features.contains(Perimeter.class),
-                    features.contains(Circularity.class), features.contains(EulerNumber.class),
+                    features.contains(EquivalentDiameter.class), features.contains(Circularity.class),
+                    features.contains(EulerNumber.class), false,
                     features.contains(Bounds.class), features.contains(Centroid.class),
                     features.contains(EquivalentEllipse.class), features.contains(EllipseElongation.class),
                     features.contains(Convexity.class), features.contains(MaxFeretDiameter.class),
@@ -169,7 +172,7 @@ public class RegionMorphologyPlugin implements PlugInFilter
                     features.contains(LargestInscribedDisk.class), features.contains(AverageThickness.class),
                     features.contains(GeodesicElongation.class),
             };
-            gd.addCheckboxGroup(featureNames.length / 2 + 1, 2, featureNames, states, new String[] {"Features:", ""});
+            gd.addCheckboxGroup(11, 2, featureNames, states, new String[] {"Features:", ""});
             
             gd.addMessage("");
             String[] unitDisplayLabels = UnitDisplayOption.getAllLabels();
@@ -187,8 +190,9 @@ public class RegionMorphologyPlugin implements PlugInFilter
             if (gd.getNextBoolean()) features.add(ElementCount.class);
             if (gd.getNextBoolean()) features.add(Area.class);
             if (gd.getNextBoolean()) features.add(Perimeter.class);
-            if (gd.getNextBoolean()) features.add(EulerNumber.class);
+            if (gd.getNextBoolean()) features.add(EquivalentDiameter.class);
             if (gd.getNextBoolean()) features.add(Circularity.class);
+            if (gd.getNextBoolean()) features.add(EulerNumber.class);
             if (gd.getNextBoolean()) features.add(Bounds.class);
             if (gd.getNextBoolean()) features.add(Centroid.class);
             if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);
