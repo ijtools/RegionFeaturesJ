@@ -93,8 +93,8 @@ public class BoundaryEdgesMidPoints extends AlgoStub implements OverlayFeature, 
         float[] ydata = new float[np];
         for (int i = 0; i < np; i++)
         {
-            xdata[i] = points.get(i).x;
-            ydata[i] = points.get(i).y;
+            xdata[i] = points.get(i).x - 0.5f;
+            ydata[i] = points.get(i).y - 0.5f;
         }
         return new PointRoi(xdata, ydata);
     }
