@@ -27,7 +27,7 @@ public class Bounds extends AlgoStub implements RegionTabularFeature, OverlayFea
     /**
      * The names of the columns of the resulting table.
      */
-    public static final String[] colNames = new String[] {"Bounds2D_XMin", "Bounds2D_XMax", "Bounds2D_YMin", "Bounds2D_YMax"};
+    public static final String[] colNames = new String[] {"Bounds_XMin", "Bounds_XMax", "Bounds_YMin", "Bounds_YMax"};
     
     /**
      * Default empty constructor.

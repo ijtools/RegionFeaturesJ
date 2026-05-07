@@ -21,6 +21,7 @@ import net.ijt.regfeat.Feature;
 import net.ijt.regfeat.RegionFeatures;
 import net.ijt.regfeat.RegionFeatures.UnitDisplay;
 import net.ijt.regfeat.morpho3d.Bounds3D;
+import net.ijt.regfeat.morpho3d.BoundsExtent3D;
 import net.ijt.regfeat.morpho3d.Centroid3D;
 import net.ijt.regfeat.morpho3d.EllipsoidElongations;
 import net.ijt.regfeat.morpho3d.EquivalentEllipsoid;
@@ -236,9 +237,9 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         String[] featureNames = new String[] {
                 "Voxel_Count", null, 
                 "Volume", "Surface_Area", 
-                "Mean_Breadth", "Euler_Number",  
-                "Sphericity", null, 
-                "Bounding_Box", "Centroid",
+                "Mean_Breadth", "Sphericity",   
+                "Euler_Number", "Centroid", 
+                "Bounding_Box", "Bounding_Box_Extent",
                 "Equivalent_Ellipsoid", "Ellipsoid_Elongations",
                 "Max_Feret_Diameter", "Inscribed_Ball", 
                 "Geodesic_Diameter", "Tortuosity", 
@@ -247,9 +248,9 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         boolean[] states = new boolean[] {
                 features.contains(ElementCount.class), false, 
                 features.contains(Volume.class), features.contains(SurfaceArea.class), 
-                features.contains(MeanBreadth.class), features.contains(EulerNumber.class),
-                features.contains(Sphericity.class), false, 
-                features.contains(Bounds3D.class), features.contains(Centroid3D.class),
+                features.contains(MeanBreadth.class), features.contains(Sphericity.class),  
+                features.contains(EulerNumber.class), features.contains(Centroid3D.class),
+                features.contains(Bounds3D.class), features.contains(BoundsExtent3D.class),
                 features.contains(EquivalentEllipsoid.class), features.contains(EllipsoidElongations.class),
                 features.contains(MaxFeretDiameter3D.class), features.contains(LargestInscribedBall.class), 
                 features.contains(GeodesicDiameter3D.class), features.contains(Tortuosity3D.class),
@@ -274,10 +275,11 @@ public class RegionMorphology3DPlugin implements PlugInFilter
         if (gd.getNextBoolean()) features.add(Volume.class);
         if (gd.getNextBoolean()) features.add(SurfaceArea.class);
         if (gd.getNextBoolean()) features.add(MeanBreadth.class);
-        if (gd.getNextBoolean()) features.add(EulerNumber.class);
         if (gd.getNextBoolean()) features.add(Sphericity.class);
-        if (gd.getNextBoolean()) features.add(Bounds3D.class);
+        if (gd.getNextBoolean()) features.add(EulerNumber.class);
         if (gd.getNextBoolean()) features.add(Centroid3D.class);
+        if (gd.getNextBoolean()) features.add(Bounds3D.class);
+        if (gd.getNextBoolean()) features.add(BoundsExtent3D.class);
         if (gd.getNextBoolean()) features.add(EquivalentEllipsoid.class);
         if (gd.getNextBoolean()) features.add(EllipsoidElongations.class);
         if (gd.getNextBoolean()) features.add(MaxFeretDiameter3D.class);

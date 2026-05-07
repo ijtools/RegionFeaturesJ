@@ -23,6 +23,7 @@ import net.ijt.regfeat.RegionFeatures.UnitDisplay;
 import net.ijt.regfeat.morpho2d.Area;
 import net.ijt.regfeat.morpho2d.AverageThickness;
 import net.ijt.regfeat.morpho2d.Bounds;
+import net.ijt.regfeat.morpho2d.BoundsExtent;
 import net.ijt.regfeat.morpho2d.Centroid;
 import net.ijt.regfeat.morpho2d.Circularity;
 import net.ijt.regfeat.morpho2d.Convexity;
@@ -150,8 +151,8 @@ public class RegionMorphologyPlugin implements PlugInFilter
                     "Pixel Count", null, 
                     "Area", "Perimeter", 
                     "Equivalent_Diameter", "Circularity",
-                    "Euler_Number", null,
-                    "Bounding_Box", "Centroid",
+                    "Euler_Number", "Centroid",
+                    "Bounding_Box", "Bounding_Box_Extent",  
                     "Equivalent_Ellipse", "Ellipse_Elongation",
                     "Convexity", "Max_Feret_Diameter",
                     "Oriented_Box", "Oriented_Box_Elongation",
@@ -163,8 +164,8 @@ public class RegionMorphologyPlugin implements PlugInFilter
                     features.contains(ElementCount.class), false,
                     features.contains(Area.class), features.contains(Perimeter.class),
                     features.contains(EquivalentDiameter.class), features.contains(Circularity.class),
-                    features.contains(EulerNumber.class), false,
-                    features.contains(Bounds.class), features.contains(Centroid.class),
+                    features.contains(EulerNumber.class), features.contains(Centroid.class),
+                    features.contains(Bounds.class), features.contains(BoundsExtent.class),
                     features.contains(EquivalentEllipse.class), features.contains(EllipseElongation.class),
                     features.contains(Convexity.class), features.contains(MaxFeretDiameter.class),
                     features.contains(OrientedBoundingBox.class), features.contains(OrientedBoxElongation.class),
@@ -193,8 +194,9 @@ public class RegionMorphologyPlugin implements PlugInFilter
             if (gd.getNextBoolean()) features.add(EquivalentDiameter.class);
             if (gd.getNextBoolean()) features.add(Circularity.class);
             if (gd.getNextBoolean()) features.add(EulerNumber.class);
-            if (gd.getNextBoolean()) features.add(Bounds.class);
             if (gd.getNextBoolean()) features.add(Centroid.class);
+            if (gd.getNextBoolean()) features.add(Bounds.class);
+            if (gd.getNextBoolean()) features.add(BoundsExtent.class);
             if (gd.getNextBoolean()) features.add(EquivalentEllipse.class);
             if (gd.getNextBoolean()) features.add(EllipseElongation.class);
             if (gd.getNextBoolean()) features.add(Convexity.class);

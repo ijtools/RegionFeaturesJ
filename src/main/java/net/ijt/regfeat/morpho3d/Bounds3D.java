@@ -25,9 +25,9 @@ public class Bounds3D extends AlgoStub implements RegionTabularFeature
      * The names of the columns of the resulting table.
      */
     public static final String[] colNames = new String[] {
-            "Bounds3D_XMin", "Bounds3D_XMax", 
-            "Bounds3D_YMin", "Bounds3D_YMax", 
-            "Bounds3D_ZMin", "Bounds3D_ZMax"};
+            "Bounds_XMin", "Bounds_XMax", 
+            "Bounds_YMin", "Bounds_YMax", 
+            "Bounds_ZMin", "Bounds_ZMax"};
     
     /**
      * Default empty constructor.

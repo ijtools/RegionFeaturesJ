@@ -59,12 +59,12 @@ public class Bounds3DTest
         assertEquals(8, table.getCounter());
         assertEquals(5, table.getLastColumn());
         
-        assertTrue("Bounds3D_XMin".equals(table.getColumnHeading(0)));
-        assertTrue("Bounds3D_XMax".equals(table.getColumnHeading(1)));
-        assertTrue("Bounds3D_YMin".equals(table.getColumnHeading(2)));
-        assertTrue("Bounds3D_YMax".equals(table.getColumnHeading(3)));
-        assertTrue("Bounds3D_ZMin".equals(table.getColumnHeading(4)));
-        assertTrue("Bounds3D_ZMax".equals(table.getColumnHeading(5)));
+        assertTrue("Bounds_XMin".equals(table.getColumnHeading(0)));
+        assertTrue("Bounds_XMax".equals(table.getColumnHeading(1)));
+        assertTrue("Bounds_YMin".equals(table.getColumnHeading(2)));
+        assertTrue("Bounds_YMax".equals(table.getColumnHeading(3)));
+        assertTrue("Bounds_ZMin".equals(table.getColumnHeading(4)));
+        assertTrue("Bounds_ZMax".equals(table.getColumnHeading(5)));
     }
 
 }
